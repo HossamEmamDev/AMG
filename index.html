@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMG Main Contracting</title>
+  <meta name="description" content="AMG Main Contracting Group – Building the Future Across Egypt & Saudi Arabia" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="AMG Main Contracting" />
+  <meta property="og:description" content="Building the Future Across Egypt & Saudi Arabia" />
+  <meta property="og:image" content="assets/images/amg-logo.jpeg" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" id="favicon-link" href="assets/images/amg-logo.jpeg" type="image/jpeg" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <!-- Boxicons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/hero.css" />
+  <link rel="stylesheet" href="css/sections.css" />
+  <link rel="stylesheet" href="css/projects.css" />
+  <link rel="stylesheet" href="css/careers.css" />
+  <link rel="stylesheet" href="css/partners.css" />
+  <link rel="stylesheet" href="css/contact.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/modal.css" />
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar" class="navbar">
+  <div class="nav-container">
+    <a href="#hero" class="nav-logo">
+      <img id="site-logo" src="assets/images/amg-logo.jpeg" alt="AMG Main Contracting" />
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#hero" data-en="Home" data-ar="الرئيسية">Home</a></li>
+      <li class="has-dropdown">
+        <a href="#our-group" data-en="Our Group" data-ar="مجموعتنا">Our Group <i class="fa fa-chevron-down"></i></a>
+        <ul class="dropdown">
+          <li><a href="https://amjaad-sa.com/" target="_blank" data-en="Amjaad – KSA" data-ar="أمجاد – السعودية">Amjaad – KSA</a></li>
+          <li><a href="https://electrocivic.com/" target="_blank" data-en="Electrocivic – Egypt" data-ar="إلكتروسيفيك – مصر">Electrocivic – Egypt</a></li>
+        </ul>
+      </li>
+      <li><a href="#services" data-en="Services" data-ar="خدماتنا">Services</a></li>
+      <li><a href="#projects" data-en="Projects" data-ar="مشاريعنا">Projects</a></li>
+      <li><a href="#careers" data-en="Careers" data-ar="وظائف">Careers</a></li>
+      <li><a href="#partners" data-en="Partners" data-ar="شركاؤنا">Partners</a></li>
+      <li><a href="#contact" data-en="Contact" data-ar="تواصل معنا">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <!-- Shows "EN" when site is Arabic (click to go English), shows "ع" when site is English (click to go Arabic) -->
+      <button class="lang-toggle" id="lang-toggle" onclick="toggleLanguage()" title="Switch language">
+        <span class="lang-label" id="lang-label">ع</span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO SECTION — Kontric Split Layout ===== -->
+<section id="hero" class="hero-section">
+
+  <!-- LEFT: dark content pane -->
+  <div class="hero-left animate-hero">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-line"></span>
+        <span class="hero-eyebrow-text"
+          data-en="AMG Main Contracting Group"
+          data-ar="مجموعة AMG للمقاولات الرئيسية">AMG Main Contracting Group</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span data-en="We Build" data-ar="نبني">We Build</span>
+        <span class="accent" data-en="Excellence" data-ar="التميز">Excellence</span>
+        <span data-en="Into Structure" data-ar="في كل مبنى">Into Structure</span>
+      </h1>
+
+      <p class="hero-subtitle" id="hero-subtitle"
+        data-en="Premium construction, civil & electromechanical solutions across Egypt and Saudi Arabia — on time, built to last."
+        data-ar="حلول إنشائية ومدنية وكهروميكانيكية متميزة في مصر والمملكة العربية السعودية — في الوقت المحدد وتدوم طويلاً.">
+        Premium construction, civil &amp; electromechanical solutions across Egypt and Saudi Arabia — on time, built to last.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">
+          <span data-en="View Projects" data-ar="استعرض المشاريع">View Projects</span>
+          <i class="fa fa-arrow-right"></i>
+        </a>
+        <a href="#contact" class="btn btn-outline-white">
+          <span data-en="Contact Us" data-ar="تواصل معنا">Contact Us</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats strip at the bottom of the dark pane -->
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num-wrap"><span class="stat-num" data-count="250">0</span><span class="stat-suffix">+</span></div>
+        <span class="stat-label" data-en="Projects" data-ar="مشروع">Projects</span>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num-wrap"><span class="stat-num" data-count="15">0</span><span class="stat-suffix">+</span></div>
+        <span class="stat-label" data-en="Years" data-ar="سنة">Years</span>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num-wrap"><span class="stat-num" data-count="2">0</span></div>
+        <span class="stat-label" data-en="Countries" data-ar="دول">Countries</span>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num-wrap"><span class="stat-num" data-count="500">0</span><span class="stat-suffix">+</span></div>
+        <span class="stat-label" data-en="Experts" data-ar="خبير">Experts</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: video / image background -->
+  <div class="hero-right">
+    <video id="hero-video" autoplay muted loop playsinline>
+      <source src="https://videos.pexels.com/video-files/3963190/3963190-hd_1920_1080_25fps.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <a href="#our-group" class="scroll-down-btn" aria-label="Scroll"><i class="fa fa-chevron-down"></i></a>
+</section>
+
+<!-- ===== OUR GROUP ===== -->
+<section id="our-group" class="section our-group-section section-white reveal">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-en="Who We Are" data-ar="من نحن">Who We Are</span>
+      <h2 data-en="Our Group Companies" data-ar="شركات مجموعتنا">Our Group Companies</h2>
+    </div>
+    <div class="group-grid" id="group-grid">
+      <!-- Rendered dynamically from localStorage — editable in Dashboard → Our Group -->
+    </div>
+  </div>
+</section>
+<!-- ===== SERVICES ===== -->
+<section id="services" class="section services-section section-dark reveal">
+  <div class="container">
+    <div class="section-header centered">
+      <span class="section-tag" data-en="What We Do" data-ar="ما نقدمه">What We Do</span>
+      <h2 data-en="Our Services" data-ar="خدماتنا">Our Services</h2>
+    </div>
+    <div class="services-bento" id="services-grid">
+      <!-- Populated by JS from localStorage -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects" class="section projects-section section-light reveal">
+  <div class="container">
+    <div class="section-header centered">
+      <span class="section-tag" data-en="Our Work" data-ar="أعمالنا">Our Work</span>
+      <h2 data-en="Featured Projects" data-ar="المشاريع المميزة">Featured Projects</h2>
+    </div>
+
+    <div class="projects-slider-wrap">
+      <div class="projects-slider" id="projects-slider"></div>
+    </div>
+
+    <div class="slider-controls">
+      <button class="slider-btn" id="proj-prev"><i class="fa fa-chevron-left"></i></button>
+      <div class="slider-dots" id="proj-dots"></div>
+      <button class="slider-btn" id="proj-next"><i class="fa fa-chevron-right"></i></button>
+    </div>
+
+    <div class="projects-footer">
+      <button class="btn btn-outline" id="view-all-projects"
+        style="border-color:rgba(184,134,11,0.5);color:var(--color-primary)"
+        data-en="View All Projects" data-ar="عرض كل المشاريع">View All Projects</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CAREERS ===== -->
+<section id="careers" class="section careers-section section-light reveal">
+  <div class="container">
+    <div class="section-header centered">
+      <span class="section-tag" data-en="Join Our Team" data-ar="انضم لفريقنا">Join Our Team</span>
+      <h2 data-en="Career Opportunities" data-ar="الفرص الوظيفية">Career Opportunities</h2>
+    </div>
+    <div class="careers-grid" id="careers-grid"></div>
+    <div class="careers-footer">
+      <a href="careers.html" target="_blank" class="btn btn-outline" data-en="View All Careers" data-ar="عرض كل الوظائف">View All Careers</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PARTNERS ===== -->
+<section id="partners" class="section partners-section section-dark2 reveal">
+  <div class="container">
+    <div class="section-header centered">
+      <span class="section-tag" data-en="Trusted By" data-ar="يثق بنا">Trusted By</span>
+      <h2 data-en="Our Partners" data-ar="شركاؤنا">Our Partners</h2>
+    </div>
+    <div class="partners-track-wrap">
+      <div class="partners-track" id="partners-track"></div>
+    </div>
+    <div class="testimonials-grid" id="testimonials-grid"></div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="section contact-section section-dark reveal">
+  <div class="container">
+    <div class="section-header centered">
+      <span class="section-tag" data-en="Get In Touch" data-ar="تواصل معنا">Get In Touch</span>
+      <h2 data-en="Contact Us" data-ar="اتصل بنا">Contact Us</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal-left">
+        <div class="contact-item"><i class="fa fa-phone"></i><div><strong data-en="Phone" data-ar="هاتف">Phone</strong><span id="contact-phone">+20 100 000 0000</span></div></div>
+        <div class="contact-item"><i class="fa fa-envelope"></i><div><strong data-en="Email" data-ar="البريد الإلكتروني">Email</strong><span id="contact-email-display">info@amgcontracting.com</span></div></div>
+        <div class="contact-item"><i class="fa fa-location-dot"></i><div><strong data-en="Address" data-ar="العنوان">Address</strong><span id="contact-address" data-en="Cairo, Egypt & Riyadh, KSA" data-ar="القاهرة، مصر والرياض، المملكة العربية السعودية">Cairo, Egypt & Riyadh, KSA</span></div></div>
+        <div class="contact-social" id="contact-social">
+          <a href="#" class="soc-link"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="soc-link"><i class="fab fa-linkedin"></i></a>
+          <a href="#" class="soc-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="soc-link"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <form class="contact-form reveal-right" id="contact-form" onsubmit="submitContactForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label data-en="Your Name" data-ar="اسمك">Your Name</label>
+            <input type="text" name="name" required placeholder="John Doe" />
+          </div>
+          <div class="form-group">
+            <label data-en="Email Address" data-ar="البريد الإلكتروني">Email Address</label>
+            <input type="email" name="email" required placeholder="you@example.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-en="Subject" data-ar="الموضوع">Subject</label>
+          <input type="text" name="subject" required />
+        </div>
+        <div class="form-group">
+          <label data-en="Message" data-ar="رسالتك">Message</label>
+          <textarea name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" data-en="Send Message" data-ar="إرسال الرسالة">Send Message</button>
+        <div class="form-msg" id="contact-msg"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer" class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img id="footer-logo" src="assets/images/amg-logo.jpeg" alt="AMG" />
+        <p id="footer-desc" data-en="Building a better world through innovation, quality, and commitment." data-ar="بناء عالم أفضل من خلال الابتكار والجودة والالتزام.">
+          Building a better world through innovation, quality, and commitment.
+        </p>
+      </div>
+      <div class="footer-links-col">
+        <h4 data-en="Quick Links" data-ar="روابط سريعة">Quick Links</h4>
+        <ul id="footer-links">
+          <li><a href="#hero" data-en="Home" data-ar="الرئيسية">Home</a></li>
+          <li><a href="#services" data-en="Services" data-ar="خدماتنا">Services</a></li>
+          <li><a href="#projects" data-en="Projects" data-ar="مشاريعنا">Projects</a></li>
+          <li><a href="#careers" data-en="Careers" data-ar="وظائف">Careers</a></li>
+          <li><a href="#contact" data-en="Contact" data-ar="تواصل معنا">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact-col">
+        <h4 data-en="Contact Info" data-ar="معلومات التواصل">Contact Info</h4>
+        <p><i class="fa fa-envelope"></i> <span id="footer-email">info@amgcontracting.com</span></p>
+        <p><i class="fa fa-phone"></i> <span id="footer-phone">+20 100 000 0000</span></p>
+        <p><i class="fa fa-location-dot"></i> <span id="footer-address" data-en="Cairo, Egypt & Riyadh, KSA" data-ar="القاهرة، مصر والرياض، المملكة العربية السعودية">Cairo, Egypt & Riyadh, KSA</span></p>
+      </div>
+      <div class="footer-social-col">
+        <h4 data-en="Follow Us" data-ar="تابعنا">Follow Us</h4>
+        <div class="footer-social" id="footer-social"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p id="footer-copy" data-en="© 2025 AMG Main Contracting. All Rights Reserved." data-ar="© 2025 AMG للمقاولات الرئيسية. جميع الحقوق محفوظة.">© 2025 AMG Main Contracting. All Rights Reserved.</p>
+      <p class="footer-credit">Designed by <strong>Hossam Emam</strong> | <a href="https://wa.me/011124711154" target="_blank"><i class="fab fa-whatsapp"></i> 011124711154</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== BACK TO TOP ===== -->
+<button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fa fa-arrow-up"></i>
+</button>
+
+<!-- ===== MODALS ===== -->
+<!-- Project Detail Modal -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal-box large">
+    <button class="modal-close" onclick="closeModal('project-modal')"><i class="fa fa-times"></i></button>
+    <div id="project-modal-content"></div>
+  </div>
+</div>
+
+<!-- All Projects Modal -->
+<div class="modal-overlay" id="all-projects-modal">
+  <div class="modal-box xlarge">
+    <button class="modal-close" onclick="closeModal('all-projects-modal')"><i class="fa fa-times"></i></button>
+    <h2 style="margin-bottom:2rem;" data-en="All Projects" data-ar="جميع المشاريع">All Projects</h2>
+    <div class="all-projects-grid" id="all-projects-grid"></div>
+  </div>
+</div>
+
+<!-- Career Apply Modal -->
+<div class="modal-overlay" id="career-modal">
+  <div class="modal-box large">
+    <button class="modal-close" onclick="closeModal('career-modal')"><i class="fa fa-times"></i></button>
+    <div id="career-modal-content"></div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/data.js"></script>
+<script src="js/lang.js"></script>
+<script src="js/main.js"></script>
+<script src="js/projects.js"></script>
+<script src="js/careers.js"></script>
+<script src="js/partners.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/animations.js"></script>
+</body>
+</html>

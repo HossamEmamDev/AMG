@@ -1,0 +1,58 @@
+/* ===== ANIMATIONS ===== */
+
+/* Scroll reveal — use smaller offsets and add contain */
+.reveal, .reveal-left, .reveal-right, .reveal-up {
+  opacity: 0;
+  transition: opacity 0.60s cubic-bezier(.4,0,.2,1), transform 0.60s cubic-bezier(.4,0,.2,1);
+}
+/* Use only Y-axis movement for left/right too — prevents horizontal overflow flash */
+.reveal       { transform: translateY(28px); }
+.reveal-left  { transform: translateY(24px); }   /* removed translateX to prevent overflow */
+.reveal-right { transform: translateY(24px); }
+.reveal-up    { transform: translateY(40px); }
+
+.reveal.visible, .reveal-left.visible, .reveal-right.visible, .reveal-up.visible {
+  opacity: 1; transform: none;
+}
+
+/* Stagger */
+.reveal-stagger > * { opacity:0; transform:translateY(20px); transition:opacity 0.48s ease, transform 0.48s ease; }
+.reveal-stagger.visible > *:nth-child(1)  { opacity:1;transform:none;transition-delay:.05s; }
+.reveal-stagger.visible > *:nth-child(2)  { opacity:1;transform:none;transition-delay:.12s; }
+.reveal-stagger.visible > *:nth-child(3)  { opacity:1;transform:none;transition-delay:.19s; }
+.reveal-stagger.visible > *:nth-child(4)  { opacity:1;transform:none;transition-delay:.26s; }
+.reveal-stagger.visible > *:nth-child(5)  { opacity:1;transform:none;transition-delay:.33s; }
+.reveal-stagger.visible > *:nth-child(6)  { opacity:1;transform:none;transition-delay:.40s; }
+.reveal-stagger.visible > *:nth-child(7)  { opacity:1;transform:none;transition-delay:.47s; }
+.reveal-stagger.visible > *:nth-child(8)  { opacity:1;transform:none;transition-delay:.54s; }
+
+/* Hero entrance */
+.animate-hero .hero-eyebrow  { animation: fadeUp 0.55s ease 0.10s both; }
+.animate-hero .hero-title    { animation: fadeUp 0.60s ease 0.22s both; }
+.animate-hero .hero-subtitle { animation: fadeUp 0.60s ease 0.36s both; }
+.animate-hero .hero-cta      { animation: fadeUp 0.60s ease 0.50s both; }
+.hero-stats                  { animation: fadeUp 0.50s ease 0.58s both; }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* Back to top subtle pulse */
+@keyframes topPulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(184,134,11,0.3); }
+  50%      { box-shadow:0 0 0 8px rgba(184,134,11,0); }
+}
+.back-to-top.show { animation: topPulse 2.5s ease infinite; }
+.back-to-top:hover { animation: none; }
+
+/* Partner scroll — contained inside overflow:hidden wrapper */
+@keyframes scrollPartners {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}

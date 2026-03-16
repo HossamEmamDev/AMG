@@ -1,0 +1,162 @@
+/* ===== PARTNERS — dark section infinite scroll ===== */
+.partners-section { background: var(--charcoal-2); overflow: hidden; }
+
+.partners-track-wrap {
+  position: relative; overflow: hidden;
+  max-width: 100%;
+  padding: 10px 0 30px; margin-bottom: 52px;
+}
+.partners-track-wrap::before,
+.partners-track-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+}
+.partners-track-wrap::before { left: 0; background: linear-gradient(to right, var(--charcoal-2), transparent); }
+.partners-track-wrap::after  { right: 0; background: linear-gradient(to left, var(--charcoal-2), transparent); }
+
+.partners-track {
+  display: flex; gap: 2px; width: max-content;
+  /* max-content is fine because wrapper has overflow:hidden */
+  animation: scrollPartners 30s linear infinite;
+}
+.partners-track:hover { animation-play-state: paused; }
+
+@keyframes scrollPartners {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.partner-logo {
+  display: flex; align-items: center; justify-content: center;
+  padding: 14px 26px; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: var(--tr);
+  min-width: 150px; height: 72px; flex-shrink: 0;
+}
+.partner-logo:hover { border-color: rgba(184,134,11,0.30); background: rgba(184,134,11,0.06); }
+
+.partner-logo img {
+  height: 42px; width: auto; object-fit: contain;
+  filter: brightness(0) invert(1); opacity: 0.45;
+  transition: var(--tr);
+}
+.partner-logo:hover img { opacity: 1; filter: none; }
+
+.partner-logo-text {
+  font-family: var(--font-body); font-weight: 700; font-size: 0.88rem;
+  color: rgba(255,255,255,0.35); transition: var(--tr); white-space: nowrap;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.partner-logo:hover .partner-logo-text { color: var(--gold); }
+
+/* ── Testimonials ── */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: 2px; background: rgba(255,255,255,0.04);
+}
+
+.testimonial-card {
+  background: rgba(255,255,255,0.03);
+  padding: 28px;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: var(--tr);
+  position: relative;
+}
+.testimonial-card:hover { background: rgba(255,255,255,0.06); }
+
+/* Gold quote mark */
+.testimonial-card::before {
+  content: '"';
+  position: absolute; top: 14px; right: 22px;
+  font-family: var(--font-heading); font-size: clamp(3rem, 6vw, 5rem);
+  color: var(--gold); opacity: 0.10; line-height: 1; pointer-events: none;
+}
+[data-lang="ar"] .testimonial-card::before { right: auto; left: 22px; }
+
+.testimonial-stars { display: flex; gap: 3px; margin-bottom: 12px; }
+.testimonial-stars i { color: var(--gold); font-size: 0.76rem; }
+
+.testimonial-text {
+  font-family: var(--font-body); font-size: 0.86rem;
+  color: rgba(255,255,255,0.55); line-height: 1.80;
+  margin-bottom: 18px; font-style: italic;
+}
+
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 40px; height: 40px; border-radius: 0;
+  background: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white); font-family: var(--font-heading);
+  font-weight: 800; font-size: 1rem; flex-shrink: 0;
+}
+.testimonial-name    { font-family: var(--font-body); font-weight: 700; color: var(--white); font-size: 0.86rem; }
+.testimonial-company { font-family: var(--font-body); font-size: 0.72rem; color: rgba(255,255,255,0.40); margin-top: 2px; }
+
+/* ===== CONTACT ===== */
+.contact-section { background: var(--charcoal); color: rgba(255,255,255,0.85); }
+
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1.5fr; gap: clamp(28px, 6vw, 60px); align-items: start;
+}
+@media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+.contact-info { display: flex; flex-direction: column; gap: 22px; }
+
+.contact-item { display: flex; gap: 14px; align-items: flex-start; }
+.contact-item > i {
+  width: 42px; height: 42px;
+  background: var(--gold); border-radius: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--white); font-size: 0.96rem; flex-shrink: 0;
+}
+.contact-item > div { display: flex; flex-direction: column; gap: 3px; }
+.contact-item strong {
+  font-family: var(--font-body); font-weight: 700; color: rgba(255,255,255,0.45);
+  font-size: 0.64rem; text-transform: uppercase; letter-spacing: 1.5px;
+}
+.contact-item span { font-family: var(--font-body); color: rgba(255,255,255,0.80); font-size: 0.90rem; }
+
+.contact-social { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.soc-link {
+  width: 40px; height: 40px; border-radius: 0;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.55); font-size: 0.96rem;
+  transition: var(--tr); text-decoration: none;
+}
+.soc-link:hover { background: var(--gold); border-color: var(--gold); color: var(--white); }
+
+/* Contact form — on dark bg */
+.contact-form {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: clamp(20px, 4vw, 36px);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.contact-form .form-group label { color: rgba(255,255,255,0.50); }
+.contact-form .form-group input,
+.contact-form .form-group textarea,
+.contact-form .form-group select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: var(--white);
+}
+.contact-form .form-group input:focus,
+.contact-form .form-group textarea:focus { border-color: var(--gold); background: rgba(255,255,255,0.07); }
+
+.form-msg {
+  font-family: var(--font-body); font-size: 0.84rem; padding: 10px 14px;
+}
+
+/* RTL contact */
+[data-lang="ar"] .contact-item { flex-direction: row; text-align: right; }
+[data-lang="ar"] .contact-social { justify-content: flex-start; }
+
+/* Mobile */
+@media (max-width: 600px) {
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .contact-form { padding: 22px 16px; }
+  .partners-section .section-header { padding: 0 16px; }
+}

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMG CMS Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="../assets/images/amg-logo.jpeg" alt="AMG" />
+    </div>
+    <h2>CMS Dashboard</h2>
+    <p>Administrator Access Only</p>
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="form-field">
+        <label>Username</label>
+        <div class="input-icon">
+          <i class="fas fa-user"></i>
+          <input type="text" id="login-user" required autocomplete="username" />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Password</label>
+        <div class="input-icon">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="login-pass" required autocomplete="current-password" />
+          <button type="button" class="toggle-pass" onclick="togglePass()"><i class="fas fa-eye" id="pass-eye"></i></button>
+        </div>
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button type="submit" class="login-btn">Sign In <i class="fas fa-arrow-right"></i></button>
+    </form>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard" class="dashboard hidden">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="../assets/images/amg-logo.jpeg" alt="AMG" class="sidebar-logo" id="dash-logo" />
+      <button class="sidebar-close" id="sidebar-close"><i class="fas fa-times"></i></button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-tab="overview"><i class="fas fa-chart-pie"></i> <span>Overview</span></a>
+      <a href="#" class="nav-item" data-tab="ourgroup"><i class="fas fa-city"></i> <span>Our Group</span></a>
+      <a href="#" class="nav-item" data-tab="settings"><i class="fas fa-cog"></i> <span>Site Settings</span></a>
+      <a href="#" class="nav-item" data-tab="sections"><i class="fas fa-eye"></i> <span>Sections</span></a>
+      <a href="#" class="nav-item" data-tab="services"><i class="fas fa-tools"></i> <span>Services</span></a>
+      <a href="#" class="nav-item" data-tab="projects"><i class="fas fa-building"></i> <span>Projects</span></a>
+      <a href="#" class="nav-item" data-tab="careers"><i class="fas fa-briefcase"></i> <span>Careers</span></a>
+      <a href="#" class="nav-item" data-tab="partners"><i class="fas fa-handshake"></i> <span>Partners</span></a>
+      <a href="#" class="nav-item" data-tab="messages"><i class="fas fa-envelope"></i> <span>Messages <span class="badge" id="msg-badge"></span></span></a>
+      <a href="#" class="nav-item" data-tab="applications"><i class="fas fa-user-tie"></i> <span>Applications</span></a>
+      <a href="#" class="nav-item" data-tab="team"><i class="fas fa-users"></i> <span>Team / Sub-Admins</span></a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="../index.html" target="_blank" class="view-site"><i class="fas fa-external-link-alt"></i> View Site</a>
+      <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-wrap">
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button>
+      <div class="topbar-title" id="topbar-title">Overview</div>
+      <div class="topbar-right">
+        <span class="admin-badge"><i class="fas fa-shield-alt"></i> <span id="current-user-label">Super Admin</span></span>
+      </div>
+    </header>
+
+    <!-- Tab Content -->
+    <main class="content-area" id="content-area">
+
+      <!-- ── OUR GROUP ── -->
+      <div class="tab-panel" id="tab-ourgroup">
+        <h2 class="page-title">Our Group Companies</h2>
+        <div class="toolbar">
+          <button class="btn-add" onclick="openGroupModal()"><i class="fas fa-plus"></i> Add Company</button>
+        </div>
+        <div class="items-grid" id="ourgroup-list"></div>
+      </div>
+
+      <!-- ── OVERVIEW ── -->
+      <div class="tab-panel active" id="tab-overview">
+        <h2 class="page-title">Dashboard Overview</h2>
+        <div class="stats-grid">
+          <div class="stat-card"><i class="fas fa-building"></i><div><span id="stat-projects">0</span><label>Projects</label></div></div>
+          <div class="stat-card"><i class="fas fa-tools"></i><div><span id="stat-services">0</span><label>Services</label></div></div>
+          <div class="stat-card"><i class="fas fa-briefcase"></i><div><span id="stat-careers">0</span><label>Job Postings</label></div></div>
+          <div class="stat-card highlight"><i class="fas fa-envelope"></i><div><span id="stat-messages">0</span><label>New Messages</label></div></div>
+        </div>
+        <div class="overview-grid">
+          <div class="card">
+            <div class="card-header"><h3>Recent Messages</h3><a href="#" onclick="switchTab('messages')">View All</a></div>
+            <div id="recent-msgs"></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Recent Applications</h3><a href="#" onclick="switchTab('applications')">View All</a></div>
+            <div id="recent-apps"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SITE SETTINGS ── -->
+      <div class="tab-panel" id="tab-settings">
+        <h2 class="page-title">Site Settings</h2>
+        <div class="cards-col">
+
+          <!-- Branding -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-palette"></i> Branding & Identity</h3></div>
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label>Site Logo</label>
+                <div class="upload-area" onclick="document.getElementById('logo-upload').click()">
+                  <img id="logo-preview" src="../assets/images/amg-logo.jpeg" alt="Logo" style="height:60px;object-fit:contain" />
+                  <span>Click to change logo</span>
+                </div>
+                <input type="file" id="logo-upload" accept="image/*" onchange="handleLogoUpload(this)" style="display:none" />
+              </div>
+              <div class="form-field">
+                <label>Favicon</label>
+                <div class="upload-area" onclick="document.getElementById('fav-upload').click()">
+                  <img id="fav-preview" src="../assets/images/amg-logo.jpeg" alt="Favicon" style="height:40px;object-fit:contain" />
+                  <span>Click to change favicon</span>
+                </div>
+                <input type="file" id="fav-upload" accept="image/*" onchange="handleFaviconUpload(this)" style="display:none" />
+              </div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-field"><label>Primary Color</label><input type="color" id="s-primary-color" /><small>Copper/Bronze accent</small></div>
+              <div class="form-field"><label>Secondary Color</label><input type="color" id="s-secondary-color" /><small>Charcoal/Black</small></div>
+              <div class="form-field"><label>Background Color</label><input type="color" id="s-bg-color" /></div>
+              <div class="form-field"><label>Navbar Background <span class="badge-info">Default: white</span></label><input type="color" id="s-nav-bg" /><small>Background of the top navigation bar</small></div>
+              <div class="form-field"><label>Navbar Text Color</label><input type="color" id="s-nav-text" /><small>Color of nav links and icons</small></div>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label>English Body Font</label>
+                <select id="s-font-en" onchange="previewFont('en',this.value)">
+                  <option value="Barlow">Barlow (Default)</option>
+                  <option value="Raleway">Raleway</option>
+                  <option value="Roboto">Roboto</option>
+                  <option value="Open Sans">Open Sans</option>
+                  <option value="Lato">Lato</option>
+                  <option value="Nunito">Nunito</option>
+                  <option value="Montserrat">Montserrat</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>Arabic Body Font</label>
+                <select id="s-font-ar" onchange="previewFont('ar',this.value)">
+                  <option value="Cairo">Cairo (Default)</option>
+                  <option value="Tajawal">Tajawal</option>
+                  <option value="Noto Kufi Arabic">Noto Kufi Arabic</option>
+                  <option value="Almarai">Almarai</option>
+                  <option value="Readex Pro">Readex Pro</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>English Heading Font</label>
+                <select id="s-font-heading-en" onchange="previewFont('heading-en',this.value)">
+                  <option value="Playfair Display">Playfair Display (Default)</option>
+                  <option value="Cormorant Garamond">Cormorant Garamond</option>
+                  <option value="Libre Baskerville">Libre Baskerville</option>
+                  <option value="Merriweather">Merriweather</option>
+                  <option value="DM Serif Display">DM Serif Display</option>
+                  <option value="Barlow">Barlow (same as body)</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>Font Preview</label>
+                <div id="font-preview-box" style="background:var(--dash-surface2);border:1px solid var(--dash-border);border-radius:6px;padding:12px;font-size:0.90rem;line-height:1.6;color:var(--dash-text)">
+                  The quick brown fox jumps — الثعلب البني السريع يقفز
+                </div>
+              </div>
+            </div>
+            <div class="form-field">
+              <label>Default Language</label>
+              <select id="s-default-lang">
+                <option value="auto">Auto-detect (device language)</option>
+                <option value="en">English</option>
+                <option value="ar">Arabic</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Hero -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-film"></i> Hero Section</h3></div>
+            <div class="form-field">
+              <label>Hero Video URL or Local Path</label>
+              <input type="text" id="s-hero-video" placeholder="https://example.com/video.mp4 or assets/video/hero.mp4" />
+              <small>Leave empty to use image fallback background</small>
+            </div>
+            <div class="form-grid-2">
+              <div class="form-field"><label>Hero Title (EN)</label><input type="text" id="s-hero-title-en" /></div>
+              <div class="form-field"><label>Hero Title (AR)</label><input type="text" id="s-hero-title-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Hero Subtitle (EN)</label><textarea id="s-hero-sub-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Hero Subtitle (AR)</label><textarea id="s-hero-sub-ar" rows="3" dir="rtl"></textarea></div>
+            </div>
+          </div>
+
+          <!-- Contact & Emails -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-envelope"></i> Contact & Email Settings</h3></div>
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label>Contact Us Email <span class="badge-info">Receives contact form</span></label>
+                <input type="email" id="s-contact-email" />
+              </div>
+              <div class="form-field">
+                <label>HR / Careers Email <span class="badge-info">Receives applications</span></label>
+                <input type="email" id="s-hr-email" />
+              </div>
+              <div class="form-field"><label>Phone Number</label><input type="text" id="s-phone" /></div>
+              <div class="form-field"><label>Address (EN)</label><input type="text" id="s-address-en" /></div>
+              <div class="form-field"><label>Address (AR)</label><input type="text" id="s-address-ar" dir="rtl" /></div>
+            </div>
+          </div>
+
+          <!-- Social Media -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-share-alt"></i> Social Media Links</h3></div>
+            <div id="social-links-manager"></div>
+            <button class="btn-add" onclick="addSocialLink()"><i class="fas fa-plus"></i> Add Social Link</button>
+          </div>
+
+          <!-- Footer -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-shoe-prints"></i> Footer Content</h3></div>
+            <div class="form-grid-2">
+              <div class="form-field"><label>Footer Description (EN)</label><textarea id="s-footer-desc-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Footer Description (AR)</label><textarea id="s-footer-desc-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Copyright Text (EN)</label><input type="text" id="s-footer-copy-en" /></div>
+              <div class="form-field"><label>Copyright Text (AR)</label><input type="text" id="s-footer-copy-ar" dir="rtl" /></div>
+            </div>
+          </div>
+
+          <div class="save-row">
+            <button class="btn-save" onclick="saveSettings()"><i class="fas fa-save"></i> Save All Settings</button>
+            <div class="save-msg" id="settings-msg"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SECTIONS ── -->
+      <div class="tab-panel" id="tab-sections">
+        <h2 class="page-title">Section Visibility & Navigation</h2>
+        <div class="card">
+          <p style="color:#666;margin-bottom:20px">Control which sections are visible on the landing page and appear in the navigation bar.</p>
+          <div id="sections-manager"></div>
+          <div class="save-row" style="margin-top:20px">
+            <button class="btn-save" onclick="saveSections()"><i class="fas fa-save"></i> Save Sections</button>
+            <div class="save-msg" id="sections-msg"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SERVICES ── -->
+      <div class="tab-panel" id="tab-services">
+        <h2 class="page-title">Services</h2>
+        <div class="toolbar">
+          <button class="btn-add" onclick="openServiceModal()"><i class="fas fa-plus"></i> Add Service</button>
+        </div>
+        <div class="items-grid" id="services-list"></div>
+      </div>
+
+      <!-- ── PROJECTS ── -->
+      <div class="tab-panel" id="tab-projects">
+        <h2 class="page-title">Projects</h2>
+        <div class="toolbar">
+          <button class="btn-add" onclick="openProjectModal()"><i class="fas fa-plus"></i> Add Project</button>
+        </div>
+        <div class="items-grid" id="projects-list"></div>
+      </div>
+
+      <!-- ── CAREERS ── -->
+      <div class="tab-panel" id="tab-careers">
+        <h2 class="page-title">Job Postings</h2>
+        <div class="toolbar">
+          <button class="btn-add" onclick="openCareerModal()"><i class="fas fa-plus"></i> Add Job Posting</button>
+        </div>
+        <div class="items-grid" id="careers-list"></div>
+      </div>
+
+      <!-- ── PARTNERS ── -->
+      <div class="tab-panel" id="tab-partners">
+        <h2 class="page-title">Partners & Testimonials</h2>
+        <div class="form-grid-2" style="margin-bottom:32px">
+          <div>
+            <div class="toolbar" style="margin-bottom:16px"><h3 style="margin:0">Partners</h3><button class="btn-add" onclick="openPartnerModal()"><i class="fas fa-plus"></i> Add</button></div>
+            <div id="partners-list"></div>
+          </div>
+          <div>
+            <div class="toolbar" style="margin-bottom:16px"><h3 style="margin:0">Testimonials</h3><button class="btn-add" onclick="openTestimonialModal()"><i class="fas fa-plus"></i> Add</button></div>
+            <div id="testimonials-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MESSAGES ── -->
+      <div class="tab-panel" id="tab-messages">
+        <h2 class="page-title">Contact Messages</h2>
+        <div id="messages-list"></div>
+      </div>
+
+      <!-- ── APPLICATIONS ── -->
+      <div class="tab-panel" id="tab-applications">
+        <h2 class="page-title">Job Applications</h2>
+        <div id="applications-list"></div>
+      </div>
+
+      <!-- ── TEAM ── -->
+      <div class="tab-panel" id="tab-team">
+        <h2 class="page-title">Team & Sub-Admins</h2>
+        <div class="toolbar">
+          <button class="btn-add" onclick="openTeamModal()"><i class="fas fa-plus"></i> Add Sub-Admin</button>
+        </div>
+        <div id="team-list"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="dash-modal-overlay" id="dash-modal">
+  <div class="dash-modal-box" id="dash-modal-box">
+    <button class="dash-modal-close" onclick="closeDashModal()"><i class="fas fa-times"></i></button>
+    <div id="dash-modal-content"></div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
