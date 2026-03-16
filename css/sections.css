@@ -4,7 +4,7 @@
 .group-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2px; background: var(--border);
+  gap: 5px; background: var(--border);
 }
 
 .group-card {

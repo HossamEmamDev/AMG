@@ -4,7 +4,7 @@
   /* CRITICAL: contain everything, no children can overflow */
   overflow: hidden;
   min-height: 580px;
-
+  max-height: 680px;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -34,11 +34,18 @@
 .hero-left::after {
   content: '';
   position: absolute;
-  top: 0; right: -40px; bottom: 0;
+  top: 0;  bottom: 0;
   width: 80px;
   background: var(--charcoal);
   clip-path: polygon(0 0, 55% 0, 100% 100%, 0 100%);
   z-index: 1;
+}
+[data-lang="ar"] .hero-left::after {
+    left: -40px;
+    clip-path: polygon(0 100%, 55% 0, 100% 100%, 0 100%);
+}
+[data-lang="en"] .hero-left::after {
+    right: -40px;
 }
 
 /* ── Right video pane ── */
