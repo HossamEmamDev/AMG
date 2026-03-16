@@ -4,7 +4,7 @@
   /* CRITICAL: contain everything, no children can overflow */
   overflow: hidden;
   min-height: 580px;
-  max-height: 780px;
+  max-height: 770px;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
