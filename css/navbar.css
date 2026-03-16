@@ -25,8 +25,9 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  overflow: hidden; 
-  justify-content: space-between;   /* stop any child overflowing container */
+/*   overflow: hidden; 
+ */  
+ justify-content: space-between;   /* stop any child overflowing container */
 }
 
 .nav-logo { flex-shrink: 0; line-height: 0; }
