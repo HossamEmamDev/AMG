@@ -65,7 +65,7 @@ html[data-lang="en"] {
   direction: ltr;
 }
 html[data-lang="ar"] {
-  --font-body:    'Cairo', Georgia, serif;
-  --font-heading: 'Cairo', Georgia, serif;
+  --font-body:    'Tajawal', 'Cairo', Georgia, serif;
+  --font-heading: 'Tajawal', 'Cairo', Georgia, serif;
   direction: rtl;
 }

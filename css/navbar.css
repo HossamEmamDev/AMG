@@ -32,10 +32,14 @@
 
 .nav-logo { flex-shrink: 0; line-height: 0; }
 .nav-logo img {
-      height: clamp(33px, 10.5vw, 76px);
-    width: auto;
-    object-fit: contain;
-    display: block;
+  height: clamp(36px, 8vw, 56px); /* avoid oversized text-consuming nav on large displays */
+  width: auto;
+  object-fit: contain;
+  display: block;
+  transition: transform var(--tr);
+}
+.nav-logo img:hover {
+  transform: scale(1.04);
 }
 
 /* Desktop links */

@@ -1,8 +1,8 @@
 /* ===== PROJECTS ===== */
 .projects-section { background: var(--off-white); }
 
-.projects-slider-wrap { overflow: hidden; position: relative; }
-.projects-slider { display: flex; transition: transform 0.55s cubic-bezier(.4,0,.2,1); will-change: transform; }
+.projects-slider-wrap { overflow: hidden; position: relative; direction: ltr; }
+.projects-slider { display: flex; direction: ltr; transition: transform 0.55s cubic-bezier(.4,0,.2,1); will-change: transform; }
 
 /* Slide: image 55% | info 45% */
 .project-slide {
