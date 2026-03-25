@@ -55,6 +55,39 @@ const DEFAULT_DATA = {
     contact: { visible: true, inNav: true },
   },
 
+  missionVision: {
+    intro: {
+      kickerEn: "Built on purpose",
+      kickerAr: "مبني على هدف",
+      textEn:
+        "The mission explains how AMG executes every project. The vision explains where the group is heading next.",
+      textAr:
+        "المهمة توضح كيف تنفذ AMG كل مشروع. والرؤية توضح الاتجاه الذي تسير إليه المجموعة في المرحلة القادمة.",
+    },
+    mission: {
+      labelEn: "Mission",
+      labelAr: "المهمة",
+      icon: "fas fa-bullseye",
+      titleEn: "Our Mission",
+      titleAr: "مهمتنا",
+      descriptionEn:
+        "Our ultimate construction project is our very own. With every day of operations, Sweven is laying the stones to introduce an ultra-modern definition of the management contracting industry; one that's entirely designed for clients, result-oriented, and provides personalized solutions for a lap of luxury for every client, regardless of the size of the project at hand. With Sweven, no project is too substantial or too small-scale",
+      descriptionAr:
+        "مشروعنا الإنشائي النهائي هو ملكنا. مع كل يوم من العمليات، نضع الأساس لتقديم تعريف حديث للغاية لصناعة المقاولات الإدارية؛ واحد مصمم بالكامل للعملاء، موجه نحو النتائج، ويوفر حلولاً مخصصة لكل عميل، بغض النظر عن حجم المشروع. مع AMG، لا يوجد مشروع كبير جداً أو صغير جداً",
+    },
+    vision: {
+      labelEn: "Vision",
+      labelAr: "الرؤية",
+      icon: "fas fa-binoculars",
+      titleEn: "AMG Foresight",
+      titleAr: "رؤيا AMG",
+      descriptionEn:
+        "We aspire to become lifelong construction partners for every client we do business with, including the customer, design professionals, sub-contractors, and tradesmen, through our sustained provision of trailblazing engineering and financial solutions and services. By heightening our capacities and capabilities, we aim to showcase the power of contracting engineers when it comes to applying technical expertise to practical problems, not only in Egypt but in the MENA region at large.",
+      descriptionAr:
+        "نطمح لأن نصبح شركاء بناء مدى الحياة لكل عميل نتعامل معه، بما في ذلك العميل والمتخصصون في التصميم والمقاولون من الباطن والحرفيون، من خلال توفيرنا المستمر للحل الهندسي والمالي والخدمات الرائدة. من خلال تحسين قدراتنا وإمكانياتنا، نسعى لعرض قوة مهندسي المقاولات عندما يتعلق الأمر بتطبيق الخبرة الفنية على المشاكل العملية، ليس فقط في مصر بل في منطقة الشرق الأوسط وشمال أفريقيا بأسرها.",
+    },
+  },
+
   // ── Services ──
   services: [
     {

@@ -1215,60 +1215,85 @@ function pushToServer() {
 // ===== MISSION & VISION =====
 function loadMissionVision() {
   const data = getData("missionVision") || {
-    mission: { titleEn: "Our Mission", titleAr: "مهمتنا", descriptionEn: "", descriptionAr: "", image: "" },
-    vision: { titleEn: "AMG Foresight", titleAr: "رؤيا AMG", descriptionEn: "", descriptionAr: "", image: "" },
+    intro: {
+      kickerEn: "Built on purpose",
+      kickerAr: "مبني على هدف",
+      textEn: "",
+      textAr: "",
+    },
+    mission: {
+      labelEn: "Mission",
+      labelAr: "المهمة",
+      icon: "fas fa-bullseye",
+      titleEn: "Our Mission",
+      titleAr: "مهمتنا",
+      descriptionEn: "",
+      descriptionAr: "",
+    },
+    vision: {
+      labelEn: "Vision",
+      labelAr: "الرؤية",
+      icon: "fas fa-binoculars",
+      titleEn: "AMG Foresight",
+      titleAr: "رؤيا AMG",
+      descriptionEn: "",
+      descriptionAr: "",
+    },
   };
 
+  document.getElementById("mv-intro-kicker-en").value = data.intro?.kickerEn || "";
+  document.getElementById("mv-intro-kicker-ar").value = data.intro?.kickerAr || "";
+  document.getElementById("mv-intro-text-en").value = data.intro?.textEn || "";
+  document.getElementById("mv-intro-text-ar").value = data.intro?.textAr || "";
+
+  document.getElementById("mv-mission-label-en").value = data.mission.labelEn || "";
+  document.getElementById("mv-mission-label-ar").value = data.mission.labelAr || "";
+  document.getElementById("mv-mission-icon").value = data.mission.icon || "fas fa-bullseye";
   document.getElementById("mv-mission-title-en").value = data.mission.titleEn;
   document.getElementById("mv-mission-title-ar").value = data.mission.titleAr;
   document.getElementById("mv-mission-desc-en").value = data.mission.descriptionEn;
   document.getElementById("mv-mission-desc-ar").value = data.mission.descriptionAr;
-  if (data.mission.image) {
-    document.getElementById("mv-mission-img-preview").src = data.mission.image;
-  }
 
+  document.getElementById("mv-vision-label-en").value = data.vision.labelEn || "";
+  document.getElementById("mv-vision-label-ar").value = data.vision.labelAr || "";
+  document.getElementById("mv-vision-icon").value = data.vision.icon || "fas fa-binoculars";
   document.getElementById("mv-vision-title-en").value = data.vision.titleEn;
   document.getElementById("mv-vision-title-ar").value = data.vision.titleAr;
   document.getElementById("mv-vision-desc-en").value = data.vision.descriptionEn;
   document.getElementById("mv-vision-desc-ar").value = data.vision.descriptionAr;
-  if (data.vision.image) {
-    document.getElementById("mv-vision-img-preview").src = data.vision.image;
-  }
 }
 
 function saveMissionVision() {
   const data = {
+    intro: {
+      kickerEn: document.getElementById("mv-intro-kicker-en").value,
+      kickerAr: document.getElementById("mv-intro-kicker-ar").value,
+      textEn: document.getElementById("mv-intro-text-en").value,
+      textAr: document.getElementById("mv-intro-text-ar").value,
+    },
     mission: {
+      labelEn: document.getElementById("mv-mission-label-en").value,
+      labelAr: document.getElementById("mv-mission-label-ar").value,
+      icon: document.getElementById("mv-mission-icon").value,
       titleEn: document.getElementById("mv-mission-title-en").value,
       titleAr: document.getElementById("mv-mission-title-ar").value,
       descriptionEn: document.getElementById("mv-mission-desc-en").value,
       descriptionAr: document.getElementById("mv-mission-desc-ar").value,
-      image: document.getElementById("mv-mission-img-preview").src,
     },
     vision: {
+      labelEn: document.getElementById("mv-vision-label-en").value,
+      labelAr: document.getElementById("mv-vision-label-ar").value,
+      icon: document.getElementById("mv-vision-icon").value,
       titleEn: document.getElementById("mv-vision-title-en").value,
       titleAr: document.getElementById("mv-vision-title-ar").value,
       descriptionEn: document.getElementById("mv-vision-desc-en").value,
       descriptionAr: document.getElementById("mv-vision-desc-ar").value,
-      image: document.getElementById("mv-vision-img-preview").src,
     },
   };
 
   setData("missionVision", data);
   showMsg("mission-vision-msg", "✓ Mission & Vision saved successfully!", true);
   pushToServer();
-}
-
-function handleMissionVisionImg(type, input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const previewId = `mv-${type}-img-preview`;
-    const el = document.getElementById(previewId);
-    if (el) el.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
 }
 
 // Add mission-vision to pushToServer data collection

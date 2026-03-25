@@ -111,12 +111,55 @@
         <div class="tab-panel" id="tab-mission-vision">
           <h2 class="page-title">Mission & Vision</h2>
           <div class="cards-col">
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fas fa-pen-ruler"></i> Section Intro</h3>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label>Intro Kicker (EN)</label>
+                  <input type="text" id="mv-intro-kicker-en" placeholder="Built on purpose" />
+                </div>
+                <div class="form-field">
+                  <label>Intro Kicker (AR)</label>
+                  <input type="text" id="mv-intro-kicker-ar" placeholder="مبني على هدف" dir="rtl" />
+                </div>
+                <div class="form-field">
+                  <label>Intro Text (EN)</label>
+                  <textarea id="mv-intro-text-en" rows="3"
+                    placeholder="Enter intro text in English..."></textarea>
+                </div>
+                <div class="form-field">
+                  <label>Intro Text (AR)</label>
+                  <textarea id="mv-intro-text-ar" rows="3" dir="rtl"
+                    placeholder="أدخل النص التعريفي بالعربية..."></textarea>
+                </div>
+              </div>
+            </div>
+
             <!-- Mission -->
             <div class="card">
               <div class="card-header">
                 <h3><i class="fas fa-target"></i> Our Mission</h3>
               </div>
               <div class="form-grid-2">
+                <div class="form-field">
+                  <label>Mission Label (EN)</label>
+                  <input type="text" id="mv-mission-label-en" placeholder="Mission" />
+                </div>
+                <div class="form-field">
+                  <label>Mission Label (AR)</label>
+                  <input type="text" id="mv-mission-label-ar" placeholder="المهمة" dir="rtl" />
+                </div>
+                <div class="form-field">
+                  <label>Mission Icon</label>
+                  <select id="mv-mission-icon">
+                    <option value="fas fa-bullseye">Bullseye</option>
+                    <option value="fas fa-compass-drafting">Compass</option>
+                    <option value="fas fa-flag-checkered">Flag</option>
+                    <option value="fas fa-crosshairs">Crosshairs</option>
+                  </select>
+                </div>
                 <div class="form-field">
                   <label>Mission Title (EN)</label>
                   <input type="text" id="mv-mission-title-en" placeholder="Our Mission" />
@@ -135,16 +178,6 @@
                   <textarea id="mv-mission-desc-ar" rows="5" dir="rtl"
                     placeholder="أدخل وصف المهمة بالعربية..."></textarea>
                 </div>
-                <div class="form-field full-width">
-                  <label>Mission Image</label>
-                  <div class="upload-area" onclick="document.getElementById('mv-mission-img').click()">
-                    <img id="mv-mission-img-preview" src="../assets/images/mission.jpg" alt="Mission"
-                      style="height:120px;object-fit:cover" />
-                    <span>Click to change image</span>
-                  </div>
-                  <input type="file" id="mv-mission-img" accept="image/*"
-                    onchange="handleMissionVisionImg('mission', this)" style="display:none" />
-                </div>
               </div>
             </div>
 
@@ -154,6 +187,23 @@
                 <h3><i class="fas fa-binoculars"></i> AMG Foresight (Vision)</h3>
               </div>
               <div class="form-grid-2">
+                <div class="form-field">
+                  <label>Vision Label (EN)</label>
+                  <input type="text" id="mv-vision-label-en" placeholder="Vision" />
+                </div>
+                <div class="form-field">
+                  <label>Vision Label (AR)</label>
+                  <input type="text" id="mv-vision-label-ar" placeholder="الرؤية" dir="rtl" />
+                </div>
+                <div class="form-field">
+                  <label>Vision Icon</label>
+                  <select id="mv-vision-icon">
+                    <option value="fas fa-binoculars">Binoculars</option>
+                    <option value="fas fa-eye">Eye</option>
+                    <option value="fas fa-lightbulb">Lightbulb</option>
+                    <option value="fas fa-mountain-sun">Horizon</option>
+                  </select>
+                </div>
                 <div class="form-field">
                   <label>Vision Title (EN)</label>
                   <input type="text" id="mv-vision-title-en" placeholder="AMG Foresight" />
@@ -171,16 +221,6 @@
                   <label>Vision Description (AR)</label>
                   <textarea id="mv-vision-desc-ar" rows="5" dir="rtl"
                     placeholder="أدخل وصف الرؤية بالعربية..."></textarea>
-                </div>
-                <div class="form-field full-width">
-                  <label>Vision Image</label>
-                  <div class="upload-area" onclick="document.getElementById('mv-vision-img').click()">
-                    <img id="mv-vision-img-preview" src="../assets/images/vision.jpg" alt="Vision"
-                      style="height:120px;object-fit:cover" />
-                    <span>Click to change image</span>
-                  </div>
-                  <input type="file" id="mv-vision-img" accept="image/*"
-                    onchange="handleMissionVisionImg('vision', this)" style="display:none" />
                 </div>
               </div>
             </div>
