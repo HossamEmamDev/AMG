@@ -117,6 +117,10 @@ function switchTab(tab) {
   document.getElementById("topbar-title").textContent =
     navEl?.querySelector("span")?.textContent?.replace(/\d+/, "").trim() || tab;
   document.getElementById("sidebar").classList.remove("open");
+
+  // Load tab-specific data
+  if (tab === "settings") loadSettings();
+  if (tab === "mission-vision") loadMissionVision();
 }
 
 // ── Settings ──
@@ -144,6 +148,7 @@ function loadSettings() {
   document.getElementById("s-contact-email").value = s.contactEmail || "";
   document.getElementById("s-hr-email").value = s.hrEmail || "";
   document.getElementById("s-phone").value = s.phone || "";
+  document.getElementById("s-whatsapp-number").value = s.whatsappNumber || "+201124711154";
   document.getElementById("s-address-en").value = s.address_en || "";
   document.getElementById("s-address-ar").value = s.address_ar || "";
   document.getElementById("s-footer-desc-en").value = s.footerDesc_en || "";
@@ -194,6 +199,7 @@ function saveSettings() {
   s.contactEmail = document.getElementById("s-contact-email").value;
   s.hrEmail = document.getElementById("s-hr-email").value;
   s.phone = document.getElementById("s-phone").value;
+  s.whatsappNumber = document.getElementById("s-whatsapp-number").value;
   s.address_en = document.getElementById("s-address-en").value;
   s.address_ar = document.getElementById("s-address-ar").value;
   s.footerDesc_en = document.getElementById("s-footer-desc-en").value;
@@ -1187,6 +1193,98 @@ function pushToServer() {
     "partners",
     "testimonials",
     "groupCompanies",
+  ];
+  keys.forEach((k) => {
+    const val = localStorage.getItem("amg_" + k);
+    if (val) allData[k] = JSON.parse(val);
+  });
+
+  const formData = new FormData();
+  formData.append("secret", "amg_admin_2025");
+  formData.append("data", JSON.stringify(allData));
+
+  fetch("../php/save_settings.php", { method: "POST", body: formData })
+    .then((r) => r.json())
+    .then((res) => {
+      if (res.success) console.log("✅ Settings saved to server");
+      else console.warn("⚠️ Server save failed:", res.message);
+    })
+    .catch((err) => console.warn("⚠️ Could not reach server:", err));
+}
+
+// ===== MISSION & VISION =====
+function loadMissionVision() {
+  const data = getData("missionVision") || {
+    mission: { titleEn: "Our Mission", titleAr: "مهمتنا", descriptionEn: "", descriptionAr: "", image: "" },
+    vision: { titleEn: "AMG Foresight", titleAr: "رؤيا AMG", descriptionEn: "", descriptionAr: "", image: "" },
+  };
+
+  document.getElementById("mv-mission-title-en").value = data.mission.titleEn;
+  document.getElementById("mv-mission-title-ar").value = data.mission.titleAr;
+  document.getElementById("mv-mission-desc-en").value = data.mission.descriptionEn;
+  document.getElementById("mv-mission-desc-ar").value = data.mission.descriptionAr;
+  if (data.mission.image) {
+    document.getElementById("mv-mission-img-preview").src = data.mission.image;
+  }
+
+  document.getElementById("mv-vision-title-en").value = data.vision.titleEn;
+  document.getElementById("mv-vision-title-ar").value = data.vision.titleAr;
+  document.getElementById("mv-vision-desc-en").value = data.vision.descriptionEn;
+  document.getElementById("mv-vision-desc-ar").value = data.vision.descriptionAr;
+  if (data.vision.image) {
+    document.getElementById("mv-vision-img-preview").src = data.vision.image;
+  }
+}
+
+function saveMissionVision() {
+  const data = {
+    mission: {
+      titleEn: document.getElementById("mv-mission-title-en").value,
+      titleAr: document.getElementById("mv-mission-title-ar").value,
+      descriptionEn: document.getElementById("mv-mission-desc-en").value,
+      descriptionAr: document.getElementById("mv-mission-desc-ar").value,
+      image: document.getElementById("mv-mission-img-preview").src,
+    },
+    vision: {
+      titleEn: document.getElementById("mv-vision-title-en").value,
+      titleAr: document.getElementById("mv-vision-title-ar").value,
+      descriptionEn: document.getElementById("mv-vision-desc-en").value,
+      descriptionAr: document.getElementById("mv-vision-desc-ar").value,
+      image: document.getElementById("mv-vision-img-preview").src,
+    },
+  };
+
+  setData("missionVision", data);
+  showMsg("mission-vision-msg", "✓ Mission & Vision saved successfully!", true);
+  pushToServer();
+}
+
+function handleMissionVisionImg(type, input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const previewId = `mv-${type}-img-preview`;
+    const el = document.getElementById(previewId);
+    if (el) el.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Add mission-vision to pushToServer data collection
+const originalPushToServer = pushToServer;
+pushToServer = function pushToServerWithMissionVision() {
+  const allData = {};
+  const keys = [
+    "siteSettings",
+    "sections",
+    "services",
+    "projects",
+    "careers",
+    "partners",
+    "testimonials",
+    "groupCompanies",
+    "missionVision",
   ];
   keys.forEach((k) => {
     const val = localStorage.getItem("amg_" + k);

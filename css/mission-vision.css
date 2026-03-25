@@ -1,0 +1,173 @@
+/* ===== MISSION & VISION - OPEN BOOK LAYOUT ===== */
+
+.mission-vision-section {
+  background: var(--white);
+}
+
+.mission-vision-section .section-header h2 {
+  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  margin-bottom: clamp(2rem, 5vw, 3.2rem);
+}
+
+/* Open Book Container */
+.book-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 4vw, 50px);
+  align-items: stretch;
+}
+
+/* Individual Book Pages */
+.book-page {
+  display: grid;
+  grid-template-columns: clamp(140px, 35%, 280px) 1fr;
+  gap: clamp(16px, 3vw, 28px);
+  align-items: center;
+  background: var(--off-white);
+  border-radius: 6px;
+  overflow: hidden;
+  padding: clamp(20px, 4vw, 40px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+  transition: box-shadow var(--tr), transform var(--tr);
+}
+
+.book-page:hover {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+/* Left page: image on left, content on right */
+.mission-page {
+  grid-template-columns: clamp(140px, 35%, 280px) 1fr;
+}
+
+/* Right page: content on left, image on right */
+.vision-page {
+  grid-template-columns: 1fr clamp(140px, 35%, 280px);
+}
+
+[data-lang="ar"] .mission-page {
+  grid-template-columns: 1fr clamp(140px, 35%, 280px);
+}
+
+[data-lang="ar"] .vision-page {
+  grid-template-columns: clamp(140px, 35%, 280px) 1fr;
+}
+
+/* Page Image Wrapper */
+.page-image-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  width: 100%;
+  height: clamp(160px, 25vw, 280px);
+  background: linear-gradient(135deg, rgba(184, 134, 11, 0.1), rgba(28, 28, 28, 0.05));
+}
+
+.page-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-page:hover .page-image-wrap img {
+  transform: scale(1.08);
+}
+
+/* Gold accent line on top */
+.page-image-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--gold);
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.book-page:hover .page-image-wrap::before {
+  width: 100%;
+}
+
+/* Page Content */
+.page-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 18px);
+  min-width: 0;
+}
+
+.page-content h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 700;
+  color: var(--charcoal);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.page-content p {
+  font-family: var(--font-body);
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  line-height: 1.7;
+  color: var(--text-muted);
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ════════════════════════════════
+   RESPONSIVE — TABLET & MOBILE
+   ════════════════════════════════ */
+
+@media (max-width: 860px) {
+
+  /* Stack pages vertically */
+  .book-container {
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 5vw, 40px);
+  }
+
+  /* Both pages: image top, content bottom */
+  .book-page,
+  .mission-page,
+  .vision-page {
+    grid-template-columns: 1fr;
+    gap: clamp(18px, 4vw, 28px);
+  }
+
+  [data-lang="ar"] .mission-page,
+  [data-lang="ar"] .vision-page {
+    grid-template-columns: 1fr;
+  }
+
+  /* Image on top for mobile */
+  .page-image-wrap {
+    order: -1;
+    height: clamp(160px, 40vw, 240px);
+  }
+}
+
+@media (max-width: 520px) {
+  .book-page {
+    padding: clamp(16px, 3vw, 24px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .page-content h3 {
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+  }
+
+  .page-content p {
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    line-height: 1.65;
+  }
+
+  .page-image-wrap {
+    height: clamp(140px, 35vw, 180px);
+  }
+}

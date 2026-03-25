@@ -56,6 +56,7 @@
     <nav class="sidebar-nav">
       <a href="#" class="nav-item active" data-tab="overview"><i class="fas fa-chart-pie"></i> <span>Overview</span></a>
       <a href="#" class="nav-item" data-tab="ourgroup"><i class="fas fa-city"></i> <span>Our Group</span></a>
+      <a href="#" class="nav-item" data-tab="mission-vision"><i class="fas fa-lightbulb"></i> <span>Mission & Vision</span></a>
       <a href="#" class="nav-item" data-tab="settings"><i class="fas fa-cog"></i> <span>Site Settings</span></a>
       <a href="#" class="nav-item" data-tab="sections"><i class="fas fa-eye"></i> <span>Sections</span></a>
       <a href="#" class="nav-item" data-tab="services"><i class="fas fa-tools"></i> <span>Services</span></a>
@@ -94,6 +95,79 @@
           <button class="btn-add" onclick="openGroupModal()"><i class="fas fa-plus"></i> Add Company</button>
         </div>
         <div class="items-grid" id="ourgroup-list"></div>
+      </div>
+
+      <!-- ── MISSION & VISION ── -->
+      <div class="tab-panel" id="tab-mission-vision">
+        <h2 class="page-title">Mission & Vision</h2>
+        <div class="cards-col">
+          <!-- Mission -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-target"></i> Our Mission</h3></div>
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label>Mission Title (EN)</label>
+                <input type="text" id="mv-mission-title-en" placeholder="Our Mission" />
+              </div>
+              <div class="form-field">
+                <label>Mission Title (AR)</label>
+                <input type="text" id="mv-mission-title-ar" placeholder="مهمتنا" dir="rtl" />
+              </div>
+              <div class="form-field">
+                <label>Mission Description (EN)</label>
+                <textarea id="mv-mission-desc-en" rows="5" placeholder="Enter mission description in English..."></textarea>
+              </div>
+              <div class="form-field">
+                <label>Mission Description (AR)</label>
+                <textarea id="mv-mission-desc-ar" rows="5" dir="rtl" placeholder="أدخل وصف المهمة بالعربية..."></textarea>
+              </div>
+              <div class="form-field full-width">
+                <label>Mission Image</label>
+                <div class="upload-area" onclick="document.getElementById('mv-mission-img').click()">
+                  <img id="mv-mission-img-preview" src="../assets/images/mission.jpg" alt="Mission" style="height:120px;object-fit:cover" />
+                  <span>Click to change image</span>
+                </div>
+                <input type="file" id="mv-mission-img" accept="image/*" onchange="handleMissionVisionImg('mission', this)" style="display:none" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Vision -->
+          <div class="card">
+            <div class="card-header"><h3><i class="fas fa-binoculars"></i> AMG Foresight (Vision)</h3></div>
+            <div class="form-grid-2">
+              <div class="form-field">
+                <label>Vision Title (EN)</label>
+                <input type="text" id="mv-vision-title-en" placeholder="AMG Foresight" />
+              </div>
+              <div class="form-field">
+                <label>Vision Title (AR)</label>
+                <input type="text" id="mv-vision-title-ar" placeholder="رؤيا AMG" dir="rtl" />
+              </div>
+              <div class="form-field">
+                <label>Vision Description (EN)</label>
+                <textarea id="mv-vision-desc-en" rows="5" placeholder="Enter vision description in English..."> </textarea>
+              </div>
+              <div class="form-field">
+                <label>Vision Description (AR)</label>
+                <textarea id="mv-vision-desc-ar" rows="5" dir="rtl" placeholder="أدخل وصف الرؤية بالعربية..."></textarea>
+              </div>
+              <div class="form-field full-width">
+                <label>Vision Image</label>
+                <div class="upload-area" onclick="document.getElementById('mv-vision-img').click()">
+                  <img id="mv-vision-img-preview" src="../assets/images/vision.jpg" alt="Vision" style="height:120px;object-fit:cover" />
+                  <span>Click to change image</span>
+                </div>
+                <input type="file" id="mv-vision-img" accept="image/*" onchange="handleMissionVisionImg('vision', this)" style="display:none" />
+              </div>
+            </div>
+          </div>
+
+          <div class="save-row">
+            <button class="btn-save" onclick="saveMissionVision()"><i class="fas fa-save"></i> Save Mission & Vision</button>
+            <div class="save-msg" id="mission-vision-msg"></div>
+          </div>
+        </div>
       </div>
 
       <!-- ── OVERVIEW ── -->
@@ -230,6 +304,7 @@
                 <input type="email" id="s-hr-email" />
               </div>
               <div class="form-field"><label>Phone Number</label><input type="text" id="s-phone" /></div>
+              <div class="form-field"><label>WhatsApp Number <span class="badge-success">For floating widget</span></label><input type="text" id="s-whatsapp-number" placeholder="+201000000000" /></div>
               <div class="form-field"><label>Address (EN)</label><input type="text" id="s-address-en" /></div>
               <div class="form-field"><label>Address (AR)</label><input type="text" id="s-address-ar" dir="rtl" /></div>
             </div>

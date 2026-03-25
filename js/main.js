@@ -152,16 +152,9 @@ function scrollToSection(id) {
 }
 
 function heroContactCTA() {
-  const message =
-    "هل تود التواصل عبر WhatsApp أم عبر نموذج الاتصال؟\n\nنعم: عبر واتساب\nلا: عبر نموذج الاتصال";
-  const viaWhatsApp = window.confirm(message);
-  if (viaWhatsApp) {
-    window.open("https://wa.me/011124711154", "_blank");
-  } else {
-    scrollToSection("contact");
-    document
-      .getElementById("contact-form")
-      ?.querySelector("input, textarea")
-      ?.focus();
-  }
+  scrollToSection("contact");
+  document
+    .getElementById("contact-form")
+    ?.querySelector("input, textarea")
+    ?.focus();
 }
