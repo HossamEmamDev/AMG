@@ -18,7 +18,7 @@
   border: none;
   box-shadow: 0 8px 28px rgba(184, 134, 11, 0.28);
   transition: all var(--tr);
-  z-index: 997;
+  z-index: 1001;
   opacity: 0;
   pointer-events: none;
   transform: scale(0.8);
