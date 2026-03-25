@@ -48,6 +48,7 @@ const DEFAULT_DATA = {
   // ── Sections Visibility ──
   sections: {
     "our-group": { visible: true, inNav: true },
+    "mission-vision": { visible: true, inNav: true },
     services: { visible: true, inNav: true },
     projects: { visible: true, inNav: true },
     careers: { visible: true, inNav: true },

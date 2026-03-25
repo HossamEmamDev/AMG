@@ -306,6 +306,7 @@ function renderSectionsManager() {
   if (!wrap) return;
   const names = {
     "our-group": "Our Group",
+    "mission-vision": "Our Journey",
     services: "Services",
     projects: "Projects",
     careers: "Careers",
