@@ -32,7 +32,7 @@
 
 .nav-logo { flex-shrink: 0; line-height: 0; }
 .nav-logo img {
-  height: clamp(36px, 8vw, 56px); /* avoid oversized text-consuming nav on large displays */
+  height: clamp(42px, 9vw, 72px); /* larger logo in navbar for brand strength */
   width: auto;
   object-fit: contain;
   display: block;

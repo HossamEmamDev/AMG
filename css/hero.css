@@ -3,10 +3,24 @@
   position: relative;
   /* CRITICAL: contain everything, no children can overflow */
   overflow: hidden;
-  min-height: 580px;
-  max-height: 770px;
+  min-height: 520px;
+  max-height: 720px;
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+@media (min-width: 1200px) {
+  .hero-section {
+    min-height: 540px;
+    max-height: 680px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .hero-section {
+    min-height: 520px;
+    max-height: 640px;
+  }
 }
 
 /* ── Left dark content pane ── */
@@ -22,24 +36,6 @@
   padding: 0 clamp(20px, 5vw, 56px);
   padding-top: calc(var(--nav-h) + clamp(16px, 3vw, 32px));
   padding-bottom: clamp(72px, 12vw, 100px);
-}
-.hero-logo-large {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: clamp(10px, 2.5vw, 18px);
-  font-family: var(--font-heading);
-  font-size: clamp(0.82rem, 1.2vw, 1.2rem);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 900;
-  color: var(--gold);
-}
-.hero-logo-large img {
-  height: clamp(36px, 4vw, 48px);
-  width: auto;
-  border-radius: 8px;
-  border: 2px solid rgba(184,134,11,0.8);
 }
 .hero-badge {
   background: rgba(255,255,255,0.12);
@@ -110,46 +106,6 @@
   .hero-content { position: relative; z-index: 5; }
 }
 
-.hero-bg-logo {
-  position: absolute;
-  top: 50%; left: 50%; transform: translate(-50%, -50%);
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(15,15,15,0.62);
-  border: 1px solid rgba(255,255,255,0.17);
-  border-radius: 10px;
-  padding: clamp(10px, 1.2vw, 14px) clamp(12px, 1.8vw, 18px);
-  backdrop-filter: blur(4px);
-  max-width: min(85%, 420px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.36);
-}
-.hero-bg-logo img {
-  width: clamp(46px, 6vw, 72px);
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
-  border: 2px solid rgba(184,134,11,0.8);
-}
-.hero-bg-logo-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  color: #fff;
-  text-align: left;
-}
-.hero-bg-logo-text span {
-  font-family: var(--font-heading);
-  font-size: clamp(0.72rem, 1.2vw, 0.92rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
-.hero-bg-logo-text small {
-  color: rgba(255,255,255,0.78);
-  font-size: clamp(0.58rem, 1vw, 0.70rem);
-}
-[data-lang="ar"] .hero-bg-logo-text { text-align: right; }
 
 @media (max-width: 960px) {
   .hero-right {
@@ -158,17 +114,12 @@
   .hero-right::after {
     background: rgba(0,0,0,0.7);
   }
-  .hero-logo-large {
-    display: none;
+  .hero-right {
+    position: absolute; inset: 0; z-index: 1;
   }
-  .hero-bg-logo {
-    top: 16px; left: 50%; transform: translateX(-50%);
-    width: min(90%, 360px);
-    border-radius: 8px;
-    padding: 8px 12px;
+  .hero-right::after {
+    background: rgba(0,0,0,0.7);
   }
-  .hero-bg-logo-text span { font-size: clamp(0.68rem, 1.8vw, 0.84rem); }
-  .hero-bg-logo-text small { display: none; }
 }
 
 
@@ -185,6 +136,12 @@
   font-family: var(--font-body);
   font-size: clamp(0.86rem, 1.5vw, 0.96rem);
   font-weight: 700; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold);
+}
+
+@media (min-width: 1200px) {
+  .hero-eyebrow-logo img {
+    height: clamp(50px, 4vw, 84px);
+  }
 }
 
 .hero-title {
@@ -234,7 +191,39 @@
 [data-lang="ar"] .hero-subtitle { text-align: right; max-width: 100%; }
 [data-lang="ar"] .hero-title    { text-align: right; }
 
-.hero-cta { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; margin: 15px; }
+.hero-cta {
+  display: flex;
+  gap: clamp(10px, 1.5vw, 14px);
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin: 15px;
+  min-height: 48px;
+}
+
+.hero-cta .btn {
+  min-width: 165px;
+  padding: clamp(10px, 2vw, 14px) clamp(16px, 3.5vw, 30px);
+}
+
+@media (max-width: 860px) {
+  .hero-cta {
+    flex-direction: column;
+    align-items: stretch;
+    width: min(100%, 460px);
+  }
+  .hero-cta .btn {
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 861px) {
+  .hero-cta .btn {
+    flex: 1 1 auto;
+  }
+}
+
 [data-lang="ar"] .hero-cta { flex-direction: row-reverse; }
 
 /* ── Stats strip ── */
