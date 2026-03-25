@@ -1,81 +1,71 @@
 /* ===== CSS VARIABLES ===== */
 :root {
-  --gold: #DC143C;
-  --gold-light: #FF6B7A;
-  --gold-dark: #B81428;
-  --charcoal: #1C1C1C;
-  --charcoal-2: #242424;
-  --charcoal-3: #2E2E2E;
-  --off-white: #F7F5F0;
-  --white: #FFFFFF;
-  --text: #1C1C1C;
-  --text-muted: #6B6B6B;
-  --border: #E8E4DC;
+  --gold:          #B8860B;
+  --gold-light:    #D4A017;
+  --gold-dark:     #8B6408;
+  --charcoal:      #1C1C1C;
+  --charcoal-2:    #242424;
+  --charcoal-3:    #2E2E2E;
+  --off-white:     #F7F5F0;
+  --white:         #FFFFFF;
+  --text:          #1C1C1C;
+  --text-muted:    #6B6B6B;
+  --border:        #E8E4DC;
 
   /* aliases */
-  --color-primary: var(--gold);
-  --color-primary-light: var(--gold-light);
-  --color-primary-dark: var(--gold-dark);
-  --color-secondary: var(--charcoal);
-  --color-bg: var(--off-white);
-  --color-bg-alt: #EFECE5;
-  --color-text: var(--text);
-  --color-text-muted: var(--text-muted);
-  --color-white: var(--white);
-  --color-border: var(--border);
+  --color-primary:        var(--gold);
+  --color-primary-light:  var(--gold-light);
+  --color-primary-dark:   var(--gold-dark);
+  --color-secondary:      var(--charcoal);
+  --color-bg:             var(--off-white);
+  --color-bg-alt:         #EFECE5;
+  --color-text:           var(--text);
+  --color-text-muted:     var(--text-muted);
+  --color-white:          var(--white);
+  --color-border:         var(--border);
 
   /* Navbar */
-  --nav-bg: rgba(255, 255, 255, 1);
+  --nav-bg:          rgba(255, 255, 255, 1);
   --nav-bg-scrolled: rgba(255, 255, 255, 0.99);
-  --nav-text-color: #1C1C1C;
+  --nav-text-color:  #1C1C1C;
 
   /* Fonts */
-  --font-body-en: 'Barlow';
+  --font-body-en:    'Barlow';
   --font-heading-en: 'Barlow Condensed';
-  --font-body-ar: 'Cairo';
+  --font-body-ar:    'Cairo';
   --font-heading-ar: 'Cairo';
-  --font-body: 'Barlow', Georgia, serif;
+  --font-body:    'Barlow', Georgia, serif;
   --font-heading: 'Barlow Condensed', Georgia, serif;
 
   /* Layout — fluid so clamp in base overrides properly */
   --container: 1240px;
-  --nav-h: 66px;
+  --nav-h:     66px;
 
   /* Radii — sharp */
-  --r-sm: 2px;
-  --r-md: 4px;
-  --r-lg: 6px;
-  --r-xl: 10px;
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 6px;
-  --radius-xl: 10px;
+  --r-sm: 2px; --r-md: 4px; --r-lg: 6px; --r-xl: 10px;
+  --radius-sm: 2px; --radius-md: 4px; --radius-lg: 6px; --radius-xl: 10px;
 
   /* Shadows */
-  --sh-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --sh-md: 0 6px 24px rgba(0, 0, 0, 0.12);
-  --sh-lg: 0 16px 48px rgba(0, 0, 0, 0.18);
-  --sh-gold: 0 6px 24px rgba(220, 20, 60, 0.28);
-  --shadow-sm: var(--sh-sm);
-  --shadow-md: var(--sh-md);
-  --shadow-lg: var(--sh-lg);
-  --shadow-copper: var(--sh-gold);
+  --sh-sm:    0 2px 8px rgba(0,0,0,0.08);
+  --sh-md:    0 6px 24px rgba(0,0,0,0.12);
+  --sh-lg:    0 16px 48px rgba(0,0,0,0.18);
+  --sh-gold:  0 6px 24px rgba(184,134,11,0.28);
+  --shadow-sm: var(--sh-sm); --shadow-md: var(--sh-md);
+  --shadow-lg: var(--sh-lg); --shadow-copper: var(--sh-gold);
 
   /* Transitions */
-  --tr: 0.25s cubic-bezier(.4, 0, .2, 1);
-  --tr-slow: 0.45s cubic-bezier(.4, 0, .2, 1);
-  --transition: var(--tr);
-  --transition-slow: var(--tr-slow);
+  --tr:      0.25s cubic-bezier(.4,0,.2,1);
+  --tr-slow: 0.45s cubic-bezier(.4,0,.2,1);
+  --transition: var(--tr); --transition-slow: var(--tr-slow);
 }
 
 html[data-lang="en"] {
-  --font-body: 'Barlow', Georgia, serif;
+  --font-body:    'Barlow', Georgia, serif;
   --font-heading: 'Barlow Condensed', Georgia, serif;
   direction: ltr;
 }
-
 html[data-lang="ar"] {
-  --font-body: 'Tajawal', 'Cairo', Georgia, serif;
+  --font-body:    'Tajawal', 'Cairo', Georgia, serif;
   --font-heading: 'Tajawal', 'Cairo', Georgia, serif;
   direction: rtl;
 }
