@@ -32,10 +32,60 @@
 
 .mission-vision-intro {
   display: grid;
-  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
-  gap: clamp(20px, 3vw, 32px);
-  align-items: start;
+  grid-template-columns: minmax(220px, 0.38fr) minmax(0, 1fr);
+  gap: clamp(18px, 2.8vw, 34px);
+  align-items: stretch;
   margin-bottom: clamp(24px, 4vw, 36px);
+}
+
+.mission-vision-intro-mark {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  padding: clamp(20px, 3vw, 28px);
+  background: linear-gradient(180deg, rgba(31, 31, 31, 0.98) 0%, rgba(22, 22, 22, 1) 100%);
+  border-left: 4px solid var(--gold);
+  box-shadow: 0 18px 42px rgba(28, 28, 28, 0.14);
+}
+
+.intro-mark-line {
+  width: clamp(56px, 7vw, 88px);
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold) 0%, rgba(184, 134, 11, 0.18) 100%);
+}
+
+.mission-vision-intro-copy {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100%;
+  padding: clamp(24px, 3vw, 34px);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(28, 28, 28, 0.08);
+  box-shadow: 0 18px 42px rgba(28, 28, 28, 0.08);
+}
+
+.mission-vision-intro-copy::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 22px;
+  height: 22px;
+  border-top: 2px solid rgba(184, 134, 11, 0.4);
+  border-left: 2px solid rgba(184, 134, 11, 0.4);
+}
+
+.mission-vision-intro-copy::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  width: 22px;
+  height: 22px;
+  border-right: 2px solid rgba(184, 134, 11, 0.28);
+  border-bottom: 2px solid rgba(184, 134, 11, 0.28);
 }
 
 .mission-vision-kicker,
@@ -51,16 +101,17 @@
 }
 
 .mission-vision-kicker {
-  color: var(--gold);
+  color: var(--white);
+  font-size: 0.76rem;
 }
 
 .mission-vision-intro p {
   margin: 0;
-  max-width: 760px;
+  max-width: 700px;
   font-family: var(--font-body);
-  font-size: clamp(1rem, 1.7vw, 1.08rem);
-  line-height: 1.8;
-  color: rgba(28, 28, 28, 0.78);
+  font-size: clamp(1.02rem, 1.7vw, 1.12rem);
+  line-height: 1.9;
+  color: rgba(28, 28, 28, 0.82);
 }
 
 .mission-vision-grid {
@@ -156,12 +207,31 @@
 }
 
 [data-lang="ar"] .mission-vision-intro {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 240px);
+  grid-template-columns: minmax(220px, 0.38fr) minmax(0, 1fr);
 }
 
 [data-lang="ar"] .mission-vision-intro p,
 [data-lang="ar"] .mission-vision-content {
   text-align: right;
+}
+
+[data-lang="ar"] .mission-vision-intro-mark {
+  border-left: 0;
+  border-right: 4px solid var(--gold);
+}
+
+[data-lang="ar"] .mission-vision-intro-copy::before {
+  left: auto;
+  right: 18px;
+  border-left: 0;
+  border-right: 2px solid rgba(184, 134, 11, 0.4);
+}
+
+[data-lang="ar"] .mission-vision-intro-copy::after {
+  right: auto;
+  left: 18px;
+  border-right: 0;
+  border-left: 2px solid rgba(184, 134, 11, 0.28);
 }
 
 [data-lang="ar"] .mission-card {
@@ -177,6 +247,11 @@
   .mission-vision-intro,
   [data-lang="ar"] .mission-vision-intro {
     grid-template-columns: 1fr;
+  }
+
+  .mission-vision-intro-mark,
+  .mission-vision-intro-copy {
+    box-shadow: none;
   }
 
   .mission-vision-grid {
@@ -202,6 +277,11 @@
 
   .mission-vision-card {
     min-height: unset;
+  }
+
+  .mission-vision-intro-mark,
+  .mission-vision-intro-copy {
+    padding: 18px 16px;
   }
 
   .mission-vision-content {

@@ -57,6 +57,10 @@ const DEFAULT_DATA = {
 
   missionVision: {
     intro: {
+      sectionTagEn: "Our Journey",
+      sectionTagAr: "رحلتنا",
+      sectionTitleEn: "Mission & Vision",
+      sectionTitleAr: "مهمتنا ورؤيتنا",
       kickerEn: "Built on purpose",
       kickerAr: "مبني على هدف",
       textEn:

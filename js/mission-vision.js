@@ -6,6 +6,10 @@
   // Default mission/vision data
   const defaultData = {
     intro: {
+      sectionTagEn: "Our Journey",
+      sectionTagAr: "رحلتنا",
+      sectionTitleEn: "Mission & Vision",
+      sectionTitleAr: "مهمتنا ورؤيتنا",
       kickerEn: "Built on purpose",
       kickerAr: "مبني على هدف",
       textEn:
@@ -59,11 +63,19 @@
 
     const introKicker = document.getElementById("mv-intro-kicker");
     const introText = document.getElementById("mv-intro-text");
+    const sectionTag = document.getElementById("mv-section-tag");
+    const sectionTitle = document.getElementById("mv-section-title");
     const missionLabel = document.getElementById("mission-label");
     const missionIcon = document.getElementById("mission-icon");
     const visionLabel = document.getElementById("vision-label");
     const visionIcon = document.getElementById("vision-icon");
 
+    if (sectionTag) {
+      sectionTag.textContent = lang === "ar" ? data.intro.sectionTagAr : data.intro.sectionTagEn;
+    }
+    if (sectionTitle) {
+      sectionTitle.textContent = lang === "ar" ? data.intro.sectionTitleAr : data.intro.sectionTitleEn;
+    }
     if (introKicker) {
       introKicker.textContent = lang === "ar" ? data.intro.kickerAr : data.intro.kickerEn;
     }

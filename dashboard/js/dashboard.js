@@ -1216,6 +1216,10 @@ function pushToServer() {
 function loadMissionVision() {
   const data = getData("missionVision") || {
     intro: {
+      sectionTagEn: "Our Journey",
+      sectionTagAr: "رحلتنا",
+      sectionTitleEn: "Mission & Vision",
+      sectionTitleAr: "مهمتنا ورؤيتنا",
       kickerEn: "Built on purpose",
       kickerAr: "مبني على هدف",
       textEn: "",
@@ -1241,6 +1245,10 @@ function loadMissionVision() {
     },
   };
 
+  document.getElementById("mv-section-tag-en").value = data.intro?.sectionTagEn || "";
+  document.getElementById("mv-section-tag-ar").value = data.intro?.sectionTagAr || "";
+  document.getElementById("mv-section-title-en").value = data.intro?.sectionTitleEn || "";
+  document.getElementById("mv-section-title-ar").value = data.intro?.sectionTitleAr || "";
   document.getElementById("mv-intro-kicker-en").value = data.intro?.kickerEn || "";
   document.getElementById("mv-intro-kicker-ar").value = data.intro?.kickerAr || "";
   document.getElementById("mv-intro-text-en").value = data.intro?.textEn || "";
@@ -1266,6 +1274,10 @@ function loadMissionVision() {
 function saveMissionVision() {
   const data = {
     intro: {
+      sectionTagEn: document.getElementById("mv-section-tag-en").value,
+      sectionTagAr: document.getElementById("mv-section-tag-ar").value,
+      sectionTitleEn: document.getElementById("mv-section-title-en").value,
+      sectionTitleAr: document.getElementById("mv-section-title-ar").value,
       kickerEn: document.getElementById("mv-intro-kicker-en").value,
       kickerAr: document.getElementById("mv-intro-kicker-ar").value,
       textEn: document.getElementById("mv-intro-text-en").value,
