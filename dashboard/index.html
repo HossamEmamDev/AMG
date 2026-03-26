@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
@@ -330,7 +330,8 @@
                 <div class="form-field">
                   <label>English Body Font</label>
                   <select id="s-font-en" onchange="previewFont('en',this.value)">
-                    <option value="Barlow">Barlow (Default)</option>
+                    <option value="Manrope">Manrope (Default)</option>
+                    <option value="Barlow">Barlow</option>
                     <option value="Raleway">Raleway</option>
                     <option value="Roboto">Roboto</option>
                     <option value="Open Sans">Open Sans</option>
@@ -342,7 +343,8 @@
                 <div class="form-field">
                   <label>Arabic Body Font</label>
                   <select id="s-font-ar" onchange="previewFont('ar',this.value)">
-                    <option value="Cairo">Cairo (Default)</option>
+                    <option value="IBM Plex Sans Arabic">IBM Plex Sans Arabic (Default)</option>
+                    <option value="Cairo">Cairo</option>
                     <option value="Tajawal">Tajawal</option>
                     <option value="Noto Kufi Arabic">Noto Kufi Arabic</option>
                     <option value="Almarai">Almarai</option>
@@ -352,12 +354,25 @@
                 <div class="form-field">
                   <label>English Heading Font</label>
                   <select id="s-font-heading-en" onchange="previewFont('heading-en',this.value)">
-                    <option value="Playfair Display">Playfair Display (Default)</option>
+                    <option value="Oswald">Oswald (Default)</option>
+                    <option value="Barlow Condensed">Barlow Condensed</option>
+                    <option value="Playfair Display">Playfair Display</option>
                     <option value="Cormorant Garamond">Cormorant Garamond</option>
                     <option value="Libre Baskerville">Libre Baskerville</option>
                     <option value="Merriweather">Merriweather</option>
                     <option value="DM Serif Display">DM Serif Display</option>
                     <option value="Barlow">Barlow (same as body)</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label>Arabic Heading Font</label>
+                  <select id="s-font-heading-ar" onchange="previewFont('heading-ar',this.value)">
+                    <option value="IBM Plex Sans Arabic">IBM Plex Sans Arabic (Default)</option>
+                    <option value="Cairo">Cairo</option>
+                    <option value="Tajawal">Tajawal</option>
+                    <option value="Noto Kufi Arabic">Noto Kufi Arabic</option>
+                    <option value="Almarai">Almarai</option>
+                    <option value="Readex Pro">Readex Pro</option>
                   </select>
                 </div>
                 <div class="form-field">

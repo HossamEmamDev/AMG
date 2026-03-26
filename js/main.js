@@ -3,12 +3,15 @@
 
 // ── Navbar scroll ──
 const navbar = document.getElementById("navbar");
-window.addEventListener("scroll", () => {
+function updateNavbarState() {
   if (window.scrollY > 50) navbar.classList.add("scrolled");
   else navbar.classList.remove("scrolled");
   updateBackToTop();
   updateActiveNavLink();
-});
+}
+
+window.addEventListener("scroll", updateNavbarState);
+window.addEventListener("load", updateNavbarState);
 
 // ── Hamburger ──
 const hamburger = document.getElementById("hamburger");

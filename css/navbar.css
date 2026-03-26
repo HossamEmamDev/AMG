@@ -30,16 +30,57 @@
  justify-content: space-between;   /* stop any child overflowing container */
 }
 
-.nav-logo { flex-shrink: 0; line-height: 0; }
+.nav-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  transition: opacity var(--tr), transform var(--tr);
+}
 .nav-logo img {
-  height: clamp(42px, 9vw, 72px); /* larger logo in navbar for brand strength */
+  height: clamp(42px, 4.2vw, 56px);
   width: auto;
   object-fit: contain;
   display: block;
-  transition: transform var(--tr);
+  transition: transform var(--tr), opacity var(--tr), filter var(--tr);
+  max-width: 180px;
+  opacity: 1;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.12));
 }
-.nav-logo img:hover {
-  transform: scale(1.04);
+
+.nav-brand-copy {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  transition: opacity var(--tr), transform var(--tr), max-width var(--tr);
+  max-width: 320px;
+  opacity: 1;
+  overflow: hidden;
+  transform: translateX(0);
+}
+
+.nav-brand-kicker {
+  font-family: var(--font-body);
+  font-size: clamp(0.74rem, 0.9vw, 0.84rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(184, 134, 11, 0.94);
+  white-space: nowrap;
+  border-left: 1px solid rgba(184, 134, 11, 0.22);
+  padding-left: 12px;
+}
+
+.nav-logo:hover img {
+  transform: translateY(-1px) scale(1.02);
+}
+
+[data-lang="ar"] .nav-brand-kicker {
+  border-left: none;
+  border-right: 1px solid rgba(184, 134, 11, 0.22);
+  padding-left: 0;
+  padding-right: 12px;
 }
 
 /* Desktop links */
@@ -55,7 +96,7 @@
   display: flex; align-items: center; gap: 4px;
   padding: 6px clamp(6px, 1.2vw, 12px);
   color: var(--nav-text-color); font-family: var(--font-body);
-  font-weight: 600; font-size: clamp(0.68rem, 1.1vw, 0.80rem);
+  font-weight: 600; font-size: clamp(0.72rem, 1.15vw, 0.84rem);
   letter-spacing: 0.5px; text-transform: uppercase;
   transition: var(--tr); text-decoration: none; white-space: nowrap;
   opacity: 0.75; position: relative;
@@ -123,6 +164,15 @@
    ════════════════════════════════ */
 @media (max-width: 960px) {
   .hamburger { display: flex; }
+
+  .nav-logo img {
+    max-width: 160px;
+    opacity: 1;
+  }
+
+  .nav-brand-copy {
+    display: none;
+  }
 
   /* The mobile panel — full viewport width, NO wider */
   .nav-links {

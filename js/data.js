@@ -11,8 +11,10 @@ const DEFAULT_DATA = {
     primaryColor: "#B8860B",
     secondaryColor: "#2B2B2B",
     bgColor: "#FAFAF8",
-    fontEn: "Barlow",
-    fontAr: "Cairo",
+    fontEn: "Manrope",
+    fontAr: "IBM Plex Sans Arabic",
+    fontHeadingEn: "Oswald",
+    fontHeadingAr: "IBM Plex Sans Arabic",
     heroVideo: "",
     heroTitle_en: "Building Tomorrow's World",
     heroTitle_ar: "نبني مستقبل الغد",
@@ -482,7 +484,12 @@ function _loadGoogleFont(name) {
   if (
     !name ||
     name === "Barlow" ||
+    name === "Barlow Condensed" ||
     name === "Cairo" ||
+    name === "Tajawal" ||
+    name === "Manrope" ||
+    name === "Oswald" ||
+    name === "IBM Plex Sans Arabic" ||
     name === "Playfair Display"
   )
     return; // already loaded
@@ -522,7 +529,6 @@ function applySettings() {
   root.style.setProperty("--nav-text-color", _navText);
 
   // Fonts — update the source variables; html[data-lang] rules pick them up automatically
-  // Dashboard stores fontEn (body) and fontAr (body). Heading font changes separately.
   if (s.fontEn) {
     root.style.setProperty("--font-body-en", `'${s.fontEn}', Georgia, serif`);
     // Reload the computed var used by current lang if EN is active
@@ -532,13 +538,14 @@ function applySettings() {
   }
   if (s.fontAr) {
     root.style.setProperty("--font-body-ar", `'${s.fontAr}', Georgia, serif`);
-    root.style.setProperty(
-      "--font-heading-ar",
-      `'${s.fontAr}', Georgia, serif`,
-    );
+    if (!s.fontHeadingAr) {
+      root.style.setProperty("--font-heading-ar", `'${s.fontAr}', Georgia, serif`);
+    }
     if (root.getAttribute("data-lang") === "ar") {
       root.style.setProperty("--font-body", `'${s.fontAr}', Georgia, serif`);
-      root.style.setProperty("--font-heading", `'${s.fontAr}', Georgia, serif`);
+      if (!s.fontHeadingAr) {
+        root.style.setProperty("--font-heading", `'${s.fontAr}', Georgia, serif`);
+      }
     }
   }
   if (s.fontHeadingEn) {
@@ -553,9 +560,23 @@ function applySettings() {
       );
     }
   }
+  if (s.fontHeadingAr) {
+    root.style.setProperty(
+      "--font-heading-ar",
+      `'${s.fontHeadingAr}', Georgia, serif`,
+    );
+    if (root.getAttribute("data-lang") === "ar") {
+      root.style.setProperty(
+        "--font-heading",
+        `'${s.fontHeadingAr}', Georgia, serif`,
+      );
+    }
+  }
   // Dynamically inject Google Fonts link if needed
-  _loadGoogleFont(s.fontEn || "Barlow");
-  _loadGoogleFont(s.fontAr || "Cairo");
+  _loadGoogleFont(s.fontEn || "Manrope");
+  _loadGoogleFont(s.fontAr || "IBM Plex Sans Arabic");
+  _loadGoogleFont(s.fontHeadingEn || "Oswald");
+  _loadGoogleFont(s.fontHeadingAr || s.fontAr || "IBM Plex Sans Arabic");
 
   // Logo
   document

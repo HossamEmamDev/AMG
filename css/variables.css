@@ -30,12 +30,12 @@
   --nav-text-color:  #1C1C1C;
 
   /* Fonts */
-  --font-body-en:    'Barlow';
-  --font-heading-en: 'Barlow Condensed';
-  --font-body-ar:    'Cairo';
-  --font-heading-ar: 'Cairo';
-  --font-body:    'Barlow', Georgia, serif;
-  --font-heading: 'Barlow Condensed', Georgia, serif;
+  --font-body-en:    'Manrope', Georgia, serif;
+  --font-heading-en: 'Oswald', Georgia, serif;
+  --font-body-ar:    'IBM Plex Sans Arabic', 'Cairo', Georgia, serif;
+  --font-heading-ar: 'IBM Plex Sans Arabic', 'Cairo', Georgia, serif;
+  --font-body:    'Manrope', Georgia, serif;
+  --font-heading: 'Oswald', Georgia, serif;
 
   /* Layout — fluid so clamp in base overrides properly */
   --container: 1240px;
@@ -60,12 +60,12 @@
 }
 
 html[data-lang="en"] {
-  --font-body:    'Barlow', Georgia, serif;
-  --font-heading: 'Barlow Condensed', Georgia, serif;
+  --font-body: var(--font-body-en);
+  --font-heading: var(--font-heading-en);
   direction: ltr;
 }
 html[data-lang="ar"] {
-  --font-body:    'Tajawal', 'Cairo', Georgia, serif;
-  --font-heading: 'Tajawal', 'Cairo', Georgia, serif;
+  --font-body: var(--font-body-ar);
+  --font-heading: var(--font-heading-ar);
   direction: rtl;
 }

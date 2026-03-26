@@ -135,10 +135,12 @@ function loadSettings() {
   if (nb) nb.value = s.navBg || "#FFFFFF";
   const nt = document.getElementById("s-nav-text");
   if (nt) nt.value = s.navText || "#1A1A1A";
-  document.getElementById("s-font-en").value = s.fontEn || "Barlow";
-  document.getElementById("s-font-ar").value = s.fontAr || "Cairo";
+  document.getElementById("s-font-en").value = s.fontEn || "Manrope";
+  document.getElementById("s-font-ar").value = s.fontAr || "IBM Plex Sans Arabic";
   const fhe = document.getElementById("s-font-heading-en");
-  if (fhe) fhe.value = s.fontHeadingEn || "Playfair Display";
+  if (fhe) fhe.value = s.fontHeadingEn || "Oswald";
+  const fha = document.getElementById("s-font-heading-ar");
+  if (fha) fha.value = s.fontHeadingAr || s.fontAr || "IBM Plex Sans Arabic";
   document.getElementById("s-default-lang").value = s.defaultLang || "auto";
   document.getElementById("s-hero-video").value = s.heroVideo || "";
   document.getElementById("s-hero-title-en").value = s.heroTitle_en || "";
@@ -165,14 +167,25 @@ function previewFont(type, name) {
   if (!box) return;
   // Load font if not built-in
   const id = "gf-prev-" + name.replace(/\s+/g, "-");
-  if (!document.getElementById(id) && name !== "Barlow" && name !== "Cairo") {
+  if (
+    !document.getElementById(id) &&
+    ![
+      "Barlow",
+      "Barlow Condensed",
+      "Cairo",
+      "Tajawal",
+      "Manrope",
+      "Oswald",
+      "IBM Plex Sans Arabic",
+    ].includes(name)
+  ) {
     const lk = document.createElement("link");
     lk.id = id;
     lk.rel = "stylesheet";
     lk.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(name)}:wght@400;700&display=swap`;
     document.head.appendChild(lk);
   }
-  if (type === "ar") box.style.fontFamily = `'${name}', serif`;
+  if (type === "ar" || type === "heading-ar") box.style.fontFamily = `'${name}', serif`;
   if (type === "en" || type === "heading-en")
     box.style.fontFamily = `'${name}', serif`;
 }
@@ -190,6 +203,8 @@ function saveSettings() {
   s.fontAr = document.getElementById("s-font-ar").value;
   const fhe2 = document.getElementById("s-font-heading-en");
   if (fhe2) s.fontHeadingEn = fhe2.value;
+  const fha2 = document.getElementById("s-font-heading-ar");
+  if (fha2) s.fontHeadingAr = fha2.value;
   s.defaultLang = document.getElementById("s-default-lang").value;
   s.heroVideo = document.getElementById("s-hero-video").value;
   s.heroTitle_en = document.getElementById("s-hero-title-en").value;
