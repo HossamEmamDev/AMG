@@ -1075,7 +1075,7 @@ function renderOurGroupList() {
       </div>
       <div class="item-card-meta">
         <span><i class="fas fa-location-dot"></i> ${c.location_en}</span>
-        <span><i class="fas fa-link"></i> ${(c.url || "").replace("https://", "")}</span>
+        <span><i class="fas fa-file-pdf"></i> ${c.profile ? "Profile attached" : "No profile"}</span>
       </div>
       ${c.image ? `<img src="${c.image}" alt="" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-top:8px;" />` : ""}
       <div class="item-card-actions">
@@ -1102,9 +1102,10 @@ function openGroupModal(id) {
       <div class="form-field"><label>Description (EN)</label><textarea id="m-gdesc-en" rows="3">${c?.desc_en || ""}</textarea></div>
       <div class="form-field"><label>Description (AR)</label><textarea id="m-gdesc-ar" rows="3" dir="rtl">${c?.desc_ar || ""}</textarea></div>
     </div>
-    <div class="form-field"><label>Website URL</label><input id="m-gurl" value="${c?.url || "https://"}" /></div>
     <div class="form-field"><label>Image URL</label><input id="m-gimage" value="${c?.image || ""}" placeholder="https://... or upload below" /></div>
     <div class="form-field"><label>Upload Image</label><input type="file" accept="image/*" onchange="previewUpload(this,'m-gimage')" style="color:var(--dash-muted)" /></div>
+    <div class="form-field"><label>Company Profile PDF</label><input id="m-gprofile" value="${c?.profile || ""}" placeholder="PDF URL or uploaded PDF data" /></div>
+    <div class="form-field"><label>Upload Profile PDF</label><input type="file" accept="application/pdf,.pdf" onchange="previewUpload(this,'m-gprofile')" style="color:var(--dash-muted)" /></div>
     <div class="modal-actions">
       <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
       <button class="btn-modal-save" onclick="saveGroup(${id || "null"})">Save Company</button>
@@ -1121,8 +1122,8 @@ function saveGroup(id) {
     location_ar: document.getElementById("m-gloc-ar").value,
     desc_en: document.getElementById("m-gdesc-en").value,
     desc_ar: document.getElementById("m-gdesc-ar").value,
-    url: document.getElementById("m-gurl").value,
     image: document.getElementById("m-gimage").value,
+    profile: document.getElementById("m-gprofile").value,
   };
   if (id) {
     const idx = companies.findIndex((x) => x.id === id);

@@ -398,7 +398,7 @@ const DEFAULT_DATA = {
         "A leading construction force in the Kingdom of Saudi Arabia, specializing in large-scale residential, commercial, and infrastructure projects with a commitment to Vision 2030.",
       desc_ar:
         "قوة إنشائية رائدة في المملكة العربية السعودية، متخصصة في المشاريع السكنية والتجارية والبنية التحتية الكبيرة بالتزام برؤية 2030.",
-      url: "https://amjaad-sa.com/",
+      profile: "",
       image: "assets/images/amjaad.avif",
     },
     {
@@ -411,7 +411,7 @@ const DEFAULT_DATA = {
         "Egypt's premier electromechanical and civil contracting company, delivering integrated MEP solutions, industrial facilities, and advanced infrastructure.",
       desc_ar:
         "شركة مصر الرائدة في المقاولات الكهروميكانيكية والمدنية، تقدم حلول MEP المتكاملة والمنشآت الصناعية والبنية التحتية المتقدمة.",
-      url: "https://electrocivic.com/",
+      profile: "",
       image: "assets/images/electrocivic.avif",
     },
   ],
@@ -462,6 +462,15 @@ function initData() {
   }
 }
 
+function cleanupLegacyGroupCompanies() {
+  const companies = getData("groupCompanies") || [];
+  const cleaned = companies.map(({ url, ...company }) => ({
+    ...company,
+    profile: company.profile || "",
+  }));
+  setData("groupCompanies", cleaned);
+}
+
 // ── Get / Set helpers ──
 function getData(key) {
   try {
@@ -478,6 +487,7 @@ function setData(key, value) {
 
 // Run on load
 initData();
+cleanupLegacyGroupCompanies();
 
 // Inject Google Font dynamically
 function _loadGoogleFont(name) {
@@ -633,26 +643,34 @@ function renderGroup() {
   const grid = document.getElementById("group-grid");
   if (!grid) return;
 
-  const visitLabel = lang === "ar" ? "زيارة الموقع" : "Visit Website";
+  const profileLabel = lang === "ar" ? "تحميل بروفايل الشركة" : "Download Company Profile";
 
   grid.innerHTML = companies
     .map(
-      (c) => `
+      (c) => {
+        const profileUrl = c.profile || "";
+        const profileName = `${(c.name_en || "company").toLowerCase().replace(/\s+/g, "-")}-profile.pdf`;
+        const linkAttrs = profileUrl
+          ? `href="${profileUrl}" target="_blank" download="${profileName}"`
+          : `href="javascript:void(0)" aria-disabled="true"`;
+
+        return `
     <div class="group-card reveal-left">
       <div class="group-card-image">
         <img src="${c.image || ""}" alt="${c["name_" + lang] || c.name_en}"
              onerror="this.style.background='#1a1a1a';this.style.display='block'" loading="lazy" />
         <div class="group-card-overlay">
-          <a href="${c.url}" target="_blank" class="btn btn-primary">${visitLabel}</a>
+          <a ${linkAttrs} class="btn btn-primary">${profileLabel}</a>
         </div>
       </div>
       <div class="group-card-body">
         <div class="group-card-flag"><i class="fa fa-location-dot"></i> ${c["location_" + lang] || c.location_en}</div>
         <h3>${c["name_" + lang] || c.name_en}</h3>
         <p>${c["desc_" + lang] || c.desc_en}</p>
-        <a href="${c.url}" target="_blank" class="group-link">${c.url.replace("https://", "").replace("/", "")}<i class="fa fa-arrow-up-right-from-square"></i></a>
+        <a ${linkAttrs} class="group-link">${profileLabel}<i class="fa fa-file-arrow-down"></i></a>
       </div>
-    </div>`,
+    </div>`;
+      },
     )
     .join("");
 
@@ -670,6 +688,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Object.keys(serverData).forEach((key) => {
           localStorage.setItem("amg_" + key, JSON.stringify(serverData[key]));
         });
+        cleanupLegacyGroupCompanies();
       }
     })
     .catch(() => {}) // if fetch fails, fall back to localStorage silently
