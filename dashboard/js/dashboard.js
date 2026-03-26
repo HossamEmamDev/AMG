@@ -822,6 +822,7 @@ function renderPartnersList() {
         (p) => `
     <div class="item-card" style="margin-bottom:10px">
       <div class="item-card-header"><span class="item-card-title">${p.name}</span></div>
+      ${p.logo ? `<img src="${p.logo}" alt="${p.name}" style="width:100%;height:72px;object-fit:contain;background:var(--dash-surface2);border:1px solid var(--dash-border);border-radius:6px;padding:12px;margin:8px 0;" />` : ""}
       <div class="item-card-actions">
         <button class="btn-edit" onclick="openPartnerModal(${p.id})"><i class="fas fa-edit"></i> Edit</button>
         <button class="btn-del" onclick="deleteItemFrom('partners',${p.id})"><i class="fas fa-trash"></i></button>
@@ -838,7 +839,8 @@ function openPartnerModal(id) {
   openDashModal(`
     <h3>${p ? "Edit Partner" : "Add Partner"}</h3>
     <div class="form-field"><label>Partner Name</label><input id="m-pname" value="${p?.name || ""}" /></div>
-    <div class="form-field"><label>Logo URL or Upload</label><input id="m-plogo" value="${p?.logo || ""}" placeholder="https://..." /></div>
+    <div class="form-field"><label>Logo Path / URL</label><input id="m-plogo" value="${p?.logo || ""}" placeholder="assets/images/partner/logo.avif or https://..." /></div>
+    <div class="form-field"><small style="color:var(--dash-muted)">Recommended: use local files from <code>assets/images/partner</code> for the new luxury logo wall.</small></div>
     <div class="form-field"><input type="file" accept="image/*" onchange="previewUpload(this,'m-plogo')" style="color:var(--dash-muted)" /></div>
     <div class="modal-actions">
       <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>

@@ -6,9 +6,7 @@ function renderPartners() {
   const track    = document.getElementById('partners-track');
   if (!track) return;
 
-  // Double list for seamless infinite scroll
-  const all = [...partners, ...partners];
-  track.innerHTML = all.map(p => `
+  track.innerHTML = partners.map(p => `
     <div class="partner-logo">
       ${p.logo
         ? `<img

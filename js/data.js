@@ -361,30 +361,18 @@ const DEFAULT_DATA = {
 
   // ── Partners & Testimonials ──
   partners: [
-    {
-      id: 1,
-      name: "Orascom Construction",
-      logo: "https://logo.clearbit.com/orascomconstruction.com",
-    },
-    { id: 2, name: "BESIX Group", logo: "https://logo.clearbit.com/besix.com" },
-    { id: 3, name: "AECOM", logo: "https://logo.clearbit.com/aecom.com" },
-    {
-      id: 4,
-      name: "Parsons Corporation",
-      logo: "https://logo.clearbit.com/parsons.com",
-    },
-    { id: 5, name: "Dar Al Riyadh", logo: "https://logo.clearbit.com/dar.com" },
-    { id: 6, name: "WSP Global", logo: "https://logo.clearbit.com/wsp.com" },
-    {
-      id: 7,
-      name: "Hill International",
-      logo: "https://logo.clearbit.com/hillintl.com",
-    },
-    {
-      id: 8,
-      name: "Turner Construction",
-      logo: "https://logo.clearbit.com/turnerconstruction.com",
-    },
+    { id: 1, name: "Arby's", logo: "assets/images/partner/arbys.avif" },
+    { id: 2, name: "Baja", logo: "assets/images/partner/baja.png" },
+    { id: 3, name: "BLBN", logo: "assets/images/partner/blbn.avif" },
+    { id: 4, name: "Coffee", logo: "assets/images/partner/coffe.avif" },
+    { id: 5, name: "Danken", logo: "assets/images/partner/danken.avif" },
+    { id: 6, name: "Ibrahem", logo: "assets/images/partner/ibrahem.avif" },
+    { id: 7, name: "K", logo: "assets/images/partner/k.avif" },
+    { id: 8, name: "Print", logo: "assets/images/partner/print.avif" },
+    { id: 9, name: "Samsung", logo: "assets/images/partner/samsung_logo.svg-AGBzqaB3BQfzPKg0.avif" },
+    { id: 10, name: "Semsema", logo: "assets/images/partner/semsema.avif" },
+    { id: 11, name: "White", logo: "assets/images/partner/white.avif" },
+    { id: 12, name: "Zed", logo: "assets/images/partner/zed.avif" },
   ],
   // ── Group Companies ──
   groupCompanies: [
