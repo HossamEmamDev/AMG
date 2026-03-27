@@ -4,8 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Careers — AMG Main Contracting</title>
+  <meta name="description" content="Discover career opportunities at AMG Main Contracting Group." />
+  <meta name="keywords" content="AMG careers, construction jobs, engineering jobs" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Careers — AMG Main Contracting" />
+  <meta property="og:description" content="Discover career opportunities at AMG Main Contracting Group." />
+  <meta property="og:image" content="assets/images/amg-logo.jpeg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Careers — AMG Main Contracting" />
+  <meta name="twitter:description" content="Discover career opportunities at AMG Main Contracting Group." />
+  <meta name="twitter:image" content="assets/images/amg-logo.jpeg" />
+  <meta name="author" content="AMG Main Contracting Group" />
+  <meta name="application-name" content="AMG Careers" />
+  <meta name="theme-color" content="#C99664" />
+  <meta property="og:site_name" content="AMG Main Contracting Group" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="google-site-verification" content="" />
+  <meta name="msvalidate.01" content="" />
+  <link rel="canonical" href="" />
   <link rel="icon" id="favicon-link" href="assets/images/amg-logo.jpeg" />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/base.css" />
@@ -14,30 +33,8 @@
   <link rel="stylesheet" href="css/modal.css" />
   <link rel="stylesheet" href="css/footer.css" />
   <link rel="stylesheet" href="css/animations.css" />
-  <style>
-    .careers-page-hero {
-      background: linear-gradient(135deg, var(--color-secondary) 0%, #1a1a1a 100%);
-      padding: 140px 0 80px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .careers-page-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z' fill='none' stroke='rgba(184,134,11,0.08)' stroke-width='1'/%3E%3C/svg%3E");
-    }
-    .careers-page-hero h1 { font-family: var(--font-heading); font-size: clamp(2.5rem,5vw,4rem); color: #fff; font-weight: 900; margin-bottom: 16px; }
-    .careers-page-hero p { color: rgba(255,255,255,0.7); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
-    .careers-filter { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
-    .filter-btn { padding: 8px 22px; border-radius: 100px; border: 2px solid var(--color-border); background: var(--color-white); color: var(--color-text); font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: var(--transition); }
-    .filter-btn.active, .filter-btn:hover { background: var(--color-primary); border-color: var(--color-primary); color: white; }
-    .careers-section { background: var(--color-bg-alt); padding: 80px 0; }
-    .careers-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
-  </style>
 </head>
-<body>
+<body data-page="careers">
 
 <nav id="navbar" class="navbar scrolled">
   <div class="nav-container">
@@ -46,7 +43,14 @@
       <li><a href="index.html" data-en="Home" data-ar="الرئيسية">Home</a></li>
       <li><a href="index.html#services" data-en="Services" data-ar="خدماتنا">Services</a></li>
       <li><a href="index.html#projects" data-en="Projects" data-ar="مشاريعنا">Projects</a></li>
-      <li><a href="index.html#contact" data-en="Contact" data-ar="اتصل بنا">Contact</a></li>
+      <li class="has-dropdown">
+        <a href="#careers-grid-full" data-en="Careers" data-ar="الوظائف">Careers <i class="fa fa-chevron-down"></i></a>
+        <ul class="dropdown">
+          <li><a href="#careers-grid-full" data-en="All Careers" data-ar="كل الوظائف">All Careers</a></li>
+          <li><a href="javascript:void(0)" onclick="openGeneralCvModal()" data-en="Submit Your CV" data-ar="أرسل سيرتك الذاتية">Submit Your CV</a></li>
+          <li><a href="index.html#contact" data-en="Contact" data-ar="اتصل بنا">Contact</a></li>
+        </ul>
+      </li>
     </ul>
     <div class="nav-actions">
       <button class="lang-toggle" id="lang-toggle" onclick="toggleLanguage()" title="Switch language">
@@ -64,11 +68,40 @@
     <p data-en="Build your career with AMG Main Contracting Group — where excellence meets opportunity." data-ar="ابنِ مسيرتك المهنية مع مجموعة AMG للمقاولات الرئيسية — حيث يلتقي التميز بالفرصة.">
       Build your career with AMG Main Contracting Group — where excellence meets opportunity.
     </p>
+    <div style="margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary" type="button" onclick="openGeneralCvModal()" data-en="Submit Your CV" data-ar="أرسل سيرتك الذاتية">Submit Your CV</button>
+      <a href="index.html#contact" class="btn btn-outline-white" data-en="Talk To HR" data-ar="تواصل مع الموارد البشرية">Talk To HR</a>
+    </div>
+    <div class="careers-hero-stats">
+      <div class="careers-hero-stat">
+        <strong id="career-open-count">0</strong>
+        <span data-en="Open Roles" data-ar="وظائف متاحة">Open Roles</span>
+      </div>
+      <div class="careers-hero-stat">
+        <strong data-en="2" data-ar="2">2</strong>
+        <span data-en="Core Markets" data-ar="أسواق رئيسية">Core Markets</span>
+      </div>
+      <div class="careers-hero-stat">
+        <strong data-en="HR" data-ar="HR">HR</strong>
+        <span data-en="Direct CV Review" data-ar="مراجعة مباشرة للسيرة">Direct CV Review</span>
+      </div>
+    </div>
   </div>
 </div>
 
 <section class="careers-section">
   <div class="container">
+    <div class="careers-intro-shell" style="margin-bottom:32px">
+      <div class="careers-intro-copy">
+        <span class="careers-kicker" data-en="Luxury In Delivery, Luxury In Talent" data-ar="فخامة في التنفيذ وفخامة في استقطاب الكفاءات">Luxury In Delivery, Luxury In Talent</span>
+        <p data-en="Apply to an open role or share your CV with our HR team for future leadership, engineering, and site opportunities." data-ar="قدّم على وظيفة متاحة أو شارك سيرتك الذاتية مع فريق الموارد البشرية للفرص القيادية والهندسية والميدانية القادمة.">
+          Apply to an open role or share your CV with our HR team for future leadership, engineering, and site opportunities.
+        </p>
+      </div>
+      <div class="careers-intro-cta">
+        <button class="btn btn-primary" type="button" onclick="openGeneralCvModal()" data-en="Send General Application" data-ar="إرسال طلب عام">Send General Application</button>
+      </div>
+    </div>
     <div class="careers-filter" id="careers-filter">
       <button class="filter-btn active" data-filter="all" data-en="All Positions" data-ar="جميع الوظائف" onclick="filterCareers('all', this)">All Positions</button>
       <button class="filter-btn" data-filter="full-time" data-en="Full-Time" data-ar="دوام كامل" onclick="filterCareers('full-time', this)">Full-Time</button>
@@ -78,15 +111,6 @@
     <div class="careers-grid" id="careers-grid-full"></div>
   </div>
 </section>
-
-<footer class="site-footer" style="padding:40px 0">
-  <div class="container">
-    <div class="footer-bottom" style="border:none;padding:0">
-      <p id="footer-copy">© 2025 AMG Main Contracting. All Rights Reserved.</p>
-      <p class="footer-credit">Designed by <strong>Hossam Emam</strong> | <a href="https://wa.me/011124711154" target="_blank"><i class="fab fa-whatsapp"></i> 011124711154</a></p>
-    </div>
-  </div>
-</footer>
 
 <div class="modal-overlay" id="career-modal">
   <div class="modal-box large">
@@ -119,42 +143,43 @@
   function renderAllCareers() {
     const lang = document.documentElement.getAttribute('data-lang') || 'en';
     const careers = getData('careers') || [];
-    const filtered = currentFilter === 'all' ? careers : careers.filter(c => c.type === currentFilter);
+    const filtered = currentFilter === 'all' ? careers.filter(c => c.active !== false) : careers.filter(c => c.type === currentFilter && c.active !== false);
     const grid = document.getElementById('careers-grid-full');
+    const count = document.getElementById('career-open-count');
+    if (count) count.textContent = String(careers.filter(c => c.active !== false).length);
     if (!grid) return;
 
-    const typeLabel = { 'full-time': lang==='ar'?'دوام كامل':'Full-Time', 'part-time': lang==='ar'?'دوام جزئي':'Part-Time', 'contract': lang==='ar'?'عقد':'Contract' };
-    if (!filtered.length) {
-      grid.innerHTML = `<p style="text-align:center;color:var(--color-text-muted);grid-column:1/-1;padding:40px">${lang==='ar'?'لا توجد وظائف متاحة حالياً':'No positions available currently'}</p>`;
-      return;
-    }
-    grid.innerHTML = filtered.map(c => {
-      const shareUrl = encodeURIComponent(window.location.href);
-      const shareTitle = encodeURIComponent((c['title_'+lang]||c.title_en) + ' - AMG');
-      return `
-      <div class="career-card">
+    const labels = getCareerUiStrings(lang).labels;
+    const generalCard = `
+      <div class="career-card career-card-featured">
+        <div class="career-card-glow"></div>
         <div class="career-header">
-          <h3 class="career-title">${c['title_'+lang]||c.title_en}</h3>
-          <span class="career-type ${c.type||'full-time'}">${typeLabel[c.type]||typeLabel['full-time']}</span>
+          <div class="career-head-copy">
+            <span class="career-index">${lang === 'ar' ? 'طلب عام' : 'General Application'}</span>
+            <h3 class="career-title">${labels.generalTitle}</h3>
+          </div>
         </div>
-        <p class="career-desc" style="-webkit-line-clamp:unset;overflow:visible">${c['desc_'+lang]||c.desc_en}</p>
-        <div class="career-requirements">
-          <div class="career-req-title">${lang==='ar'?'المتطلبات':'Requirements'}</div>
-          <ul class="career-req-list">${(c.requirements||[]).map(r=>`<li>${r}</li>`).join('')}</ul>
+        <p class="career-desc expanded">${labels.generalSubtitle}</p>
+        <div class="career-feature-points">
+          <span>${lang === 'ar' ? 'إرسال مباشر لفريق الموارد البشرية' : 'Direct to the HR team'}</span>
+          <span>${lang === 'ar' ? 'فرص حالية ومستقبلية' : 'Current and future opportunities'}</span>
         </div>
         <div class="career-footer">
-          <span class="career-location"><i class="fa fa-location-dot"></i> ${c['location_'+lang]||c.location_en}</span>
-          <div style="display:flex;gap:10px;align-items:center">
-            <div class="career-share-btns">
-              <a class="career-share-btn share-fb" href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank"><i class="fab fa-facebook-f"></i></a>
-              <a class="career-share-btn share-li" href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-              <a class="career-share-btn share-wa" href="https://wa.me/?text=${shareTitle}%20${shareUrl}" target="_blank"><i class="fab fa-whatsapp"></i></a>
-            </div>
-            <button class="btn btn-primary" style="padding:8px 20px;font-size:.82rem" onclick="openApplyModal(${c.id})">${lang==='ar'?'تقدم الآن':'Apply'}</button>
+          <span class="career-location"><i class="fa fa-star"></i>${lang === 'ar' ? 'مسار مهني مفتوح' : 'Open talent track'}</span>
+          <div class="career-actions">
+            <button class="btn btn-primary" style="padding:7px 16px;font-size:0.78rem" onclick="openGeneralCvModal()">${labels.submitGeneral}</button>
           </div>
         </div>
       </div>`;
-    }).join('');
+    if (!filtered.length) {
+      grid.innerHTML = [
+        generalCard,
+        `<p style="text-align:center;color:var(--color-text-muted);grid-column:1/-1;padding:40px">${lang==='ar'?'لا توجد وظائف متاحة حالياً':'No positions available currently'}</p>`
+      ].join('');
+      return;
+    }
+    grid.innerHTML = [generalCard, ...filtered.map(c => buildCareerCard(c, lang, true))].join('');
+    wireShareBtns();
   }
 
   document.addEventListener('DOMContentLoaded', renderAllCareers);

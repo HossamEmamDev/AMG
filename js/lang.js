@@ -38,13 +38,17 @@ function setLang(lang) {
 
   /* Re-apply dynamic settings with correct language */
   if (typeof applySettings === 'function') applySettings();
+  if (typeof applySeoSettings === 'function') applySeoSettings();
 
   /* Re-render dynamic sections */
   if (typeof renderProjects  === 'function') renderProjects();
   if (typeof renderCareers   === 'function') renderCareers();
+  if (typeof renderAllCareers === 'function') renderAllCareers();
   if (typeof renderServices  === 'function') renderServices();
   if (typeof renderPartners  === 'function') renderPartners();
   if (typeof renderGroup     === 'function') renderGroup();
+  if (typeof updateContactPhoneUi === 'function') updateContactPhoneUi();
+  if (typeof updateContactFileLabel === 'function') updateContactFileLabel({ files: [] });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

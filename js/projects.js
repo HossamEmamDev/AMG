@@ -3,6 +3,19 @@
 
 let currentSlide = 0;
 let projectsData = [];
+let autoPlay = null;
+let touchStartX = 0;
+let pointerStartX = 0;
+
+function startAutoplay() {
+  clearInterval(autoPlay);
+  autoPlay = setInterval(() => goToSlide(currentSlide + 1), 6000);
+}
+
+function stopAutoplay() {
+  clearInterval(autoPlay);
+  autoPlay = null;
+}
 
 /* ── Render main slider ── */
 function renderProjects() {
@@ -21,8 +34,8 @@ function renderProjects() {
       const cat = p["category_" + lang] || p.category_en || "";
       const loc = p["location_" + lang] || p.location_en || "";
       const brief = p["brief_" + lang] || p.brief_en || "";
-      const implementingCompany =
-        p["implementing_company_" + lang] || p.implementing_company_en || "";
+      const company = resolveProjectCompany(p, lang);
+      const implementingCompany = company.name || "";
       const implementingLabel =
         lang === "ar" ? "الجهة المنفذة" : "Implementing Company";
       const pLbl = lang === "ar" ? "الإنجاز" : "Completion";
@@ -30,6 +43,11 @@ function renderProjects() {
     <div class="project-slide" data-id="${p.id}" onclick="openProjectDetail(${p.id})">
       <div class="project-img-wrap">
         <img src="${img}" alt="${name}" loading="${i === 0 ? "eager" : "lazy"}" />
+        ${
+          company.logo && !p.logo_baked
+            ? `<div class="project-company-logo-badge"><img src="${company.logo}" alt="${implementingCompany}" loading="lazy" /></div>`
+            : ""
+        }
       </div>
         <div class="project-info">
         <div class="project-accent-line"></div>
@@ -70,6 +88,8 @@ function renderProjects() {
   }
   currentSlide = 0;
   updateSlider();
+  bindProjectSwipe();
+  if (!autoPlay) startAutoplay();
 }
 
 function updateSlider() {
@@ -88,19 +108,43 @@ function goToSlide(n) {
   updateSlider();
 }
 
-let autoPlay = setInterval(() => goToSlide(currentSlide + 1), 6000);
-function resetAutoplay() {
-  clearInterval(autoPlay);
-  autoPlay = setInterval(() => goToSlide(currentSlide + 1), 6000);
+function bindProjectSwipe() {
+  const slider = document.getElementById("projects-slider");
+  if (!slider || slider.dataset.swipeBound === "true") return;
+  slider.dataset.swipeBound = "true";
+
+  slider.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartX = e.changedTouches[0]?.clientX || 0;
+    },
+    { passive: true },
+  );
+  slider.addEventListener("touchend", (e) => {
+    const delta = (e.changedTouches[0]?.clientX || 0) - touchStartX;
+    if (Math.abs(delta) < 45) return;
+    stopAutoplay();
+    goToSlide(delta > 0 ? currentSlide - 1 : currentSlide + 1);
+  });
+
+  slider.addEventListener("pointerdown", (e) => {
+    pointerStartX = e.clientX || 0;
+  });
+  slider.addEventListener("pointerup", (e) => {
+    const delta = (e.clientX || 0) - pointerStartX;
+    if (Math.abs(delta) < 45) return;
+    stopAutoplay();
+    goToSlide(delta > 0 ? currentSlide - 1 : currentSlide + 1);
+  });
 }
 
 document.getElementById("proj-prev")?.addEventListener("click", () => {
+  stopAutoplay();
   goToSlide(currentSlide - 1);
-  resetAutoplay();
 });
 document.getElementById("proj-next")?.addEventListener("click", () => {
+  stopAutoplay();
   goToSlide(currentSlide + 1);
-  resetAutoplay();
 });
 
 /* ── Project Detail Modal with image gallery ── */
@@ -113,8 +157,8 @@ function openProjectDetail(id) {
   const cat = p["category_" + lang] || p.category_en || "";
   const loc = p["location_" + lang] || p.location_en || "";
   const brief = p["brief_" + lang] || p.brief_en || "";
-  const implementingCompany =
-    p["implementing_company_" + lang] || p.implementing_company_en || "";
+  const company = resolveProjectCompany(p, lang);
+  const implementingCompany = company.name || "";
   const implementingLabel =
     lang === "ar" ? "الجهة المنفذة" : "Implementing Company";
   const imgs =
@@ -127,6 +171,11 @@ function openProjectDetail(id) {
       <div class="proj-gallery">
         <div class="proj-gallery-main">
           <img id="gallery-main-img" src="${imgs[0]}" alt="${name}" />
+          ${
+            company.logo && !p.logo_baked
+              ? `<div class="project-company-logo-badge modal-logo-badge"><img src="${company.logo}" alt="${implementingCompany}" loading="lazy" /></div>`
+              : ""
+          }
           ${
             imgs.length > 1
               ? `
@@ -214,7 +263,14 @@ function renderAllProjects() {
     .map(
       (p) => `
     <div class="proj-thumb" onclick="openProjectDetail(${p.id}); closeModal('all-projects-modal'); setTimeout(()=>openModal('project-modal'),160)">
-      ${p.image ? `<img src="${p.image}" alt="${p["name_" + lang] || p.name_en}" loading="lazy" />` : '<div style="height:170px;background:#f0ede8;display:flex;align-items:center;justify-content:center"><i class="fas fa-building" style="font-size:2rem;color:#ccc"></i></div>'}
+      <div class="proj-thumb-media">
+        ${p.image ? `<img src="${p.image}" alt="${p["name_" + lang] || p.name_en}" loading="lazy" />` : '<div style="height:170px;background:#f0ede8;display:flex;align-items:center;justify-content:center"><i class="fas fa-building" style="font-size:2rem;color:#ccc"></i></div>'}
+        ${
+          resolveProjectCompany(p, lang).logo && !p.logo_baked
+            ? `<div class="project-company-logo-badge thumb-logo-badge"><img src="${resolveProjectCompany(p, lang).logo}" alt="${resolveProjectCompany(p, lang).name}" loading="lazy" /></div>`
+            : ""
+        }
+      </div>
       <div class="proj-thumb-body">
         <h4>${p["name_" + lang] || p.name_en}</h4>
         <p><i class="fa fa-location-dot" style="color:var(--color-primary);margin-right:4px"></i>${p["location_" + lang] || p.location_en} · ${p.progress}%</p>

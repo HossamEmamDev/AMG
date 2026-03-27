@@ -25,18 +25,55 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // ── Collect fields ──
 $name     = sanitize($_POST['name']    ?? '');
 $email    = sanitize($_POST['email']   ?? '');
+$phone    = sanitize($_POST['phone']   ?? '');
 $subject  = sanitize($_POST['subject'] ?? '');
 $message  = sanitize($_POST['message'] ?? '');
 $toEmail  = sanitize($_POST['to_email'] ?? 'info@amgcontracting.com');
 $lang     = sanitize($_POST['lang']    ?? 'en');
+$requiredConfig = json_decode($_POST['required_config'] ?? '{}', true);
 
 // ── Validate ──
-if (empty($name) || empty($email) || empty($message)) {
-    jsonResponse(false, 'Missing required fields');
+$requiredConfig = is_array($requiredConfig) ? $requiredConfig : [];
+$fieldValues = [
+    'name' => $name,
+    'email' => $email,
+    'phone' => $phone,
+    'subject' => $subject,
+    'message' => $message,
+];
+foreach ($requiredConfig as $field => $isRequired) {
+    if ($field === 'attachment') continue;
+    if ($isRequired && empty($fieldValues[$field])) {
+        jsonResponse(false, 'Missing required fields');
+    }
 }
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     jsonResponse(false, 'Invalid email');
 }
+
+$attachmentInfo = '';
+$attachmentData = null;
+if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+    $allowedTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/jpeg',
+        'image/png',
+    ];
+    $fileType = mime_content_type($_FILES['attachment']['tmp_name']);
+    if (!in_array($fileType, $allowedTypes)) jsonResponse(false, 'Invalid attachment type');
+    if ($_FILES['attachment']['size'] > 5 * 1024 * 1024) jsonResponse(false, 'Attachment too large (max 5MB)');
+
+    $attachmentName = basename($_FILES['attachment']['name']);
+    $attachmentInfo = "<div class='field'><label>Attachment</label><span>" . htmlspecialchars($attachmentName, ENT_QUOTES) . " (attached)</span></div>";
+    $attachmentData = [
+        'data' => base64_encode(file_get_contents($_FILES['attachment']['tmp_name'])),
+        'name' => $attachmentName,
+        'mime' => $fileType
+    ];
+}
+if (!empty($requiredConfig['attachment']) && !$attachmentData) jsonResponse(false, 'Missing required fields');
 
 // ── Build email ──
 $emailSubject = "New Contact: " . ($subject ?: 'General Inquiry') . " — AMG Main Contracting";
@@ -69,7 +106,9 @@ $htmlBody = "
   <div class='body'>
     <div class='field'><label>Name</label><span>" . $name . "</span></div>
     <div class='field'><label>Email</label><span><a href='mailto:" . $email . "'>" . $email . "</a></span></div>
+    <div class='field'><label>Phone</label><span>" . $phone . "</span></div>
     <div class='field'><label>Subject</label><span>" . ($subject ?: 'General Inquiry') . "</span></div>
+    " . $attachmentInfo . "
     <div class='field'>
       <label>Message</label>
       <div class='message-box'>" . nl2br($message) . "</div>
@@ -81,15 +120,37 @@ $htmlBody = "
 </html>";
 
 // ── Headers to avoid spam ──
-$headers  = "From: AMG Website <noreply@amgcontracting.com>\r\n";
-$headers .= "Reply-To: {$name} <{$email}>\r\n";
-$headers .= "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
-$headers .= "X-Priority: 3\r\n";
-$headers .= "Importance: Normal\r\n";
+$boundary = md5(time());
+if ($attachmentData) {
+    $headers  = "From: AMG Website <noreply@amgcontracting.com>\r\n";
+    $headers .= "Reply-To: {$name} <{$email}>\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: multipart/mixed; boundary=\"{$boundary}\"\r\n";
+    $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+    $headers .= "X-Priority: 3\r\n";
+    $headers .= "Importance: Normal\r\n";
 
-$sent = mail($toEmail, $emailSubject, $htmlBody, $headers);
+    $body  = "--{$boundary}\r\n";
+    $body .= "Content-Type: text/html; charset=UTF-8\r\n\r\n";
+    $body .= $htmlBody . "\r\n";
+    $body .= "--{$boundary}\r\n";
+    $body .= "Content-Type: {$attachmentData['mime']}; name=\"{$attachmentData['name']}\"\r\n";
+    $body .= "Content-Transfer-Encoding: base64\r\n";
+    $body .= "Content-Disposition: attachment; filename=\"{$attachmentData['name']}\"\r\n\r\n";
+    $body .= chunk_split($attachmentData['data']) . "\r\n";
+    $body .= "--{$boundary}--";
+} else {
+    $headers  = "From: AMG Website <noreply@amgcontracting.com>\r\n";
+    $headers .= "Reply-To: {$name} <{$email}>\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+    $headers .= "X-Priority: 3\r\n";
+    $headers .= "Importance: Normal\r\n";
+    $body = $htmlBody;
+}
+
+$sent = mail($toEmail, $emailSubject, $body, $headers);
 
 if ($sent) {
     jsonResponse(true, 'Message sent successfully');

@@ -1,7 +1,7 @@
 /* ===== ANIMATIONS ===== */
 
 /* Scroll reveal — use smaller offsets and add contain */
-.reveal, .reveal-left, .reveal-right, .reveal-up {
+.reveal, .reveal-left, .reveal-right, .reveal-up, .reveal-zoom, .reveal-tilt {
   opacity: 0;
   transition: opacity 0.60s cubic-bezier(.4,0,.2,1), transform 0.60s cubic-bezier(.4,0,.2,1);
 }
@@ -10,8 +10,10 @@
 .reveal-left  { transform: translateY(24px); }   /* removed translateX to prevent overflow */
 .reveal-right { transform: translateY(24px); }
 .reveal-up    { transform: translateY(40px); }
+.reveal-zoom  { transform: translateY(30px) scale(0.96); }
+.reveal-tilt  { transform: translateY(34px) rotate(-1.1deg) scale(0.985); transform-origin: center top; }
 
-.reveal.visible, .reveal-left.visible, .reveal-right.visible, .reveal-up.visible {
+.reveal.visible, .reveal-left.visible, .reveal-right.visible, .reveal-up.visible, .reveal-zoom.visible, .reveal-tilt.visible {
   opacity: 1; transform: none;
 }
 

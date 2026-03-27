@@ -121,22 +121,29 @@ function animateCounter(el, target, duration = 2000) {
   }, 16);
 }
 
-const statsObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        document.querySelectorAll(".stat-num[data-count]").forEach((el) => {
-          animateCounter(el, parseInt(el.getAttribute("data-count")));
-        });
-        statsObserver.disconnect();
-      }
-    });
-  },
-  { threshold: 0.4 },
-);
+let statsObserver = null;
+function observeHeroStats() {
+  const heroStats = document.querySelector(".hero-stats");
+  if (!heroStats || !heroStats.querySelector(".stat-num[data-count]")) return;
+  if (statsObserver) statsObserver.disconnect();
+  statsObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll(".stat-num[data-count]").forEach((el) => {
+            animateCounter(el, parseInt(el.getAttribute("data-count"), 10) || 0);
+          });
+          statsObserver.disconnect();
+        }
+      });
+    },
+    { threshold: 0.4 },
+  );
+  statsObserver.observe(heroStats);
+}
 
-const heroStats = document.querySelector(".hero-stats");
-if (heroStats) statsObserver.observe(heroStats);
+window.refreshHeroStatsCounters = observeHeroStats;
+observeHeroStats();
 
 // ── View All Projects button ──
 const viewAllBtn = document.getElementById("view-all-projects");
@@ -160,4 +167,33 @@ function heroContactCTA() {
     .getElementById("contact-form")
     ?.querySelector("input, textarea")
     ?.focus();
+}
+
+const designerCredit = document.getElementById("designer-credit");
+const designerCreditTrigger = document.getElementById("designer-credit-trigger");
+const designerCreditPopup = document.getElementById("designer-credit-popup");
+
+if (designerCredit && designerCreditTrigger && designerCreditPopup) {
+  const closeDesignerPopup = () => {
+    designerCredit.classList.remove("open");
+    designerCreditPopup.hidden = true;
+    designerCreditTrigger.setAttribute("aria-expanded", "false");
+  };
+
+  designerCreditTrigger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = designerCredit.classList.toggle("open");
+    designerCreditPopup.hidden = !isOpen;
+    designerCreditTrigger.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  designerCreditPopup.addEventListener("click", (e) => e.stopPropagation());
+
+  document.addEventListener("click", (e) => {
+    if (!designerCredit.contains(e.target)) closeDesignerPopup();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeDesignerPopup();
+  });
 }

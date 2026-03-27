@@ -20,15 +20,31 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') jsonResponse(false, 'Method not allow
 $name       = sanitize($_POST['name']       ?? '');
 $email      = sanitize($_POST['email']      ?? '');
 $phone      = sanitize($_POST['phone']      ?? '');
+$linkedin   = sanitize($_POST['linkedin']   ?? '');
 $education  = sanitize($_POST['education']  ?? '');
 $experience = sanitize($_POST['experience'] ?? '');
 $message    = sanitize($_POST['message']    ?? '');
 $jobTitle   = sanitize($_POST['job_title']  ?? 'Open Application');
 $hrEmail    = sanitize($_POST['hr_email']   ?? 'hr@amgcontracting.com');
+$applicationType = sanitize($_POST['application_type'] ?? 'job');
 $lang       = sanitize($_POST['lang']       ?? 'en');
+$requiredConfig = json_decode($_POST['required_config'] ?? '{}', true);
 
-if (empty($name) || empty($email) || empty($phone)) jsonResponse(false, 'Missing required fields');
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) jsonResponse(false, 'Invalid email');
+$requiredConfig = is_array($requiredConfig) ? $requiredConfig : [];
+$fieldValues = [
+    'name' => $name,
+    'email' => $email,
+    'phone' => $phone,
+    'linkedin' => $linkedin,
+    'education' => $education,
+    'experience' => $experience,
+    'message' => $message,
+];
+foreach ($requiredConfig as $field => $isRequired) {
+    if ($field === 'cv') continue;
+    if ($isRequired && empty($fieldValues[$field])) jsonResponse(false, 'Missing required fields');
+}
+if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) jsonResponse(false, 'Invalid email');
 
 // ── Handle CV Upload ──
 $cvInfo = '';
@@ -51,6 +67,7 @@ if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
         'mime' => $cvMime
     ];
 }
+if (!empty($requiredConfig['cv']) && !$cvAttachment) jsonResponse(false, 'Missing required fields');
 
 $eduLabels = ['bachelor'=>"Bachelor's", 'master'=>"Master's", 'phd'=>'PhD', 'diploma'=>'Diploma'];
 
@@ -79,13 +96,14 @@ $htmlBody = "
 <div class='wrap'>
   <div class='header'>
     <h1>AMG Main Contracting</h1>
-    <p>New Job Application Received</p>
+    <p>" . ($applicationType === 'general' ? 'New General CV Submission' : 'New Job Application Received') . "</p>
     <div class='job-badge'>📋 {$jobTitle}</div>
   </div>
   <div class='body'>
     <div class='field'><label>Full Name</label><span>{$name}</span></div>
     <div class='field'><label>Email</label><span><a href='mailto:{$email}'>{$email}</a></span></div>
     <div class='field'><label>Phone</label><span>{$phone}</span></div>
+    " . (!empty($linkedin) ? "<div class='field'><label>LinkedIn</label><span><a href='{$linkedin}' target='_blank' rel='noopener noreferrer'>{$linkedin}</a></span></div>" : '') . "
     <div class='field'><label>Education</label><span>" . ($eduLabels[$education] ?? $education) . "</span></div>
     <div class='field'><label>Years of Experience</label><span>{$experience} years</span></div>
     {$cvInfo}

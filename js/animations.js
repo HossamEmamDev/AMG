@@ -11,7 +11,7 @@ function setupScrollReveal() {
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
-  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-up, .reveal-stagger').forEach(el => {
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-up, .reveal-zoom, .reveal-tilt, .reveal-stagger').forEach(el => {
     // Only observe if not already visible
     if (!el.classList.contains('visible')) observer.observe(el);
   });

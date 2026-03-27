@@ -8,6 +8,42 @@ const SUPER_ADMIN = {
   role: "Super Admin",
 };
 
+const PARTNER_ACCENT_PRESETS = [
+  {
+    value:
+      "radial-gradient(circle at 30% 30%, rgba(201,150,100,0.62), rgba(120,68,42,0.22))",
+    label: "Copper Gold",
+  },
+  {
+    value:
+      "radial-gradient(circle at 35% 30%, rgba(88,160,184,0.58), rgba(36,72,102,0.24))",
+    label: "Ocean Blue",
+  },
+  {
+    value:
+      "radial-gradient(circle at 30% 35%, rgba(221,120,120,0.56), rgba(126,42,56,0.24))",
+    label: "Rose Brick",
+  },
+  {
+    value:
+      "radial-gradient(circle at 30% 30%, rgba(132,182,113,0.58), rgba(56,97,54,0.22))",
+    label: "Olive Green",
+  },
+  {
+    value:
+      "radial-gradient(circle at 30% 30%, rgba(170,143,223,0.56), rgba(78,58,122,0.22))",
+    label: "Royal Violet",
+  },
+];
+
+function getSuperAdmin() {
+  return JSON.parse(localStorage.getItem("amg_super_admin") || JSON.stringify(SUPER_ADMIN));
+}
+
+function setSuperAdmin(admin) {
+  localStorage.setItem("amg_super_admin", JSON.stringify(admin));
+}
+
 function getTeam() {
   return JSON.parse(localStorage.getItem("amg_team") || "[]");
 }
@@ -22,8 +58,9 @@ function handleLogin(e) {
   const err = document.getElementById("login-error");
 
   let user = null;
-  if (u === SUPER_ADMIN.username && p === SUPER_ADMIN.password) {
-    user = { username: u, role: SUPER_ADMIN.role };
+  const superAdmin = getSuperAdmin();
+  if (u === superAdmin.username && p === superAdmin.password) {
+    user = { username: u, role: superAdmin.role };
   } else {
     user = getTeam().find((m) => m.username === u && m.password === p);
   }
@@ -75,9 +112,11 @@ window.addEventListener("DOMContentLoaded", () => {
 function initDashboard() {
   renderOurGroupList();
   loadSettings();
+  loadSeoSettings();
   renderOverview();
   renderSectionsManager();
   renderServicesList();
+  renderProjectCompaniesList();
   renderProjectsList();
   renderCareersList();
   renderPartnersList();
@@ -120,14 +159,19 @@ function switchTab(tab) {
 
   // Load tab-specific data
   if (tab === "settings") loadSettings();
+  if (tab === "seo") loadSeoSettings();
   if (tab === "mission-vision") loadMissionVision();
 }
 
 // ── Settings ──
 function loadSettings() {
   const s = getData("siteSettings");
+  const setVal = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.value = value || "";
+  };
   document.getElementById("s-primary-color").value =
-    s.primaryColor || "#B8860B";
+    s.primaryColor || "#C99664";
   document.getElementById("s-secondary-color").value =
     s.secondaryColor || "#2B2B2B";
   document.getElementById("s-bg-color").value = s.bgColor || "#FAFAF8";
@@ -142,15 +186,24 @@ function loadSettings() {
   const fha = document.getElementById("s-font-heading-ar");
   if (fha) fha.value = s.fontHeadingAr || s.fontAr || "IBM Plex Sans Arabic";
   document.getElementById("s-default-lang").value = s.defaultLang || "auto";
-  document.getElementById("s-hero-video").value = s.heroVideo || "";
-  document.getElementById("s-hero-title-en").value = s.heroTitle_en || "";
-  document.getElementById("s-hero-title-ar").value = s.heroTitle_ar || "";
-  document.getElementById("s-hero-sub-en").value = s.heroSubtitle_en || "";
-  document.getElementById("s-hero-sub-ar").value = s.heroSubtitle_ar || "";
+  setVal("s-hero-video", s.heroVideo);
+  setVal("s-hero-title-en", s.heroTitle_en);
+  setVal("s-hero-title-ar", s.heroTitle_ar);
+  setVal("s-hero-sub-en", s.heroSubtitle_en);
+  setVal("s-hero-sub-ar", s.heroSubtitle_ar);
+  (s.heroStats || []).slice(0, 4).forEach((stat, index) => {
+    const i = index + 1;
+    setVal(`s-hero-stat-${i}-value`, stat.value);
+    setVal(`s-hero-stat-${i}-suffix`, stat.suffix);
+    setVal(`s-hero-stat-${i}-label-en`, stat.label_en);
+    setVal(`s-hero-stat-${i}-label-ar`, stat.label_ar);
+  });
   document.getElementById("s-contact-email").value = s.contactEmail || "";
   document.getElementById("s-hr-email").value = s.hrEmail || "";
   document.getElementById("s-phone").value = s.phone || "";
   document.getElementById("s-whatsapp-number").value = s.whatsappNumber || "+201124711154";
+  document.getElementById("s-manual-company-profile").value =
+    s.manualCompanyProfile || "";
   document.getElementById("s-address-en").value = s.address_en || "";
   document.getElementById("s-address-ar").value = s.address_ar || "";
   document.getElementById("s-footer-desc-en").value = s.footerDesc_en || "";
@@ -159,6 +212,7 @@ function loadSettings() {
   document.getElementById("s-footer-copy-ar").value = s.footerCopy_ar || "";
   const logoP = document.getElementById("logo-preview");
   if (logoP && s.logo) logoP.src = s.logo;
+  loadFormRequirementSettings(s.formRequirements || {});
   renderSocialLinks();
 }
 
@@ -211,10 +265,21 @@ function saveSettings() {
   s.heroTitle_ar = document.getElementById("s-hero-title-ar").value;
   s.heroSubtitle_en = document.getElementById("s-hero-sub-en").value;
   s.heroSubtitle_ar = document.getElementById("s-hero-sub-ar").value;
+  s.heroStats = Array.from({ length: 4 }, (_, index) => {
+    const i = index + 1;
+    return {
+      value: document.getElementById(`s-hero-stat-${i}-value`).value,
+      suffix: document.getElementById(`s-hero-stat-${i}-suffix`).value,
+      label_en: document.getElementById(`s-hero-stat-${i}-label-en`).value,
+      label_ar: document.getElementById(`s-hero-stat-${i}-label-ar`).value,
+    };
+  });
+  s.formRequirements = collectFormRequirementSettings();
   s.contactEmail = document.getElementById("s-contact-email").value;
   s.hrEmail = document.getElementById("s-hr-email").value;
   s.phone = document.getElementById("s-phone").value;
   s.whatsappNumber = document.getElementById("s-whatsapp-number").value;
+  s.manualCompanyProfile = document.getElementById("s-manual-company-profile").value;
   s.address_en = document.getElementById("s-address-en").value;
   s.address_ar = document.getElementById("s-address-ar").value;
   s.footerDesc_en = document.getElementById("s-footer-desc-en").value;
@@ -226,11 +291,114 @@ function saveSettings() {
   setData("siteSettings", s);
   // Apply color/font preview in dashboard itself
   document.documentElement.style.setProperty(
-    "--dash-accent",
-    s.primaryColor || "#B8860B",
+      "--dash-accent",
+    s.primaryColor || "#C99664",
   );
   showMsg("settings-msg", "✓ Settings saved successfully!", true);
   // Push all data to server so other visitors see changes
+  pushToServer();
+}
+
+function getCheckboxValue(id) {
+  return Boolean(document.getElementById(id)?.checked);
+}
+
+function setCheckboxValue(id, checked) {
+  const el = document.getElementById(id);
+  if (el) el.checked = Boolean(checked);
+}
+
+function loadFormRequirementSettings(formRequirements) {
+  const defaults = DEFAULT_DATA.siteSettings.formRequirements;
+  ["contact", "career", "generalCv"].forEach((group) => {
+    const fields = { ...defaults[group], ...(formRequirements[group] || {}) };
+    Object.entries(fields).forEach(([field, value]) => {
+      setCheckboxValue(`req-${group}-${field}`, value);
+    });
+  });
+}
+
+function collectFormRequirementSettings() {
+  const defaults = DEFAULT_DATA.siteSettings.formRequirements;
+  const result = {};
+  ["contact", "career", "generalCv"].forEach((group) => {
+    result[group] = {};
+    Object.keys(defaults[group]).forEach((field) => {
+      result[group][field] = getCheckboxValue(`req-${group}-${field}`);
+    });
+  });
+  return result;
+}
+
+function loadSeoSettings() {
+  const seo = getData("seoSettings") || {};
+  const setVal = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.value = value || "";
+  };
+  setVal("seo-default-title", seo.defaultTitle);
+  setVal("seo-default-title-ar", seo.defaultTitle_ar);
+  setVal("seo-default-description", seo.defaultDescription);
+  setVal("seo-default-description-ar", seo.defaultDescription_ar);
+  setVal("seo-default-keywords", seo.defaultKeywords);
+  setVal("seo-default-keywords-ar", seo.defaultKeywords_ar);
+  setVal("seo-og-image", seo.ogImage);
+  setVal("seo-robots", seo.robots);
+  setVal("seo-canonical-base", seo.canonicalBase);
+  setVal("seo-google-verification", seo.googleSiteVerification);
+  setVal("seo-bing-verification", seo.bingSiteVerification);
+  setVal("seo-ga-id", seo.googleAnalyticsId);
+  setVal("seo-gtm-id", seo.googleTagManagerId);
+  setVal("seo-schema-type", seo.schemaType);
+  setVal("seo-schema-name", seo.schemaName);
+  setVal("seo-schema-name-ar", seo.schemaName_ar);
+  setVal("seo-home-title", seo.homeTitle);
+  setVal("seo-home-title-ar", seo.homeTitle_ar);
+  setVal("seo-home-description", seo.homeDescription);
+  setVal("seo-home-description-ar", seo.homeDescription_ar);
+  setVal("seo-home-keywords", seo.homeKeywords);
+  setVal("seo-home-keywords-ar", seo.homeKeywords_ar);
+  setVal("seo-careers-title", seo.careersTitle);
+  setVal("seo-careers-title-ar", seo.careersTitle_ar);
+  setVal("seo-careers-description", seo.careersDescription);
+  setVal("seo-careers-description-ar", seo.careersDescription_ar);
+  setVal("seo-careers-keywords", seo.careersKeywords);
+  setVal("seo-careers-keywords-ar", seo.careersKeywords_ar);
+}
+
+function saveSeoSettings() {
+  const seo = {
+    defaultTitle: document.getElementById("seo-default-title").value,
+    defaultTitle_ar: document.getElementById("seo-default-title-ar").value,
+    defaultDescription: document.getElementById("seo-default-description").value,
+    defaultDescription_ar: document.getElementById("seo-default-description-ar").value,
+    defaultKeywords: document.getElementById("seo-default-keywords").value,
+    defaultKeywords_ar: document.getElementById("seo-default-keywords-ar").value,
+    ogImage: document.getElementById("seo-og-image").value,
+    robots: document.getElementById("seo-robots").value,
+    canonicalBase: document.getElementById("seo-canonical-base").value,
+    googleSiteVerification: document.getElementById("seo-google-verification").value,
+    bingSiteVerification: document.getElementById("seo-bing-verification").value,
+    googleAnalyticsId: document.getElementById("seo-ga-id").value,
+    googleTagManagerId: document.getElementById("seo-gtm-id").value,
+    schemaType: document.getElementById("seo-schema-type").value,
+    schemaName: document.getElementById("seo-schema-name").value,
+    schemaName_ar: document.getElementById("seo-schema-name-ar").value,
+    homeTitle: document.getElementById("seo-home-title").value,
+    homeTitle_ar: document.getElementById("seo-home-title-ar").value,
+    homeDescription: document.getElementById("seo-home-description").value,
+    homeDescription_ar: document.getElementById("seo-home-description-ar").value,
+    homeKeywords: document.getElementById("seo-home-keywords").value,
+    homeKeywords_ar: document.getElementById("seo-home-keywords-ar").value,
+    careersTitle: document.getElementById("seo-careers-title").value,
+    careersTitle_ar: document.getElementById("seo-careers-title-ar").value,
+    careersDescription: document.getElementById("seo-careers-description").value,
+    careersDescription_ar: document.getElementById("seo-careers-description-ar").value,
+    careersKeywords: document.getElementById("seo-careers-keywords").value,
+    careersKeywords_ar: document.getElementById("seo-careers-keywords-ar").value,
+  };
+  setData("seoSettings", seo);
+  showMsg("seo-msg", "✓ SEO settings saved successfully!", true);
   pushToServer();
 }
 
@@ -315,8 +483,11 @@ function removeSocialLink(i) {
 }
 
 // ── Sections ──
-function renderSectionsManager() {
+let sectionOrderTemp = [];
+
+function renderSectionsManager(nextOrder = null) {
   const sections = getData("sections");
+  sectionOrderTemp = Array.isArray(nextOrder) ? [...nextOrder] : getSectionOrder();
   const wrap = document.getElementById("sections-manager");
   if (!wrap) return;
   const names = {
@@ -328,23 +499,24 @@ function renderSectionsManager() {
     partners: "Partners",
     contact: "Contact",
   };
-  wrap.innerHTML = Object.entries(sections)
+  wrap.innerHTML = sectionOrderTemp
     .map(
-      ([id, cfg]) => `
-    <div class="section-row">
+      (id) => `
+    <div class="section-row" data-section-id="${id}">
+      <button class="section-row-drag" type="button" draggable="true" aria-label="Drag ${names[id] || id}"><i class="fas fa-grip-vertical"></i></button>
       <span class="section-row-name">${names[id] || id}</span>
       <div class="section-controls">
         <div class="toggle-wrap">
           <span class="toggle-label">Visible</span>
           <label class="toggle-switch">
-            <input type="checkbox" ${cfg.visible ? "checked" : ""} onchange="updateSection('${id}','visible',this.checked)" />
+            <input type="checkbox" ${(sections[id] || {}).visible ? "checked" : ""} onchange="updateSection('${id}','visible',this.checked)" />
             <span class="toggle-slider"></span>
           </label>
         </div>
         <div class="toggle-wrap">
           <span class="toggle-label">In Nav</span>
           <label class="toggle-switch">
-            <input type="checkbox" ${cfg.inNav ? "checked" : ""} onchange="updateSection('${id}','inNav',this.checked)" />
+            <input type="checkbox" ${(sections[id] || {}).inNav ? "checked" : ""} onchange="updateSection('${id}','inNav',this.checked)" />
             <span class="toggle-slider"></span>
           </label>
         </div>
@@ -352,6 +524,7 @@ function renderSectionsManager() {
     </div>`,
     )
     .join("");
+  bindSectionDragAndDrop();
 }
 
 function updateSection(id, key, val) {
@@ -360,7 +533,56 @@ function updateSection(id, key, val) {
   setData("sections", sections);
 }
 
+function bindSectionDragAndDrop() {
+  const rows = document.querySelectorAll("#sections-manager .section-row");
+  const handles = document.querySelectorAll("#sections-manager .section-row-drag");
+  let draggedId = null;
+  handles.forEach((handle) => {
+    handle.addEventListener("dragstart", (e) => {
+      const row = handle.closest(".section-row");
+      if (!row) return;
+      draggedId = row.dataset.sectionId;
+      if (e.dataTransfer) {
+        e.dataTransfer.effectAllowed = "move";
+        e.dataTransfer.setData("text/plain", draggedId);
+      }
+      row.classList.add("dragging");
+    });
+    handle.addEventListener("dragend", () => {
+      const row = handle.closest(".section-row");
+      if (!row) return;
+      row.classList.remove("dragging");
+    });
+  });
+  rows.forEach((row) => {
+    row.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      row.classList.add("drag-over");
+      if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+    });
+    row.addEventListener("dragleave", () => {
+      row.classList.remove("drag-over");
+    });
+    row.addEventListener("drop", (e) => {
+      e.preventDefault();
+      row.classList.remove("drag-over");
+      const transferredId = e.dataTransfer?.getData("text/plain");
+      if (transferredId) draggedId = transferredId;
+      const targetId = row.dataset.sectionId;
+      if (!draggedId || draggedId === targetId) return;
+      const next = [...sectionOrderTemp];
+      const fromIndex = next.indexOf(draggedId);
+      const toIndex = next.indexOf(targetId);
+      if (fromIndex === -1 || toIndex === -1) return;
+      next.splice(toIndex, 0, next.splice(fromIndex, 1)[0]);
+      sectionOrderTemp = next;
+      renderSectionsManager(next);
+    });
+  });
+}
+
 function saveSections() {
+  setData("sectionOrder", sectionOrderTemp);
   showMsg("sections-msg", "Section settings saved!", true);
   pushToServer();
 }
@@ -541,6 +763,7 @@ function saveService(id) {
 // ── Projects ──
 function renderProjectsList() {
   const projects = getData("projects") || [];
+  const projectCompanies = getData("projectCompanies") || [];
   const list = document.getElementById("projects-list");
   if (!list) return;
   if (!projects.length) {
@@ -550,10 +773,15 @@ function renderProjectsList() {
   }
   list.innerHTML = projects
     .map(
-      (p) => `
+      (p) => {
+        const company =
+          projectCompanies.find((item) => String(item.id) === String(p.company_id)) ||
+          null;
+        return `
     <div class="item-card">
       <div class="item-card-header"><span class="item-card-title">${p.name_en}</span></div>
       <div class="item-card-meta">
+        <span><i class="fas fa-building-circle-check"></i> ${company?.name_en || p.implementing_company_en || "No company selected"}</span>
         <span><i class="fas fa-location-dot"></i> ${p.location_en}</span>
         <span><i class="fas fa-calendar"></i> ${p.year || ""}</span>
         <span><i class="fas fa-percent"></i> ${p.progress}%</span>
@@ -562,9 +790,75 @@ function renderProjectsList() {
         <button class="btn-edit" onclick="openProjectModal(${p.id})"><i class="fas fa-edit"></i> Edit</button>
         <button class="btn-del" onclick="deleteItem('projects',${p.id})"><i class="fas fa-trash"></i> Delete</button>
       </div>
+    </div>`;
+      },
+    )
+    .join("");
+}
+
+function renderProjectCompaniesList() {
+  const companies = getData("projectCompanies") || [];
+  const list = document.getElementById("project-companies-list");
+  if (!list) return;
+  if (!companies.length) {
+    list.innerHTML =
+      '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-building-circle-check"></i>No implementing companies yet</div>';
+    return;
+  }
+  list.innerHTML = companies
+    .map(
+      (company) => `
+    <div class="item-card">
+      <div class="item-card-header"><span class="item-card-title">${company.name_en}</span></div>
+      <div class="item-card-meta">
+        <span><i class="fas fa-language"></i> ${company.name_ar || "—"}</span>
+      </div>
+      ${company.logo ? `<img src="${company.logo}" alt="${company.name_en}" style="width:100%;height:72px;object-fit:contain;background:var(--dash-surface2);border:1px solid var(--dash-border);border-radius:8px;padding:12px;margin-top:8px;" />` : ""}
+      <div class="item-card-actions">
+        <button class="btn-edit" onclick="openProjectCompanyModal(${company.id})"><i class="fas fa-edit"></i> Edit</button>
+        <button class="btn-del" onclick="deleteItem('projectCompanies',${company.id})"><i class="fas fa-trash"></i> Delete</button>
+      </div>
     </div>`,
     )
     .join("");
+}
+
+function openProjectCompanyModal(id) {
+  const companies = getData("projectCompanies") || [];
+  const company = id ? companies.find((item) => item.id === id) : null;
+  openDashModal(`
+    <h3>${company ? "Edit Implementing Company" : "Add Implementing Company"}</h3>
+    <div class="form-grid-2">
+      <div class="form-field"><label>Name (EN)</label><input id="m-pc-name-en" value="${company?.name_en || ""}" /></div>
+      <div class="form-field"><label>Name (AR)</label><input id="m-pc-name-ar" value="${company?.name_ar || ""}" dir="rtl" /></div>
+    </div>
+    <div class="form-field"><label>Logo Path / URL</label><input id="m-pc-logo" value="${company?.logo || ""}" placeholder="assets/images/logo.avif or https://..." /></div>
+    <div class="form-field"><label>Upload Logo</label><input type="file" accept="image/*" onchange="previewUpload(this,'m-pc-logo')" style="color:var(--dash-muted)" /></div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
+      <button class="btn-modal-save" onclick="saveProjectCompany(${id || "null"})">Save Company</button>
+    </div>`);
+}
+
+function saveProjectCompany(id) {
+  const companies = getData("projectCompanies") || [];
+  const item = {
+    id: id || Date.now(),
+    name_en: document.getElementById("m-pc-name-en").value,
+    name_ar: document.getElementById("m-pc-name-ar").value,
+    logo: document.getElementById("m-pc-logo").value,
+  };
+  if (id) {
+    const idx = companies.findIndex((company) => company.id === id);
+    if (idx > -1) companies[idx] = item;
+  } else {
+    companies.push(item);
+  }
+  setData("projectCompanies", companies);
+  closeDashModal();
+  renderProjectCompaniesList();
+  renderProjectsList();
+  pushToServer();
 }
 
 // Extra images temp array for project modal
@@ -572,6 +866,7 @@ let projectImagesTemp = [];
 
 function openProjectModal(id) {
   const projects = getData("projects") || [];
+  const projectCompanies = getData("projectCompanies") || [];
   const p = id ? projects.find((x) => x.id === id) : null;
   projectImagesTemp = p?.images ? [...p.images] : p?.image ? [p.image] : [];
 
@@ -582,8 +877,16 @@ function openProjectModal(id) {
       <div class="form-field"><label>Name (AR)</label><input id="m-name-ar" value="${p?.name_ar || ""}" dir="rtl" /></div>
       <div class="form-field"><label>Category (EN)</label><input id="m-cat-en" value="${p?.category_en || ""}" /></div>
       <div class="form-field"><label>Category (AR)</label><input id="m-cat-ar" value="${p?.category_ar || ""}" dir="rtl" /></div>
-      <div class="form-field"><label>Implementing Company (EN)</label><input id="m-impl-en" value="${p?.implementing_company_en || ""}" /></div>
-      <div class="form-field"><label>Implementing Company (AR)</label><input id="m-impl-ar" value="${p?.implementing_company_ar || ""}" dir="rtl" /></div>
+      <div class="form-field">
+        <label>Implementing Company</label>
+        <select id="m-company-id">
+          <option value="">Select company...</option>
+          ${projectCompanies.map((company) => `<option value="${company.id}" ${String(p?.company_id || "") === String(company.id) ? "selected" : ""}>${company.name_en}</option>`).join("")}
+        </select>
+      </div>
+      <div class="form-field" style="display:flex;align-items:flex-end">
+        <button class="btn-add" type="button" onclick="openProjectCompanyModal()"><i class="fas fa-plus"></i> Add New Company</button>
+      </div>
       <div class="form-field"><label>Location (EN)</label><input id="m-loc-en" value="${p?.location_en || ""}" /></div>
       <div class="form-field"><label>Location (AR)</label><input id="m-loc-ar" value="${p?.location_ar || ""}" dir="rtl" /></div>
       <div class="form-field"><label>Year</label><input id="m-year" type="number" value="${p?.year || new Date().getFullYear()}" /></div>
@@ -667,17 +970,136 @@ function removeProjectImg(i) {
   renderProjectImgList();
 }
 
-function saveProject(id) {
+function loadImageElement(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    if (!String(src || "").startsWith("data:")) img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function normalizeImageSource(src) {
+  if (!src) return src;
+  if (String(src).startsWith("data:")) return src;
+
+  try {
+    const response = await fetch(src, { mode: "cors" });
+    if (!response.ok) throw new Error("Fetch failed");
+    const blob = await response.blob();
+    return await blobToDataUrl(blob);
+  } catch (_) {
+    return src;
+  }
+}
+
+async function composeProjectCoverWithLogo(imageSrc, logoSrc) {
+  if (!imageSrc || !logoSrc) return imageSrc;
+
+  try {
+    const [safeImageSrc, safeLogoSrc] = await Promise.all([
+      normalizeImageSource(imageSrc),
+      normalizeImageSource(logoSrc),
+    ]);
+    const [baseImage, logoImage] = await Promise.all([
+      loadImageElement(safeImageSrc),
+      loadImageElement(safeLogoSrc),
+    ]);
+
+    const canvas = document.createElement("canvas");
+    canvas.width = baseImage.naturalWidth || baseImage.width || 1600;
+    canvas.height = baseImage.naturalHeight || baseImage.height || 1000;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return imageSrc;
+
+    ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+
+    const logoSize = Math.max(canvas.width * 0.14, 120);
+    const inset = Math.max(canvas.width * 0.035, 26);
+    const badgeX = canvas.width - logoSize - inset;
+    const badgeY = canvas.height - logoSize - inset;
+    const radius = logoSize / 2;
+
+    ctx.save();
+    ctx.shadowColor = "rgba(0, 0, 0, 0.24)";
+    ctx.shadowBlur = Math.max(canvas.width * 0.015, 16);
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.beginPath();
+    ctx.arc(badgeX + radius, badgeY + radius, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(badgeX + radius, badgeY + radius, radius * 0.84, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(
+      logoImage,
+      badgeX + logoSize * 0.16,
+      badgeY + logoSize * 0.16,
+      logoSize * 0.68,
+      logoSize * 0.68,
+    );
+    ctx.restore();
+
+    ctx.save();
+    const stroke = ctx.createLinearGradient(
+      badgeX,
+      badgeY,
+      badgeX + logoSize,
+      badgeY + logoSize,
+    );
+    stroke.addColorStop(0, "rgba(255,255,255,0.95)");
+    stroke.addColorStop(1, "rgba(201,150,100,0.92)");
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = Math.max(canvas.width * 0.005, 6);
+    ctx.beginPath();
+    ctx.arc(badgeX + radius, badgeY + radius, radius * 0.9, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    return canvas.toDataURL("image/jpeg", 0.92);
+  } catch (_) {
+    return imageSrc;
+  }
+}
+
+async function prepareProjectImagesForSaving(images, logoSrc) {
+  if (!images.length || !logoSrc) return images;
+  const bakedCover = await composeProjectCoverWithLogo(images[0], logoSrc);
+  return [bakedCover, ...images.slice(1)];
+}
+
+async function saveProject(id) {
   const projects = getData("projects") || [];
+  const projectCompanies = getData("projectCompanies") || [];
   const imgs = [...projectImagesTemp];
+  const companyId = document.getElementById("m-company-id").value;
+  const company =
+    projectCompanies.find((item) => String(item.id) === String(companyId)) || null;
+  const normalizedImages = await prepareProjectImagesForSaving(imgs, company?.logo);
   const item = {
     id: id || Date.now(),
     name_en: document.getElementById("m-name-en").value,
     name_ar: document.getElementById("m-name-ar").value,
     category_en: document.getElementById("m-cat-en").value,
     category_ar: document.getElementById("m-cat-ar").value,
-    implementing_company_en: document.getElementById("m-impl-en").value,
-    implementing_company_ar: document.getElementById("m-impl-ar").value,
+    company_id: company?.id || "",
+    implementing_company_en: company?.name_en || "",
+    implementing_company_ar: company?.name_ar || "",
+    company_logo: company?.logo || "",
     location_en: document.getElementById("m-loc-en").value,
     location_ar: document.getElementById("m-loc-ar").value,
     year:
@@ -686,8 +1108,12 @@ function saveProject(id) {
     progress: parseInt(document.getElementById("m-progress").value) || 0,
     brief_en: document.getElementById("m-brief-en").value,
     brief_ar: document.getElementById("m-brief-ar").value,
-    image: imgs[0] || "", // first image = cover
-    images: imgs,
+    logo_baked:
+      Boolean(company?.logo) &&
+      Boolean(normalizedImages[0]) &&
+      normalizedImages[0] !== imgs[0],
+    image: normalizedImages[0] || "", // first image = cover
+    images: normalizedImages,
   };
   if (id) {
     const idx = projects.findIndex((x) => x.id === id);
@@ -696,6 +1122,7 @@ function saveProject(id) {
   setData("projects", projects);
   closeDashModal();
   renderProjectsList();
+  renderProjectCompaniesList();
   pushToServer();
 }
 
@@ -859,6 +1286,12 @@ function openPartnerModal(id) {
     <h3>${p ? "Edit Partner" : "Add Partner"}</h3>
     <div class="form-field"><label>Partner Name</label><input id="m-pname" value="${p?.name || ""}" /></div>
     <div class="form-field"><label>Logo Path / URL</label><input id="m-plogo" value="${p?.logo || ""}" placeholder="assets/images/partner/logo.avif or https://..." /></div>
+    <div class="form-field">
+      <label>Accent Background</label>
+      <select id="m-paccent">
+        ${PARTNER_ACCENT_PRESETS.map((accent) => `<option value="${accent.value}" ${accent.value === (p?.accent || PARTNER_ACCENT_PRESETS[0].value) ? "selected" : ""}>${accent.label}</option>`).join("")}
+      </select>
+    </div>
     <div class="form-field"><small style="color:var(--dash-muted)">Recommended: use local files from <code>assets/images/partner</code> for the new luxury logo wall.</small></div>
     <div class="form-field"><input type="file" accept="image/*" onchange="previewUpload(this,'m-plogo')" style="color:var(--dash-muted)" /></div>
     <div class="modal-actions">
@@ -873,6 +1306,7 @@ function savePartner(id) {
     id: id || Date.now(),
     name: document.getElementById("m-pname").value,
     logo: document.getElementById("m-plogo").value,
+    accent: document.getElementById("m-paccent").value,
   };
   if (id) {
     const idx = partners.findIndex((x) => x.id === id);
@@ -971,9 +1405,10 @@ function renderMessagesList() {
       (m, i) => `
     <div class="msg-row ${m.read ? "" : "unread"}" onclick="markMsgRead(${messages.length - 1 - i})">
       <div class="msg-row-header"><span class="msg-row-name">${m.name}</span><span class="msg-row-date">${new Date(m.date).toLocaleString()}</span></div>
-      <div class="msg-row-email">${m.email}</div>
+      <div class="msg-row-email">${m.email}${m.phone ? ` &nbsp;|&nbsp; 📞 ${m.phone}` : ""}</div>
       <div class="msg-row-subject">${m.subject || "—"}</div>
       <div class="msg-row-body">${m.message || ""}</div>
+      ${m.attachmentName ? `<div class="msg-row-subject">Attachment: <strong>${m.attachmentName}</strong></div>` : ""}
     </div>`,
     )
     .join("");
@@ -1004,7 +1439,7 @@ function renderApplicationsList() {
     <div class="msg-row">
       <div class="msg-row-header"><span class="msg-row-name">${a.name}</span><span class="msg-row-date">${new Date(a.date).toLocaleString()}</span></div>
       <div class="msg-row-email">${a.email} &nbsp;|&nbsp; 📞 ${a.phone || ""}</div>
-      <div class="msg-row-subject">Applied for: <strong>${a.jobTitle || "Open Application"}</strong></div>
+      <div class="msg-row-subject">${a.type === "general" ? "General CV:" : "Applied for:"} <strong>${a.jobTitle || "Open Application"}</strong></div>
     </div>`,
     )
     .join("");
@@ -1015,21 +1450,24 @@ function renderTeamList() {
   const team = getTeam();
   const list = document.getElementById("team-list");
   if (!list) return;
+  const currentUser = JSON.parse(sessionStorage.getItem("amg_session") || "null");
+  const superAdminAccount = getSuperAdmin();
 
-  const superAdmin = `
+  const superAdminCard = `
     <div class="team-card">
       <div class="team-avatar">A</div>
-      <div class="team-info"><div class="team-username">admin</div><div class="team-role">Super Admin (cannot be deleted)</div></div>
+      <div class="team-info"><div class="team-username">${superAdminAccount.username}</div><div class="team-role">Super Admin (cannot be deleted)</div></div>
+      ${currentUser ? `<button class="btn-edit" onclick="openPasswordModal()" style="margin-left:auto"><i class="fas fa-key"></i> Change Password</button>` : ""}
     </div>`;
 
   if (!team.length) {
     list.innerHTML =
-      superAdmin +
+      superAdminCard +
       '<div class="empty-state" style="margin-top:20px"><i class="fas fa-users"></i><p>No sub-admins yet</p></div>';
     return;
   }
   list.innerHTML =
-    superAdmin +
+    superAdminCard +
     team
       .map(
         (m, i) => `
@@ -1052,6 +1490,45 @@ function openTeamModal() {
       <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
       <button class="btn-modal-save" onclick="saveTeamMember()">Add Member</button>
     </div>`);
+}
+
+function openPasswordModal() {
+  openDashModal(`
+    <h3>Change Password</h3>
+    <div class="form-field"><label>Current Password</label><input id="m-current-pass" type="password" /></div>
+    <div class="form-field"><label>New Password</label><input id="m-new-pass" type="password" /></div>
+    <div class="form-field"><label>Confirm New Password</label><input id="m-confirm-pass" type="password" /></div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
+      <button class="btn-modal-save" onclick="savePasswordChange()">Update Password</button>
+    </div>`);
+}
+
+function savePasswordChange() {
+  const session = JSON.parse(sessionStorage.getItem("amg_session") || "null");
+  if (!session) return;
+  const current = document.getElementById("m-current-pass")?.value || "";
+  const next = document.getElementById("m-new-pass")?.value || "";
+  const confirm = document.getElementById("m-confirm-pass")?.value || "";
+  if (!current || !next || !confirm) return alert("All password fields are required");
+  if (next !== confirm) return alert("New password confirmation does not match");
+
+  if (session.username === getSuperAdmin().username) {
+    const superAdmin = getSuperAdmin();
+    if (current !== superAdmin.password) return alert("Current password is incorrect");
+    superAdmin.password = next;
+    setSuperAdmin(superAdmin);
+  } else {
+    const team = getTeam();
+    const index = team.findIndex((member) => member.username === session.username);
+    if (index === -1) return alert("User not found");
+    if (team[index].password !== current) return alert("Current password is incorrect");
+    team[index].password = next;
+    setTeam(team);
+  }
+
+  closeDashModal();
+  alert("Password updated successfully");
 }
 
 function saveTeamMember() {
@@ -1096,7 +1573,7 @@ function renderOurGroupList() {
       </div>
       <div class="item-card-meta">
         <span><i class="fas fa-location-dot"></i> ${c.location_en}</span>
-        <span><i class="fas fa-file-pdf"></i> ${c.profile ? "Profile attached" : "No profile"}</span>
+        <span><i class="fas fa-file-lines"></i> Uses global company profile settings</span>
       </div>
       ${c.image ? `<img src="${c.image}" alt="" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-top:8px;" />` : ""}
       <div class="item-card-actions">
@@ -1125,8 +1602,6 @@ function openGroupModal(id) {
     </div>
     <div class="form-field"><label>Image URL</label><input id="m-gimage" value="${c?.image || ""}" placeholder="https://... or upload below" /></div>
     <div class="form-field"><label>Upload Image</label><input type="file" accept="image/*" onchange="previewUpload(this,'m-gimage')" style="color:var(--dash-muted)" /></div>
-    <div class="form-field"><label>Company Profile PDF</label><input id="m-gprofile" value="${c?.profile || ""}" placeholder="PDF URL or uploaded PDF data" /></div>
-    <div class="form-field"><label>Upload Profile PDF</label><input type="file" accept="application/pdf,.pdf" onchange="previewUpload(this,'m-gprofile')" style="color:var(--dash-muted)" /></div>
     <div class="modal-actions">
       <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
       <button class="btn-modal-save" onclick="saveGroup(${id || "null"})">Save Company</button>
@@ -1144,7 +1619,7 @@ function saveGroup(id) {
     desc_en: document.getElementById("m-gdesc-en").value,
     desc_ar: document.getElementById("m-gdesc-ar").value,
     image: document.getElementById("m-gimage").value,
-    profile: document.getElementById("m-gprofile").value,
+    profile: id ? companies.find((x) => x.id === id)?.profile || "" : "",
   };
   if (id) {
     const idx = companies.findIndex((x) => x.id === id);
@@ -1167,6 +1642,10 @@ function deleteItem(key, id) {
     arr.filter((x) => x.id !== id),
   );
   if (key === "services") renderServicesList();
+  if (key === "projectCompanies") {
+    renderProjectCompaniesList();
+    renderProjectsList();
+  }
   if (key === "projects") renderProjectsList();
   if (key === "careers") renderCareersList();
   if (key === "groupCompanies") renderOurGroupList();
@@ -1209,8 +1688,10 @@ function pushToServer() {
   const allData = {};
   const keys = [
     "siteSettings",
+    "seoSettings",
     "sections",
     "services",
+    "projectCompanies",
     "projects",
     "careers",
     "partners",
@@ -1337,8 +1818,10 @@ pushToServer = function pushToServerWithMissionVision() {
   const allData = {};
   const keys = [
     "siteSettings",
+    "seoSettings",
     "sections",
     "services",
+    "projectCompanies",
     "projects",
     "careers",
     "partners",

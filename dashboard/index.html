@@ -65,6 +65,7 @@
         <a href="#" class="nav-item" data-tab="mission-vision"><i class="fas fa-lightbulb"></i> <span>Mission &
             Vision</span></a>
         <a href="#" class="nav-item" data-tab="settings"><i class="fas fa-cog"></i> <span>Site Settings</span></a>
+        <a href="#" class="nav-item" data-tab="seo"><i class="fas fa-magnifying-glass-chart"></i> <span>SEO & Meta</span></a>
         <a href="#" class="nav-item" data-tab="sections"><i class="fas fa-eye"></i> <span>Sections</span></a>
         <a href="#" class="nav-item" data-tab="services"><i class="fas fa-tools"></i> <span>Services</span></a>
         <a href="#" class="nav-item" data-tab="projects"><i class="fas fa-building"></i> <span>Projects</span></a>
@@ -413,6 +414,28 @@
                 <div class="form-field"><label>Hero Subtitle (AR)</label><textarea id="s-hero-sub-ar" rows="3"
                     dir="rtl"></textarea></div>
               </div>
+              <div class="form-field" style="margin-top:16px">
+                <label>Hero Stats</label>
+                <small style="display:block;color:var(--dash-muted);margin-bottom:14px">Edit the four stats shown under the hero section.</small>
+                <div class="form-grid-2">
+                  <div class="form-field"><label>Stat 1 Number</label><input type="text" id="s-hero-stat-1-value" /></div>
+                  <div class="form-field"><label>Stat 1 Suffix</label><input type="text" id="s-hero-stat-1-suffix" placeholder="+" /></div>
+                  <div class="form-field"><label>Stat 1 Label (EN)</label><input type="text" id="s-hero-stat-1-label-en" /></div>
+                  <div class="form-field"><label>Stat 1 Label (AR)</label><input type="text" id="s-hero-stat-1-label-ar" dir="rtl" /></div>
+                  <div class="form-field"><label>Stat 2 Number</label><input type="text" id="s-hero-stat-2-value" /></div>
+                  <div class="form-field"><label>Stat 2 Suffix</label><input type="text" id="s-hero-stat-2-suffix" placeholder="+" /></div>
+                  <div class="form-field"><label>Stat 2 Label (EN)</label><input type="text" id="s-hero-stat-2-label-en" /></div>
+                  <div class="form-field"><label>Stat 2 Label (AR)</label><input type="text" id="s-hero-stat-2-label-ar" dir="rtl" /></div>
+                  <div class="form-field"><label>Stat 3 Number</label><input type="text" id="s-hero-stat-3-value" /></div>
+                  <div class="form-field"><label>Stat 3 Suffix</label><input type="text" id="s-hero-stat-3-suffix" placeholder="+" /></div>
+                  <div class="form-field"><label>Stat 3 Label (EN)</label><input type="text" id="s-hero-stat-3-label-en" /></div>
+                  <div class="form-field"><label>Stat 3 Label (AR)</label><input type="text" id="s-hero-stat-3-label-ar" dir="rtl" /></div>
+                  <div class="form-field"><label>Stat 4 Number</label><input type="text" id="s-hero-stat-4-value" /></div>
+                  <div class="form-field"><label>Stat 4 Suffix</label><input type="text" id="s-hero-stat-4-suffix" placeholder="+" /></div>
+                  <div class="form-field"><label>Stat 4 Label (EN)</label><input type="text" id="s-hero-stat-4-label-en" /></div>
+                  <div class="form-field"><label>Stat 4 Label (AR)</label><input type="text" id="s-hero-stat-4-label-ar" dir="rtl" /></div>
+                </div>
+              </div>
             </div>
 
             <!-- Contact & Emails -->
@@ -439,6 +462,23 @@
               </div>
             </div>
 
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fas fa-file-lines"></i> Company Profile</h3>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label>Company Profile PDF</label>
+                  <input type="text" id="s-manual-company-profile" placeholder="PDF URL or uploaded PDF data" />
+                  <small>This uploaded file will be used everywhere on the website for company profile downloads.</small>
+                </div>
+                <div class="form-field">
+                  <label>Upload Company Profile PDF</label>
+                  <input type="file" accept="application/pdf,.pdf" onchange="previewUpload(this,'s-manual-company-profile')" style="color:var(--dash-muted)" />
+                </div>
+              </div>
+            </div>
+
             <!-- Social Media -->
             <div class="card">
               <div class="card-header">
@@ -446,6 +486,45 @@
               </div>
               <div id="social-links-manager"></div>
               <button class="btn-add" onclick="addSocialLink()"><i class="fas fa-plus"></i> Add Social Link</button>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fas fa-list-check"></i> Form Required Fields</h3>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label>Contact Us Form</label>
+                  <div><label><input type="checkbox" id="req-contact-name" /> Name</label></div>
+                  <div><label><input type="checkbox" id="req-contact-email" /> Email</label></div>
+                  <div><label><input type="checkbox" id="req-contact-phone" /> Phone</label></div>
+                  <div><label><input type="checkbox" id="req-contact-subject" /> Subject</label></div>
+                  <div><label><input type="checkbox" id="req-contact-message" /> Message</label></div>
+                  <div><label><input type="checkbox" id="req-contact-attachment" /> Attachment</label></div>
+                </div>
+                <div class="form-field">
+                  <label>Job Application Form</label>
+                  <div><label><input type="checkbox" id="req-career-name" /> Name</label></div>
+                  <div><label><input type="checkbox" id="req-career-email" /> Email</label></div>
+                  <div><label><input type="checkbox" id="req-career-phone" /> Phone</label></div>
+                  <div><label><input type="checkbox" id="req-career-linkedin" /> LinkedIn</label></div>
+                  <div><label><input type="checkbox" id="req-career-education" /> Education</label></div>
+                  <div><label><input type="checkbox" id="req-career-experience" /> Experience</label></div>
+                  <div><label><input type="checkbox" id="req-career-cv" /> CV Upload</label></div>
+                  <div><label><input type="checkbox" id="req-career-message" /> Cover Message</label></div>
+                </div>
+                <div class="form-field">
+                  <label>General CV Form</label>
+                  <div><label><input type="checkbox" id="req-generalCv-name" /> Name</label></div>
+                  <div><label><input type="checkbox" id="req-generalCv-email" /> Email</label></div>
+                  <div><label><input type="checkbox" id="req-generalCv-phone" /> Phone</label></div>
+                  <div><label><input type="checkbox" id="req-generalCv-linkedin" /> LinkedIn</label></div>
+                  <div><label><input type="checkbox" id="req-generalCv-education" /> Education</label></div>
+                  <div><label><input type="checkbox" id="req-generalCv-experience" /> Experience</label></div>
+                  <div><label><input type="checkbox" id="req-generalCv-cv" /> CV Upload</label></div>
+                  <div><label><input type="checkbox" id="req-generalCv-message" /> Cover Message</label></div>
+                </div>
+              </div>
             </div>
 
             <!-- Footer -->
@@ -468,6 +547,77 @@
             <div class="save-row">
               <button class="btn-save" onclick="saveSettings()"><i class="fas fa-save"></i> Save All Settings</button>
               <div class="save-msg" id="settings-msg"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── SEO ── -->
+        <div class="tab-panel" id="tab-seo">
+          <h2 class="page-title">SEO & Meta Tools</h2>
+          <div class="cards-col">
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fas fa-globe"></i> Global SEO</h3>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label>Default Title</label><input type="text" id="seo-default-title" /></div>
+                <div class="form-field"><label>Default Title (AR)</label><input type="text" id="seo-default-title-ar" dir="rtl" /></div>
+                <div class="form-field"><label>Canonical Base URL</label><input type="text" id="seo-canonical-base" placeholder="https://example.com" /></div>
+                <div class="form-field"><label>Default Description</label><textarea id="seo-default-description" rows="3"></textarea></div>
+                <div class="form-field"><label>Default Description (AR)</label><textarea id="seo-default-description-ar" rows="3" dir="rtl"></textarea></div>
+                <div class="form-field"><label>Default Keywords</label><textarea id="seo-default-keywords" rows="3"></textarea></div>
+                <div class="form-field"><label>Default Keywords (AR)</label><textarea id="seo-default-keywords-ar" rows="3" dir="rtl"></textarea></div>
+                <div class="form-field"><label>OG / Share Image</label><input type="text" id="seo-og-image" placeholder="assets/images/amg-logo.jpeg or https://..." /></div>
+                <div class="form-field"><label>Robots</label><input type="text" id="seo-robots" placeholder="index, follow" /></div>
+                <div class="form-field"><label>Schema Type</label><input type="text" id="seo-schema-type" placeholder="Organization" /></div>
+                <div class="form-field"><label>Schema Name</label><input type="text" id="seo-schema-name" placeholder="AMG Main Contracting Group" /></div>
+                <div class="form-field"><label>Schema Name (AR)</label><input type="text" id="seo-schema-name-ar" dir="rtl" placeholder="مجموعة AMG للمقاولات الرئيسية" /></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fas fa-house"></i> Homepage SEO</h3>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label>Home Title</label><input type="text" id="seo-home-title" /></div>
+                <div class="form-field"><label>Home Title (AR)</label><input type="text" id="seo-home-title-ar" dir="rtl" /></div>
+                <div class="form-field"><label>Home Description</label><textarea id="seo-home-description" rows="3"></textarea></div>
+                <div class="form-field"><label>Home Description (AR)</label><textarea id="seo-home-description-ar" rows="3" dir="rtl"></textarea></div>
+                <div class="form-field"><label>Home Keywords</label><textarea id="seo-home-keywords" rows="3"></textarea></div>
+                <div class="form-field"><label>Home Keywords (AR)</label><textarea id="seo-home-keywords-ar" rows="3" dir="rtl"></textarea></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fas fa-briefcase"></i> Careers SEO</h3>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label>Careers Title</label><input type="text" id="seo-careers-title" /></div>
+                <div class="form-field"><label>Careers Title (AR)</label><input type="text" id="seo-careers-title-ar" dir="rtl" /></div>
+                <div class="form-field"><label>Careers Description</label><textarea id="seo-careers-description" rows="3"></textarea></div>
+                <div class="form-field"><label>Careers Description (AR)</label><textarea id="seo-careers-description-ar" rows="3" dir="rtl"></textarea></div>
+                <div class="form-field"><label>Careers Keywords</label><textarea id="seo-careers-keywords" rows="3"></textarea></div>
+                <div class="form-field"><label>Careers Keywords (AR)</label><textarea id="seo-careers-keywords-ar" rows="3" dir="rtl"></textarea></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fas fa-screwdriver-wrench"></i> Search Tools</h3>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label>Google Site Verification</label><input type="text" id="seo-google-verification" /></div>
+                <div class="form-field"><label>Bing Site Verification</label><input type="text" id="seo-bing-verification" /></div>
+                <div class="form-field"><label>Google Analytics ID</label><input type="text" id="seo-ga-id" placeholder="G-XXXXXXXXXX" /></div>
+                <div class="form-field"><label>Google Tag Manager ID</label><input type="text" id="seo-gtm-id" placeholder="GTM-XXXXXXX" /></div>
+              </div>
+            </div>
+
+            <div class="save-row">
+              <button class="btn-save" onclick="saveSeoSettings()"><i class="fas fa-save"></i> Save SEO Settings</button>
+              <div class="save-msg" id="seo-msg"></div>
             </div>
           </div>
         </div>
@@ -500,6 +650,14 @@
           <h2 class="page-title">Projects</h2>
           <div class="toolbar">
             <button class="btn-add" onclick="openProjectModal()"><i class="fas fa-plus"></i> Add Project</button>
+          </div>
+          <div class="card" style="margin-bottom:20px">
+            <div class="toolbar" style="margin-bottom:14px">
+              <h3 style="margin:0">Implementing Companies</h3>
+              <button class="btn-add" onclick="openProjectCompanyModal()"><i class="fas fa-plus"></i> Add Company</button>
+            </div>
+            <p style="color:var(--dash-muted);margin-bottom:14px">Manage the company choices shown inside project cards, modal details, and image logo badges.</p>
+            <div class="items-grid" id="project-companies-list"></div>
           </div>
           <div class="items-grid" id="projects-list"></div>
         </div>

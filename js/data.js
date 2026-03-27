@@ -8,7 +8,7 @@ const DEFAULT_DATA = {
     favicon: "assets/images/amg-logo.jpeg",
     siteName: "AMG Main Contracting",
     defaultLang: "auto", // 'auto' | 'en' | 'ar'
-    primaryColor: "#B8860B",
+    primaryColor: "#C99664",
     secondaryColor: "#2B2B2B",
     bgColor: "#FAFAF8",
     fontEn: "Manrope",
@@ -16,17 +16,54 @@ const DEFAULT_DATA = {
     fontHeadingEn: "Oswald",
     fontHeadingAr: "IBM Plex Sans Arabic",
     heroVideo: "",
-    heroTitle_en: "Building Tomorrow's World",
-    heroTitle_ar: "نبني مستقبل الغد",
+    heroTitle_en: "We Build|Iconic Landmarks|With Precision & Integrity",
+    heroTitle_ar: "نحن نبني|معالم أيقونية|بدقة ومصداقية",
     heroSubtitle_en:
       "AMG Main Contracting Group delivers premium construction, civil, and electromechanical solutions across Egypt and Saudi Arabia.",
     heroSubtitle_ar:
       "مجموعة AMG للمقاولات الرئيسية تقدم حلول إنشائية ومدنية وكهروميكانيكية متميزة في مصر والمملكة العربية السعودية.",
+    heroStats: [
+      { value: "250", suffix: "+", label_en: "Projects", label_ar: "مشروع" },
+      { value: "15", suffix: "+", label_en: "Years", label_ar: "سنة" },
+      { value: "2", suffix: "", label_en: "Countries", label_ar: "دول" },
+      { value: "500", suffix: "+", label_en: "Experts", label_ar: "خبير" },
+    ],
+    formRequirements: {
+      contact: {
+        name: true,
+        email: true,
+        phone: true,
+        subject: true,
+        message: true,
+        attachment: false,
+      },
+      career: {
+        name: true,
+        email: true,
+        phone: true,
+        linkedin: false,
+        education: false,
+        experience: true,
+        cv: false,
+        message: false,
+      },
+      generalCv: {
+        name: true,
+        email: true,
+        phone: true,
+        linkedin: false,
+        education: false,
+        experience: false,
+        cv: true,
+        message: false,
+      },
+    },
     navBg: "#fbfbfb",
     navText: "#1A1A1A",
     contactEmail: "info@amgcontracting.com",
     hrEmail: "hr@amgcontracting.com",
     phone: "+20 100 000 0000",
+    manualCompanyProfile: "",
     address_en: "Cairo, Egypt & Riyadh, KSA",
     address_ar: "القاهرة، مصر والرياض، المملكة العربية السعودية",
     footerDesc_en:
@@ -47,6 +84,49 @@ const DEFAULT_DATA = {
     ],
   },
 
+  seoSettings: {
+    defaultTitle: "AMG Main Contracting Group | Premium Construction in Egypt & Saudi Arabia",
+    defaultTitle_ar: "مجموعة AMG للمقاولات الرئيسية | مقاولات وإنشاءات متميزة في مصر والسعودية",
+    defaultDescription:
+      "AMG Main Contracting Group delivers premium construction, civil, MEP, and infrastructure solutions across Egypt and Saudi Arabia.",
+    defaultDescription_ar:
+      "تقدم مجموعة AMG للمقاولات الرئيسية حلولاً متميزة في الإنشاءات والأعمال المدنية والكهروميكانيكا والبنية التحتية في مصر والمملكة العربية السعودية.",
+    defaultKeywords:
+      "AMG Main Contracting, construction company Egypt, construction company Saudi Arabia, MEP contractor, infrastructure contractor, premium contracting",
+    defaultKeywords_ar:
+      "AMG للمقاولات الرئيسية، شركة مقاولات مصر، شركة مقاولات السعودية، مقاول كهروميكانيكا، مقاول بنية تحتية، مقاولات متميزة",
+    ogImage: "assets/images/amg-logo.jpeg",
+    robots: "index, follow",
+    canonicalBase: "",
+    googleSiteVerification: "",
+    bingSiteVerification: "",
+    googleAnalyticsId: "",
+    googleTagManagerId: "",
+    schemaType: "Organization",
+    schemaName: "AMG Main Contracting Group",
+    schemaName_ar: "مجموعة AMG للمقاولات الرئيسية",
+    homeTitle: "AMG Main Contracting Group | Premium Construction in Egypt & Saudi Arabia",
+    homeTitle_ar: "مجموعة AMG للمقاولات الرئيسية | مقاولات وإنشاءات متميزة في مصر والسعودية",
+    homeDescription:
+      "Explore AMG Main Contracting Group, delivering premium construction, MEP, infrastructure, and fit-out projects across Egypt and Saudi Arabia.",
+    homeDescription_ar:
+      "اكتشف مجموعة AMG للمقاولات الرئيسية التي تقدم مشاريع متميزة في الإنشاءات وMEP والبنية التحتية والتشطيبات في مصر والمملكة العربية السعودية.",
+    homeKeywords:
+      "AMG Main Contracting, premium construction Egypt, premium construction Saudi Arabia, MEP Egypt, MEP Saudi Arabia, contracting group",
+    homeKeywords_ar:
+      "AMG للمقاولات الرئيسية، مقاولات متميزة مصر، مقاولات متميزة السعودية، MEP مصر، MEP السعودية، مجموعة مقاولات",
+    careersTitle: "Careers at AMG Main Contracting Group | Engineering & Construction Opportunities",
+    careersTitle_ar: "وظائف مجموعة AMG للمقاولات الرئيسية | فرص هندسية وإنشائية",
+    careersDescription:
+      "Discover career opportunities at AMG Main Contracting Group and submit your CV to join premium construction, engineering, and project delivery teams.",
+    careersDescription_ar:
+      "اكتشف الفرص الوظيفية في مجموعة AMG للمقاولات الرئيسية وأرسل سيرتك الذاتية للانضمام إلى فرق الإنشاءات والهندسة وإدارة التنفيذ.",
+    careersKeywords:
+      "construction jobs Egypt, construction jobs Saudi Arabia, engineering careers, AMG careers, MEP jobs, civil engineer jobs",
+    careersKeywords_ar:
+      "وظائف مقاولات مصر، وظائف مقاولات السعودية، وظائف هندسية، وظائف AMG، وظائف MEP، وظائف مهندس مدني",
+  },
+
   // ── Sections Visibility ──
   sections: {
     "our-group": { visible: true, inNav: true },
@@ -57,6 +137,15 @@ const DEFAULT_DATA = {
     partners: { visible: true, inNav: true },
     contact: { visible: true, inNav: true },
   },
+  sectionOrder: [
+    "our-group",
+    "mission-vision",
+    "services",
+    "projects",
+    "careers",
+    "partners",
+    "contact",
+  ],
 
   missionVision: {
     intro: {
@@ -190,6 +279,27 @@ const DEFAULT_DATA = {
     },
   ],
 
+  projectCompanies: [
+    {
+      id: 1,
+      name_en: "AMG Main Contracting",
+      name_ar: "AMG للمقاولات الرئيسية",
+      logo: "assets/images/amg-logo.jpeg",
+    },
+    {
+      id: 2,
+      name_en: "Amjaad Construction",
+      name_ar: "أمجاد للإنشاءات",
+      logo: "assets/images/amjaad.avif",
+    },
+    {
+      id: 3,
+      name_en: "Electrocivic",
+      name_ar: "إلكتروسيفيك",
+      logo: "assets/images/electrocivic.avif",
+    },
+  ],
+
   // ── Projects — image + images[] for gallery ──
   projects: [
     {
@@ -198,6 +308,7 @@ const DEFAULT_DATA = {
       name_ar: "أبراج النخيل",
       category_en: "Residential",
       category_ar: "سكني",
+      company_id: 2,
       implementing_company_en: "Amjaad Construction",
       implementing_company_ar: "أمجاد للإنشاءات",
       location_en: "Riyadh, KSA",
@@ -222,6 +333,7 @@ const DEFAULT_DATA = {
       name_ar: "مركز القاهرة الجديدة التجاري",
       category_en: "Commercial",
       category_ar: "تجاري",
+      company_id: 3,
       implementing_company_en: "Electrocivic",
       implementing_company_ar: "إلكتروسيفيك",
       location_en: "Cairo, Egypt",
@@ -246,6 +358,7 @@ const DEFAULT_DATA = {
       name_ar: "المجمع الصناعي بجدة",
       category_en: "Industrial",
       category_ar: "صناعي",
+      company_id: 2,
       implementing_company_en: "Amjaad Construction",
       implementing_company_ar: "أمجاد للإنشاءات",
       location_en: "Jeddah, KSA",
@@ -268,6 +381,7 @@ const DEFAULT_DATA = {
       name_ar: "مشروع MEP القرية الذكية",
       category_en: "MEP",
       category_ar: "كهروميكانيك",
+      company_id: 3,
       implementing_company_en: "Electrocivic",
       implementing_company_ar: "إلكتروسيفيك",
       location_en: "6th October, Egypt",
@@ -291,6 +405,7 @@ const DEFAULT_DATA = {
       name_ar: "محطة مترو الرياض",
       category_en: "Infrastructure",
       category_ar: "بنية تحتية",
+      company_id: 2,
       implementing_company_en: "Amjaad Construction",
       implementing_company_ar: "أمجاد للإنشاءات",
       location_en: "Riyadh, KSA",
@@ -462,6 +577,14 @@ function initData() {
   }
 }
 
+function ensureDefaultKeys() {
+  Object.keys(DEFAULT_DATA).forEach((key) => {
+    if (!localStorage.getItem("amg_" + key)) {
+      localStorage.setItem("amg_" + key, JSON.stringify(DEFAULT_DATA[key]));
+    }
+  });
+}
+
 function cleanupLegacyGroupCompanies() {
   const companies = getData("groupCompanies") || [];
   const cleaned = companies.map(({ url, ...company }) => ({
@@ -469,6 +592,88 @@ function cleanupLegacyGroupCompanies() {
     profile: company.profile || "",
   }));
   setData("groupCompanies", cleaned);
+}
+
+function migrateLegacyBranding() {
+  const settings = getData("siteSettings") || {};
+  if (settings.primaryColor === "#B8860B") {
+    settings.primaryColor = "#C99664";
+  }
+  if (typeof settings.manualCompanyProfile !== "string") {
+    settings.manualCompanyProfile = "";
+  }
+  if (settings.heroTitle_en === "Building Tomorrow's World") {
+    settings.heroTitle_en = DEFAULT_DATA.siteSettings.heroTitle_en;
+  }
+  if (settings.heroTitle_ar === "نبني مستقبل الغد") {
+    settings.heroTitle_ar = DEFAULT_DATA.siteSettings.heroTitle_ar;
+  }
+  if (Object.prototype.hasOwnProperty.call(settings, "companyProfileMode")) {
+    delete settings.companyProfileMode;
+  }
+  if (!Array.isArray(settings.heroStats) || !settings.heroStats.length) {
+    settings.heroStats = DEFAULT_DATA.siteSettings.heroStats;
+  }
+  if (!settings.formRequirements || typeof settings.formRequirements !== "object") {
+    settings.formRequirements = DEFAULT_DATA.siteSettings.formRequirements;
+  } else {
+    settings.formRequirements = {
+      contact: {
+        ...DEFAULT_DATA.siteSettings.formRequirements.contact,
+        ...(settings.formRequirements.contact || {}),
+      },
+      career: {
+        ...DEFAULT_DATA.siteSettings.formRequirements.career,
+        ...(settings.formRequirements.career || {}),
+      },
+      generalCv: {
+        ...DEFAULT_DATA.siteSettings.formRequirements.generalCv,
+        ...(settings.formRequirements.generalCv || {}),
+      },
+    };
+  }
+  setData("siteSettings", settings);
+
+  const seo = getData("seoSettings") || {};
+  setData("seoSettings", {
+    ...DEFAULT_DATA.seoSettings,
+    ...seo,
+  });
+
+  const sectionOrder = getData("sectionOrder");
+  if (!Array.isArray(sectionOrder) || !sectionOrder.length) {
+    setData("sectionOrder", DEFAULT_DATA.sectionOrder);
+  }
+}
+
+function migrateProjectCompanyAssignments() {
+  const projects = getData("projects") || [];
+  const companies = getProjectCompanies();
+  let changed = false;
+
+  const normalized = projects.map((project) => {
+    if (project.company_id && getProjectCompanyById(project.company_id)) {
+      return project;
+    }
+
+    const match = companies.find((company) =>
+      [company.name_en, company.name_ar].filter(Boolean).some((name) =>
+        name === project.implementing_company_en || name === project.implementing_company_ar,
+      ),
+    );
+
+    if (!match) return project;
+    changed = true;
+    return {
+      ...project,
+      company_id: match.id,
+      implementing_company_en: match.name_en || project.implementing_company_en || "",
+      implementing_company_ar: match.name_ar || project.implementing_company_ar || "",
+      company_logo: match.logo || project.company_logo || "",
+    };
+  });
+
+  if (changed) setData("projects", normalized);
 }
 
 // ── Get / Set helpers ──
@@ -487,7 +692,47 @@ function setData(key, value) {
 
 // Run on load
 initData();
+ensureDefaultKeys();
 cleanupLegacyGroupCompanies();
+migrateLegacyBranding();
+
+function getProjectCompanies() {
+  return getData("projectCompanies") || [];
+}
+
+function getProjectCompanyById(id) {
+  if (!id) return null;
+  return getProjectCompanies().find((company) => String(company.id) === String(id)) || null;
+}
+
+function resolveProjectCompany(project, lang) {
+  let company = getProjectCompanyById(project?.company_id);
+  if (!company && project) {
+    company = getProjectCompanies().find((item) =>
+      [item.name_en, item.name_ar].filter(Boolean).some((name) =>
+        name === project.implementing_company_en || name === project.implementing_company_ar,
+      ),
+    ) || null;
+  }
+  if (company) {
+    return {
+      id: company.id,
+      name: company["name_" + lang] || company.name_en || "",
+      name_en: company.name_en || "",
+      name_ar: company.name_ar || "",
+      logo: company.logo || "",
+    };
+  }
+
+  return {
+    id: null,
+    name: project?.["implementing_company_" + lang] || project?.implementing_company_en || "",
+    name_en: project?.implementing_company_en || "",
+    name_ar: project?.implementing_company_ar || "",
+    logo: project?.company_logo || "",
+  };
+}
+migrateProjectCompanyAssignments();
 
 // Inject Google Font dynamically
 function _loadGoogleFont(name) {
@@ -518,7 +763,7 @@ function applySettings() {
   const root = document.documentElement;
 
   // Colors
-  root.style.setProperty("--color-primary", s.primaryColor || "#B8860B");
+  root.style.setProperty("--color-primary", s.primaryColor || "#C99664");
   root.style.setProperty("--color-secondary", s.secondaryColor || "#2B2B2B");
   root.style.setProperty("--color-bg", s.bgColor || "#FAFAF8");
   // Navbar colors
@@ -621,6 +866,28 @@ function applySettings() {
   setTxt("footer-desc", s["footerDesc_" + lang] || s.footerDesc_en || "");
   setTxt("footer-copy", s["footerCopy_" + lang] || s.footerCopy_en || "");
 
+  const heroTitle = document.getElementById("hero-title");
+  if (heroTitle) {
+    const rawTitle = s["heroTitle_" + lang] || s.heroTitle_en || "";
+    const parts = rawTitle.split("|").map((part) => part.trim()).filter(Boolean);
+    const heroParts = parts.length === 3
+      ? parts
+      : (lang === "ar"
+          ? ["نحن نبني", "معالم أيقونية", "بدقة ومصداقية"]
+          : ["We Build", "Iconic Landmarks", "With Precision & Integrity"]);
+    heroTitle.innerHTML = `
+      <span>${heroParts[0]}</span>
+      <span class="accent">${heroParts[1]}</span>
+      <span>${heroParts[2]}</span>
+    `;
+  }
+  const heroSubtitle = document.getElementById("hero-subtitle");
+  if (heroSubtitle) {
+    heroSubtitle.textContent = s["heroSubtitle_" + lang] || s.heroSubtitle_en || "";
+  }
+  renderHeroStats();
+  applyContactFormRequirements();
+
   // Hero video
   const vid = document.getElementById("hero-video");
   if (vid && s.heroVideo) {
@@ -629,6 +896,165 @@ function applySettings() {
       src.src = s.heroVideo;
       vid.load();
     }
+  }
+}
+
+function getFormRequirements(formType) {
+  const settings = getData("siteSettings") || {};
+  return (
+    settings.formRequirements?.[formType] ||
+    DEFAULT_DATA.siteSettings.formRequirements[formType] ||
+    {}
+  );
+}
+
+function renderHeroStats() {
+  const wrap = document.querySelector(".hero-stats");
+  if (!wrap) return;
+  const lang = document.documentElement.getAttribute("data-lang") || "en";
+  const stats = (getData("siteSettings") || {}).heroStats || DEFAULT_DATA.siteSettings.heroStats;
+  wrap.innerHTML = stats
+    .map(
+      (item) => `
+        <div class="stat-item">
+          <div class="stat-num-wrap">
+            <span class="stat-num" data-count="${parseInt(item.value, 10) || 0}">0</span>
+            ${item.suffix ? `<span class="stat-suffix">${item.suffix}</span>` : ""}
+          </div>
+          <span class="stat-label">${item["label_" + lang] || item.label_en || ""}</span>
+        </div>`,
+    )
+    .join("");
+  if (typeof refreshHeroStatsCounters === "function") {
+    refreshHeroStatsCounters();
+  }
+}
+
+function getSectionOrder() {
+  const sectionOrder = getData("sectionOrder");
+  const fallback = [...DEFAULT_DATA.sectionOrder];
+  if (!Array.isArray(sectionOrder) || !sectionOrder.length) return fallback;
+  const validIds = Object.keys(getData("sections") || {});
+  const ordered = sectionOrder.filter((id) => validIds.includes(id));
+  validIds.forEach((id) => {
+    if (!ordered.includes(id)) ordered.push(id);
+  });
+  return ordered;
+}
+
+function setFieldRequiredState(field, required, label) {
+  if (!field) return;
+  field.required = Boolean(required);
+  field.toggleAttribute("aria-required", Boolean(required));
+  if (label) {
+    const base = label.getAttribute("data-base-text") || label.textContent.replace(/\s*\*$/, "");
+    label.setAttribute("data-base-text", base);
+    label.textContent = required ? `${base} *` : base;
+  }
+}
+
+function applyContactFormRequirements() {
+  const form = document.getElementById("contact-form");
+  if (!form) return;
+  const config = getFormRequirements("contact");
+  setFieldRequiredState(form.querySelector('input[name="name"]'), config.name, form.querySelector('label[for="contact-name"], input[name="name"]')?.closest(".form-group")?.querySelector("label"));
+  setFieldRequiredState(form.querySelector('input[name="email"]'), config.email, form.querySelector('input[name="email"]')?.closest(".form-group")?.querySelector("label"));
+  setFieldRequiredState(document.getElementById("contact-phone-local"), config.phone, document.getElementById("contact-phone-local")?.closest(".form-group")?.querySelector("label"));
+  setFieldRequiredState(form.querySelector('input[name="subject"]'), config.subject, form.querySelector('input[name="subject"]')?.closest(".form-group")?.querySelector("label"));
+  setFieldRequiredState(form.querySelector('textarea[name="message"]'), config.message, form.querySelector('textarea[name="message"]')?.closest(".form-group")?.querySelector("label"));
+  setFieldRequiredState(form.querySelector('input[name="attachment"]'), config.attachment, form.querySelector('input[name="attachment"]')?.closest(".form-group")?.querySelector("label"));
+}
+
+function applySeoSettings() {
+  const seo = getData("seoSettings") || {};
+  const page = document.body?.getAttribute("data-page") || "home";
+  const lang = document.documentElement.getAttribute("data-lang") || "en";
+  const localized = (baseKey) => {
+    const localizedKey = lang === "ar" ? `${baseKey}_ar` : baseKey;
+    return seo[localizedKey] || seo[baseKey] || "";
+  };
+  const title = page === "careers" ? localized("careersTitle") || localized("defaultTitle") : localized("homeTitle") || localized("defaultTitle");
+  const description = page === "careers" ? localized("careersDescription") || localized("defaultDescription") : localized("homeDescription") || localized("defaultDescription");
+  const keywords = page === "careers" ? localized("careersKeywords") || localized("defaultKeywords") : localized("homeKeywords") || localized("defaultKeywords");
+  const ogImage = seo.ogImage || "assets/images/amg-logo.jpeg";
+  const robots = seo.robots || "index, follow";
+  const canonicalBase = seo.canonicalBase || "";
+  const canonicalHref = canonicalBase
+    ? `${canonicalBase.replace(/\/$/, "")}/${page === "careers" ? "careers.html" : ""}`.replace(/\/$/, "")
+    : "";
+
+  const setAttr = (selector, attr, value) => {
+    const el = document.querySelector(selector);
+    if (el && value !== undefined) el.setAttribute(attr, value);
+  };
+  const ensureMeta = (selector, attrs) => {
+    let el = document.querySelector(selector);
+    if (!el) {
+      el = document.createElement("meta");
+      Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+      document.head.appendChild(el);
+    }
+    return el;
+  };
+  ensureMeta('meta[name="author"]', { name: "author" }).setAttribute("content", seo.schemaName || DEFAULT_DATA.seoSettings.schemaName);
+  ensureMeta('meta[name="application-name"]', { name: "application-name" }).setAttribute("content", lang === "ar" ? localized("defaultTitle") : seo.defaultTitle || DEFAULT_DATA.seoSettings.defaultTitle);
+  ensureMeta('meta[name="theme-color"]', { name: "theme-color" }).setAttribute("content", (getData("siteSettings") || {}).primaryColor || "#C99664");
+  ensureMeta('meta[property="og:site_name"]', { property: "og:site_name" }).setAttribute("content", seo.schemaName || DEFAULT_DATA.seoSettings.schemaName);
+  ensureMeta('meta[property="og:locale"]', { property: "og:locale" }).setAttribute("content", lang === "ar" ? "ar_AR" : "en_US");
+
+  if (document.title !== undefined && title) document.title = title;
+  setAttr('meta[name="description"]', "content", description);
+  setAttr('meta[name="keywords"]', "content", keywords);
+  setAttr('meta[name="robots"]', "content", robots);
+  setAttr('meta[property="og:title"]', "content", title);
+  setAttr('meta[property="og:description"]', "content", description);
+  setAttr('meta[property="og:image"]', "content", ogImage);
+  setAttr('meta[property="og:url"]', "content", canonicalHref || window.location.href);
+  setAttr('meta[name="twitter:title"]', "content", title);
+  setAttr('meta[name="twitter:description"]', "content", description);
+  setAttr('meta[name="twitter:image"]', "content", ogImage);
+  setAttr('meta[name="twitter:card"]', "content", "summary_large_image");
+  setAttr('meta[name="google-site-verification"]', "content", seo.googleSiteVerification || "");
+  setAttr('meta[name="msvalidate.01"]', "content", seo.bingSiteVerification || "");
+  setAttr('link[rel="canonical"]', "href", canonicalHref || window.location.href);
+
+  const schemaId = "dynamic-seo-schema";
+  const existingSchema = document.getElementById(schemaId);
+  if (existingSchema) existingSchema.remove();
+  const schema = document.createElement("script");
+  schema.type = "application/ld+json";
+  schema.id = schemaId;
+  schema.textContent = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": seo.schemaType || "Organization",
+    name:
+      (lang === "ar" ? seo.schemaName_ar : seo.schemaName) ||
+      seo.schemaName ||
+      DEFAULT_DATA.seoSettings.schemaName,
+    url: canonicalBase || window.location.origin,
+    logo: ogImage,
+    description,
+  });
+  document.head.appendChild(schema);
+
+  if (seo.googleAnalyticsId && !document.getElementById("ga-script")) {
+    const gaScript = document.createElement("script");
+    gaScript.id = "ga-script";
+    gaScript.async = true;
+    gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(seo.googleAnalyticsId)}`;
+    document.head.appendChild(gaScript);
+
+    const gaInline = document.createElement("script");
+    gaInline.id = "ga-inline-script";
+    gaInline.textContent = `window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${seo.googleAnalyticsId}');`;
+    document.head.appendChild(gaInline);
+  }
+
+  if (seo.googleTagManagerId && !document.getElementById("gtm-script")) {
+    const gtmScript = document.createElement("script");
+    gtmScript.id = "gtm-script";
+    gtmScript.textContent = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${seo.googleTagManagerId}');`;
+    document.head.appendChild(gtmScript);
   }
 }
 
@@ -654,6 +1080,26 @@ function applySectionVisibility() {
     const navLink = document.querySelector(`.nav-links a[href="#${id}"]`);
     if (navLink) navLink.parentElement.style.display = cfg.inNav ? "" : "none";
   });
+  applySectionOrder();
+}
+
+function applySectionOrder() {
+  const order = getSectionOrder();
+  const footer = document.getElementById("footer");
+  if (footer) {
+    order.forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) footer.parentNode.insertBefore(section, footer);
+    });
+  }
+
+  const nav = document.getElementById("nav-links");
+  if (!nav) return;
+  order.forEach((id) => {
+    const link = nav.querySelector(`a[href="#${id}"]`);
+    const item = link?.closest("li");
+    if (item) nav.appendChild(item);
+  });
 }
 
 function renderGroup() {
@@ -662,31 +1108,45 @@ function renderGroup() {
   const grid = document.getElementById("group-grid");
   if (!grid) return;
 
-  const profileLabel = lang === "ar" ? "تحميل بروفايل الشركة" : "Download Company Profile";
+  const settings = getData("siteSettings") || {};
+  const profileLabel =
+    lang === "ar" ? "تحميل بروفايل الشركة" : "Download Company Profile";
+  const manualUrl = settings.manualCompanyProfile || "";
+  const profileHref = manualUrl;
+  const profileName = "amg-company-profile.pdf";
+  const commonLinkAttrs = profileHref
+    ? `href="${profileHref}" target="_blank" download="${profileName}"`
+    : `href="javascript:void(0)" aria-disabled="true"`;
+  const headerCta = document.getElementById("company-profile-entry-cta");
+  if (headerCta) {
+    headerCta.textContent = profileLabel;
+    headerCta.setAttribute("href", profileHref || "javascript:void(0)");
+    if (profileHref) {
+      headerCta.setAttribute("target", "_blank");
+      headerCta.setAttribute("download", profileName);
+    } else {
+      headerCta.removeAttribute("target");
+      headerCta.removeAttribute("download");
+    }
+  }
 
   grid.innerHTML = companies
     .map(
       (c) => {
-        const profileUrl = c.profile || "";
-        const profileName = `${(c.name_en || "company").toLowerCase().replace(/\s+/g, "-")}-profile.pdf`;
-        const linkAttrs = profileUrl
-          ? `href="${profileUrl}" target="_blank" download="${profileName}"`
-          : `href="javascript:void(0)" aria-disabled="true"`;
-
         return `
-    <div class="group-card reveal-left">
+    <div class="group-card reveal-zoom">
       <div class="group-card-image">
         <img src="${c.image || ""}" alt="${c["name_" + lang] || c.name_en}"
              onerror="this.style.background='#1a1a1a';this.style.display='block'" loading="lazy" />
         <div class="group-card-overlay">
-          <a ${linkAttrs} class="btn btn-primary">${profileLabel}</a>
+          <a ${commonLinkAttrs} class="btn btn-primary">${profileLabel}</a>
         </div>
       </div>
       <div class="group-card-body">
         <div class="group-card-flag"><i class="fa fa-location-dot"></i> ${c["location_" + lang] || c.location_en}</div>
         <h3>${c["name_" + lang] || c.name_en}</h3>
         <p>${c["desc_" + lang] || c.desc_en}</p>
-        <a ${linkAttrs} class="group-link">${profileLabel}<i class="fa fa-file-arrow-down"></i></a>
+        <a ${commonLinkAttrs} class="group-link">${profileLabel}<i class="fa fa-file-arrow-down"></i></a>
       </div>
     </div>`;
       },
@@ -713,6 +1173,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(() => {}) // if fetch fails, fall back to localStorage silently
     .finally(() => {
       applySettings();
+      applySeoSettings();
       applySectionVisibility();
       renderGroup();
     });

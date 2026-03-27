@@ -13,7 +13,7 @@
   background: var(--white);
   transition: var(--tr); overflow: hidden;
 }
-.group-card:hover { box-shadow: var(--sh-md); transform: translateY(-2px); z-index: 1; }
+.group-card:hover { box-shadow: 0 22px 44px rgba(22,18,12,0.12), 0 0 0 1px rgba(201,150,100,0.08); transform: translateY(-2px); z-index: 1; }
 
 [data-lang="ar"] .group-card { grid-template-columns: 1fr clamp(120px, 18vw, 180px); }
 [data-lang="ar"] .group-card-image { order: 2; }
