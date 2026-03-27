@@ -21,17 +21,27 @@ function renderProjects() {
       const cat = p["category_" + lang] || p.category_en || "";
       const loc = p["location_" + lang] || p.location_en || "";
       const brief = p["brief_" + lang] || p.brief_en || "";
+      const implementingCompany =
+        p["implementing_company_" + lang] || p.implementing_company_en || "";
+      const implementingLabel =
+        lang === "ar" ? "الجهة المنفذة" : "Implementing Company";
       const pLbl = lang === "ar" ? "الإنجاز" : "Completion";
       return `
     <div class="project-slide" data-id="${p.id}" onclick="openProjectDetail(${p.id})">
       <div class="project-img-wrap">
         <img src="${img}" alt="${name}" loading="${i === 0 ? "eager" : "lazy"}" />
       </div>
-      <div class="project-info">
+        <div class="project-info">
+        <div class="project-accent-line"></div>
         <div class="project-info-top">
           <span class="project-category">${cat}</span>
           <h3 class="project-name">${name}</h3>
           <p class="project-brief">${brief}</p>
+          ${
+            implementingCompany
+              ? `<div class="project-company-chip"><span class="project-chip-label">${implementingLabel}</span><strong>${implementingCompany}</strong></div>`
+              : ""
+          }
           <div class="project-meta">
             <span><i class="fa fa-location-dot"></i>${loc}</span>
             ${p.year ? `<span><i class="fa fa-calendar"></i>${p.year}</span>` : ""}
@@ -103,6 +113,10 @@ function openProjectDetail(id) {
   const cat = p["category_" + lang] || p.category_en || "";
   const loc = p["location_" + lang] || p.location_en || "";
   const brief = p["brief_" + lang] || p.brief_en || "";
+  const implementingCompany =
+    p["implementing_company_" + lang] || p.implementing_company_en || "";
+  const implementingLabel =
+    lang === "ar" ? "الجهة المنفذة" : "Implementing Company";
   const imgs =
     p.images && p.images.length ? p.images : p.image ? [p.image] : [];
 
@@ -144,6 +158,15 @@ function openProjectDetail(id) {
       </div>
     </div>
     <p class="project-detail-desc">${brief}</p>
+    <div class="project-detail-facts">
+      ${
+        implementingCompany
+          ? `<div class="project-fact-card"><span>${implementingLabel}</span><strong>${implementingCompany}</strong></div>`
+          : ""
+      }
+      <div class="project-fact-card"><span>${lang === "ar" ? "التصنيف" : "Category"}</span><strong>${cat}</strong></div>
+      <div class="project-fact-card"><span>${lang === "ar" ? "الحالة" : "Status"}</span><strong>${p.progress === 100 ? (lang === "ar" ? "مكتمل" : "Completed") : (lang === "ar" ? "قيد التنفيذ" : "In Progress")}</strong></div>
+    </div>
     <div class="project-detail-progress">
       <div class="project-detail-progress-label">
         <span>${lang === "ar" ? "نسبة الإنجاز" : "Completion"}</span>

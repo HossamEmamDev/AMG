@@ -582,6 +582,8 @@ function openProjectModal(id) {
       <div class="form-field"><label>Name (AR)</label><input id="m-name-ar" value="${p?.name_ar || ""}" dir="rtl" /></div>
       <div class="form-field"><label>Category (EN)</label><input id="m-cat-en" value="${p?.category_en || ""}" /></div>
       <div class="form-field"><label>Category (AR)</label><input id="m-cat-ar" value="${p?.category_ar || ""}" dir="rtl" /></div>
+      <div class="form-field"><label>Implementing Company (EN)</label><input id="m-impl-en" value="${p?.implementing_company_en || ""}" /></div>
+      <div class="form-field"><label>Implementing Company (AR)</label><input id="m-impl-ar" value="${p?.implementing_company_ar || ""}" dir="rtl" /></div>
       <div class="form-field"><label>Location (EN)</label><input id="m-loc-en" value="${p?.location_en || ""}" /></div>
       <div class="form-field"><label>Location (AR)</label><input id="m-loc-ar" value="${p?.location_ar || ""}" dir="rtl" /></div>
       <div class="form-field"><label>Year</label><input id="m-year" type="number" value="${p?.year || new Date().getFullYear()}" /></div>
@@ -674,6 +676,8 @@ function saveProject(id) {
     name_ar: document.getElementById("m-name-ar").value,
     category_en: document.getElementById("m-cat-en").value,
     category_ar: document.getElementById("m-cat-ar").value,
+    implementing_company_en: document.getElementById("m-impl-en").value,
+    implementing_company_ar: document.getElementById("m-impl-ar").value,
     location_en: document.getElementById("m-loc-en").value,
     location_ar: document.getElementById("m-loc-ar").value,
     year:

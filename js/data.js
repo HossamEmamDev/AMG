@@ -198,6 +198,8 @@ const DEFAULT_DATA = {
       name_ar: "أبراج النخيل",
       category_en: "Residential",
       category_ar: "سكني",
+      implementing_company_en: "Amjaad Construction",
+      implementing_company_ar: "أمجاد للإنشاءات",
       location_en: "Riyadh, KSA",
       location_ar: "الرياض، المملكة العربية السعودية",
       brief_en:
@@ -220,6 +222,8 @@ const DEFAULT_DATA = {
       name_ar: "مركز القاهرة الجديدة التجاري",
       category_en: "Commercial",
       category_ar: "تجاري",
+      implementing_company_en: "Electrocivic",
+      implementing_company_ar: "إلكتروسيفيك",
       location_en: "Cairo, Egypt",
       location_ar: "القاهرة، مصر",
       brief_en:
@@ -242,6 +246,8 @@ const DEFAULT_DATA = {
       name_ar: "المجمع الصناعي بجدة",
       category_en: "Industrial",
       category_ar: "صناعي",
+      implementing_company_en: "Amjaad Construction",
+      implementing_company_ar: "أمجاد للإنشاءات",
       location_en: "Jeddah, KSA",
       location_ar: "جدة، المملكة العربية السعودية",
       brief_en:
@@ -262,6 +268,8 @@ const DEFAULT_DATA = {
       name_ar: "مشروع MEP القرية الذكية",
       category_en: "MEP",
       category_ar: "كهروميكانيك",
+      implementing_company_en: "Electrocivic",
+      implementing_company_ar: "إلكتروسيفيك",
       location_en: "6th October, Egypt",
       location_ar: "السادس من أكتوبر، مصر",
       brief_en:
@@ -283,6 +291,8 @@ const DEFAULT_DATA = {
       name_ar: "محطة مترو الرياض",
       category_en: "Infrastructure",
       category_ar: "بنية تحتية",
+      implementing_company_en: "Amjaad Construction",
+      implementing_company_ar: "أمجاد للإنشاءات",
       location_en: "Riyadh, KSA",
       location_ar: "الرياض، المملكة العربية السعودية",
       brief_en:
