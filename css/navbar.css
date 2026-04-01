@@ -159,6 +159,50 @@
 .hamburger.active span:nth-child(2) { opacity: 0; width: 0; }
 .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
+/* Desktop refinement */
+@media (min-width: 961px) {
+  .nav-container {
+    padding: 0 clamp(14px, 2.2vw, 26px);
+    gap: 4px;
+  }
+
+  .nav-logo {
+    gap: 8px;
+  }
+
+  .nav-logo img {
+    height: clamp(36px, 3.1vw, 46px);
+    max-width: 150px;
+  }
+
+  .nav-links > li > a {
+    padding: 4px clamp(5px, 0.9vw, 10px);
+    font-size: clamp(0.68rem, 0.82vw, 0.78rem);
+    letter-spacing: 0.04em;
+  }
+
+  .nav-links > li > a::after {
+    left: clamp(5px, 0.9vw, 10px);
+    right: clamp(5px, 0.9vw, 10px);
+  }
+
+  .nav-actions {
+    gap: 6px;
+    margin-left: 6px;
+  }
+
+  [data-lang="ar"] .nav-actions {
+    margin-right: 6px;
+  }
+
+  .lang-toggle {
+    height: 24px;
+    min-width: 30px;
+    padding: 0 8px;
+    font-size: 0.68rem;
+  }
+}
+
 /* ════════════════════════════════
    MOBILE ≤ 960px
    ════════════════════════════════ */

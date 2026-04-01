@@ -250,7 +250,9 @@ function loadSettings() {
   document.getElementById("s-footer-copy-en").value = s.footerCopy_en || "";
   document.getElementById("s-footer-copy-ar").value = s.footerCopy_ar || "";
   const logoP = document.getElementById("logo-preview");
-  if (logoP && s.logo) logoP.src = s.logo;
+  if (logoP && s.logo) logoP.src = toDashboardAssetPath(s.logo);
+  const favP = document.getElementById("fav-preview");
+  if (favP && s.favicon) favP.src = toDashboardAssetPath(s.favicon);
   loadFormRequirementSettings(s.formRequirements || {});
   renderSocialLinks();
 }
@@ -443,32 +445,179 @@ function saveSeoSettings() {
   pushToServer();
 }
 
-function handleLogoUpload(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const src = e.target.result;
-    document.getElementById("logo-preview").src = src;
-    document.getElementById("dash-logo").src = src;
-    const s = getData("siteSettings");
-    s.logo = src;
-    setData("siteSettings", s);
-  };
-  reader.readAsDataURL(file);
+function slugifyUploadPart(value, fallback = "file") {
+  const slug = String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+  return slug || fallback;
 }
 
-function handleFaviconUpload(input) {
-  const file = input.files[0];
+function toDashboardAssetPath(src) {
+  const value = String(src || "").trim();
+  if (!value) return value;
+  if (
+    value.startsWith("data:") ||
+    value.startsWith("blob:") ||
+    value.startsWith("../") ||
+    value.startsWith("/") ||
+    /^https?:\/\//i.test(value)
+  ) {
+    return value;
+  }
+  if (value.startsWith("assets/")) return `../${value}`;
+  return value;
+}
+
+function syncAssetPreview(src, previewId, fallback = "") {
+  const preview = document.getElementById(previewId);
+  if (!preview) return;
+  preview.src = toDashboardAssetPath(src || fallback);
+}
+
+function getInputValue(id) {
+  return document.getElementById(id)?.value?.trim() || "";
+}
+
+function buildUploadConfig(targetId) {
+  switch (targetId) {
+    case "wg-logo-url":
+      return { folder: "images/logo", filename: "who-we-are-logo" };
+    case "wg-profile-url":
+      return { folder: "files/profiles", filename: "who-we-are-profile" };
+    case "s-manual-company-profile":
+      return { folder: "files/profiles", filename: "company-profile" };
+    case "custom-block-image":
+      return {
+        folder: "images/custom-sections",
+        filename: slugifyUploadPart(
+          getInputValue("custom-block-titleEn") ||
+            getInputValue("custom-block-titleAr") ||
+            "custom-block-image",
+          "custom-block-image",
+        ),
+      };
+    case "m-pc-logo":
+      return {
+        folder: "images/project-companies",
+        filename: `${slugifyUploadPart(
+          getInputValue("m-pc-name-en") || getInputValue("m-pc-name-ar"),
+          "project-company",
+        )}-logo`,
+      };
+    case "m-plogo":
+      return {
+        folder: "images/partner",
+        filename: `${slugifyUploadPart(getInputValue("m-pname"), "partner")}-logo`,
+      };
+    case "m-gimage": {
+      const companySlug = slugifyUploadPart(
+        getInputValue("m-gname-en") || getInputValue("m-gname-ar"),
+        "group-company",
+      );
+      return {
+        folder: `images/group-companies/${companySlug}`,
+        filename: `${companySlug}-image`,
+      };
+    }
+    case "m-gprofile": {
+      const companySlug = slugifyUploadPart(
+        getInputValue("m-gname-en") || getInputValue("m-gname-ar"),
+        "group-company",
+      );
+      return {
+        folder: `files/group-companies/${companySlug}`,
+        filename: `${companySlug}-profile`,
+      };
+    }
+    default:
+      return { folder: "images/uploads", filename: "upload" };
+  }
+}
+
+async function uploadFileToServer(file, config) {
+  const formData = new FormData();
+  formData.append("secret", "amg_admin_2025");
+  formData.append("folder", config.folder);
+  formData.append("filename", config.filename);
+  formData.append("file", file, file.name || `${config.filename}.bin`);
+
+  const response = await fetch("../php/upload_file.php", {
+    method: "POST",
+    body: formData,
+  });
+  const result = await response.json();
+  if (!response.ok || !result.success || !result.path) {
+    throw new Error(result.message || "Upload failed");
+  }
+  return result.path;
+}
+
+async function previewUpload(input, targetId, previewId) {
+  const file = input.files?.[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    document.getElementById("fav-preview").src = e.target.result;
+
+  try {
+    input.disabled = true;
+    const path = await uploadFileToServer(file, buildUploadConfig(targetId));
+    const el = document.getElementById(targetId);
+    if (el) el.value = path;
+    if (previewId) syncAssetPreview(path, previewId);
+  } catch (error) {
+    console.error("Upload failed:", error);
+    alert(`Upload failed: ${error.message}`);
+  } finally {
+    input.disabled = false;
+    input.value = "";
+  }
+}
+
+async function handleLogoUpload(input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  try {
+    input.disabled = true;
+    const path = await uploadFileToServer(file, {
+      folder: "images/logo",
+      filename: "site-logo",
+    });
+    document.getElementById("logo-preview").src = toDashboardAssetPath(path);
+    document.getElementById("dash-logo").src = toDashboardAssetPath(path);
     const s = getData("siteSettings");
-    s.favicon = e.target.result;
+    s.logo = path;
     setData("siteSettings", s);
-  };
-  reader.readAsDataURL(file);
+  } catch (error) {
+    console.error("Logo upload failed:", error);
+    alert(`Logo upload failed: ${error.message}`);
+  } finally {
+    input.disabled = false;
+    input.value = "";
+  }
+}
+
+async function handleFaviconUpload(input) {
+  const file = input.files?.[0];
+  if (!file) return;
+  try {
+    input.disabled = true;
+    const path = await uploadFileToServer(file, {
+      folder: "images/logo",
+      filename: "favicon",
+    });
+    document.getElementById("fav-preview").src = toDashboardAssetPath(path);
+    const s = getData("siteSettings");
+    s.favicon = path;
+    setData("siteSettings", s);
+  } catch (error) {
+    console.error("Favicon upload failed:", error);
+    alert(`Favicon upload failed: ${error.message}`);
+  } finally {
+    input.disabled = false;
+    input.value = "";
+  }
 }
 
 // Social links
@@ -1549,7 +1698,7 @@ function renderProjectCompaniesList() {
       <div class="item-card-meta">
         <span><i class="fas fa-language"></i> ${company.name_ar || "—"}</span>
       </div>
-      ${company.logo ? `<img src="${company.logo}" alt="${company.name_en}" style="width:100%;height:72px;object-fit:contain;background:var(--dash-surface2);border:1px solid var(--dash-border);border-radius:8px;padding:12px;margin-top:8px;" />` : ""}
+      ${company.logo ? `<img src="${toDashboardAssetPath(company.logo)}" alt="${company.name_en}" style="width:100%;height:72px;object-fit:contain;background:var(--dash-surface2);border:1px solid var(--dash-border);border-radius:8px;padding:12px;margin-top:8px;" />` : ""}
       <div class="item-card-actions">
         <button class="btn-edit" onclick="openProjectCompanyModal(${company.id})"><i class="fas fa-edit"></i> Edit</button>
         <button class="btn-del" onclick="deleteItem('projectCompanies',${company.id})"><i class="fas fa-trash"></i> Delete</button>
@@ -1677,7 +1826,7 @@ function renderProjectImgList() {
     .map(
       (src, i) => `
     <div style="position:relative;flex-shrink:0">
-      <img src="${src}" style="width:80px;height:56px;object-fit:cover;border-radius:6px;border:2px solid ${i === 0 ? "var(--dash-accent)" : "var(--dash-border)"}" />
+      <img src="${toDashboardAssetPath(src)}" style="width:80px;height:56px;object-fit:cover;border-radius:6px;border:2px solid ${i === 0 ? "var(--dash-accent)" : "var(--dash-border)"}" />
       ${i === 0 ? '<span style="position:absolute;bottom:2px;left:2px;background:var(--dash-accent);color:#fff;font-size:0.55rem;padding:1px 4px;border-radius:2px;font-weight:700">COVER</span>' : ""}
       <button onclick="removeProjectImg(${i})" style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:#ef4444;border:none;color:#fff;font-size:0.55rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
     </div>`,
@@ -1693,15 +1842,29 @@ function addProjectImage() {
   renderProjectImgList();
 }
 
-function uploadProjectImage(input) {
-  const file = input.files[0];
+async function uploadProjectImage(input) {
+  const file = input.files?.[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    projectImagesTemp.push(e.target.result);
+  const projectSlug = slugifyUploadPart(
+    getInputValue("m-name-en") || getInputValue("m-name-ar"),
+    "project",
+  );
+  const imageIndex = projectImagesTemp.length + 1;
+  try {
+    input.disabled = true;
+    const path = await uploadFileToServer(file, {
+      folder: `images/projects/${projectSlug}`,
+      filename: `${projectSlug}-${imageIndex}`,
+    });
+    projectImagesTemp.push(path);
     renderProjectImgList();
-  };
-  reader.readAsDataURL(file);
+  } catch (error) {
+    console.error("Project image upload failed:", error);
+    alert(`Project image upload failed: ${error.message}`);
+  } finally {
+    input.disabled = false;
+    input.value = "";
+  }
 }
 
 function removeProjectImg(i) {
@@ -1715,7 +1878,7 @@ function loadImageElement(src) {
     if (!String(src || "").startsWith("data:")) img.crossOrigin = "anonymous";
     img.onload = () => resolve(img);
     img.onerror = reject;
-    img.src = src;
+    img.src = toDashboardAssetPath(src);
   });
 }
 
@@ -1731,15 +1894,21 @@ function blobToDataUrl(blob) {
 async function normalizeImageSource(src) {
   if (!src) return src;
   if (String(src).startsWith("data:")) return src;
+  const resolvedSrc = toDashboardAssetPath(src);
 
   try {
-    const response = await fetch(src, { mode: "cors" });
+    const response = await fetch(resolvedSrc, { mode: "cors" });
     if (!response.ok) throw new Error("Fetch failed");
     const blob = await response.blob();
     return await blobToDataUrl(blob);
   } catch (_) {
-    return src;
+    return resolvedSrc;
   }
+}
+
+async function dataUrlToBlob(dataUrl) {
+  const response = await fetch(dataUrl);
+  return await response.blob();
 }
 
 async function composeProjectCoverWithLogo(imageSrc, logoSrc) {
@@ -1828,7 +1997,22 @@ async function saveProject(id) {
   const companyId = document.getElementById("m-company-id").value;
   const company =
     projectCompanies.find((item) => String(item.id) === String(companyId)) || null;
-  const normalizedImages = await prepareProjectImagesForSaving(imgs, company?.logo);
+  let normalizedImages = await prepareProjectImagesForSaving(imgs, company?.logo);
+  if (String(normalizedImages[0] || "").startsWith("data:")) {
+    const projectSlug = slugifyUploadPart(
+      document.getElementById("m-name-en").value ||
+        document.getElementById("m-name-ar").value,
+      "project",
+    );
+    const coverBlob = await dataUrlToBlob(normalizedImages[0]);
+    normalizedImages[0] = await uploadFileToServer(
+      new File([coverBlob], `${projectSlug}-cover.jpg`, { type: "image/jpeg" }),
+      {
+        folder: `images/projects/${projectSlug}`,
+        filename: `${projectSlug}-cover`,
+      },
+    );
+  }
   const item = {
     id: id || Date.now(),
     name_en: document.getElementById("m-name-en").value,
@@ -2010,7 +2194,7 @@ function renderPartnersList() {
         (p) => `
     <div class="item-card" style="margin-bottom:10px">
       <div class="item-card-header"><span class="item-card-title">${p.name}</span></div>
-      ${p.logo ? `<img src="${p.logo}" alt="${p.name}" style="width:100%;height:72px;object-fit:contain;background:var(--dash-surface2);border:1px solid var(--dash-border);border-radius:6px;padding:12px;margin:8px 0;" />` : ""}
+      ${p.logo ? `<img src="${toDashboardAssetPath(p.logo)}" alt="${p.name}" style="width:100%;height:72px;object-fit:contain;background:var(--dash-surface2);border:1px solid var(--dash-border);border-radius:6px;padding:12px;margin:8px 0;" />` : ""}
       <div class="item-card-actions">
         <button class="btn-edit" onclick="openPartnerModal(${p.id})"><i class="fas fa-edit"></i> Edit</button>
         <button class="btn-del" onclick="deleteItemFrom('partners',${p.id})"><i class="fas fa-trash"></i></button>
@@ -2319,7 +2503,7 @@ function renderOurGroupList() {
         <span><i class="fas fa-link"></i> ${c.website || "No website set"}</span>
       </div>
       <p class="item-card-hint">Profile CTA: ${c.showProfileButton !== false ? "Visible" : "Hidden"} · Website CTA: ${c.showWebsiteButton !== false ? "Visible" : "Hidden"}</p>
-      ${c.image ? `<img src="${c.image}" alt="" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-top:8px;" />` : ""}
+      ${c.image ? `<img src="${toDashboardAssetPath(c.image)}" alt="" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-top:8px;" />` : ""}
       <div class="item-card-actions">
         <button class="btn-edit" onclick="openGroupModal(${c.id})"><i class="fas fa-edit"></i> Edit</button>
         <button class="btn-del"  onclick="deleteItem('groupCompanies',${c.id})"><i class="fas fa-trash"></i> Delete</button>
@@ -2337,7 +2521,9 @@ function loadOurGroupSettings() {
   }
   const logoPreview = document.getElementById("wg-logo-preview");
   if (logoPreview) {
-    logoPreview.src = settings.whoWeAreLogo || settings.logo || "../assets/images/amg-logo.jpeg";
+    logoPreview.src = toDashboardAssetPath(
+      settings.whoWeAreLogo || settings.logo || "assets/images/amg-logo.jpeg",
+    );
   }
   const profileInput = document.getElementById("wg-profile-url");
   if (profileInput) profileInput.value = settings.manualCompanyProfile || "";
@@ -2467,19 +2653,6 @@ function closeDashModal() {
 document.getElementById("dash-modal")?.addEventListener("click", (e) => {
   if (e.target === document.getElementById("dash-modal")) closeDashModal();
 });
-
-function previewUpload(input, targetId, previewId) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const el = document.getElementById(targetId);
-    if (el) el.value = e.target.result;
-    const preview = previewId ? document.getElementById(previewId) : null;
-    if (preview && preview.tagName === "IMG") preview.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
 
 function showMsg(id, text, success) {
   const el = document.getElementById(id);

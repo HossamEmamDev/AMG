@@ -113,7 +113,7 @@
               <div class="form-field"><label>Brief (AR)</label><textarea id="wg-brief-ar" rows="4" dir="rtl"></textarea></div>
               <div class="form-field">
                 <label>Who We Are Logo Path / URL</label>
-                <input type="text" id="wg-logo-url" placeholder="assets/images/amg-logo.jpeg or https://..." oninput="const p=document.getElementById('wg-logo-preview'); if(p) p.src=this.value || '../assets/images/amg-logo.jpeg';" />
+                <input type="text" id="wg-logo-url" placeholder="assets/images/amg-logo.jpeg or https://..." oninput="syncAssetPreview(this.value,'wg-logo-preview','assets/images/amg-logo.jpeg')" />
               </div>
               <div class="form-field">
                 <label>Upload Who We Are Logo</label>

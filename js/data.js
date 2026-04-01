@@ -1833,7 +1833,7 @@ function renderGroup() {
     setTimeout(setupScrollReveal, 50);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function initSiteData() {
   // Try to load settings from server first
   fetch("php/load_settings.php")
     .then((r) => r.json())
@@ -1855,7 +1855,13 @@ document.addEventListener("DOMContentLoaded", () => {
       renderGroup();
       if (typeof renderOrgChart === "function") renderOrgChart();
     });
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initSiteData);
+} else {
+  initSiteData();
+}
 
 function migrateCustomSections() {
   syncSectionRegistry();

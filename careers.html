@@ -26,13 +26,34 @@
   <link rel="canonical" href="" />
   <link rel="icon" id="favicon-link" href="assets/images/amg-logo.jpeg" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link rel="stylesheet" href="css/variables.css" />
-  <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/navbar.css" />
-  <link rel="stylesheet" href="css/careers.css" />
-  <link rel="stylesheet" href="css/modal.css" />
-  <link rel="stylesheet" href="css/footer.css" />
-  <link rel="stylesheet" href="css/animations.css" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script>
+    window.__assetVersion = String(Date.now());
+    window.appendVersion = function (path) {
+      if (!path || /^https?:\/\//i.test(path) || path.includes("?")) return path;
+      return `${path}?v=${window.__assetVersion}`;
+    };
+    window.loadLocalStyles = function (paths) {
+      document.write(
+        paths
+          .map((path) => `<link rel="stylesheet" href="${window.appendVersion(path)}" />`)
+          .join(""),
+      );
+    };
+  </script>
+  <script>
+    window.loadLocalStyles([
+      "css/variables.css",
+      "css/base.css",
+      "css/navbar.css",
+      "css/careers.css",
+      "css/modal.css",
+      "css/footer.css",
+      "css/animations.css"
+    ]);
+  </script>
 </head>
 <body data-page="careers">
 
@@ -119,73 +140,79 @@
   </div>
 </div>
 
-<script src="js/data.js"></script>
-<script src="js/lang.js"></script>
-<script src="js/careers.js"></script>
 <script>
-  // Navbar scroll
-  window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
-  });
-  document.getElementById('hamburger').addEventListener('click', function() {
-    this.classList.toggle('active');
-    document.getElementById('nav-links').classList.toggle('open');
-  });
+  document.write(`
+    <script src="${window.appendVersion("js/data.js")}"><\/script>
+    <script src="${window.appendVersion("js/lang.js")}"><\/script>
+    <script src="${window.appendVersion("js/careers.js")}"><\/script>
+  `);
 
-  let currentFilter = 'all';
-  function filterCareers(type, btn) {
-    currentFilter = type;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderAllCareers();
-  }
+  function bootCareersPage() {
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+    });
+    document.getElementById('hamburger').addEventListener('click', function() {
+      this.classList.toggle('active');
+      document.getElementById('nav-links').classList.toggle('open');
+    });
 
-  function renderAllCareers() {
-    const lang = document.documentElement.getAttribute('data-lang') || 'en';
-    const careers = getData('careers') || [];
-    const filtered = currentFilter === 'all' ? careers.filter(c => c.active !== false) : careers.filter(c => c.type === currentFilter && c.active !== false);
-    const grid = document.getElementById('careers-grid-full');
-    const count = document.getElementById('career-open-count');
-    if (count) count.textContent = String(careers.filter(c => c.active !== false).length);
-    if (!grid) return;
+    let currentFilter = 'all';
+    window.filterCareers = function (type, btn) {
+      currentFilter = type;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderAllCareers();
+    };
 
-    const labels = getCareerUiStrings(lang).labels;
-    const generalCard = `
-      <div class="career-card career-card-featured">
-        <div class="career-card-glow"></div>
-        <div class="career-header">
-          <div class="career-head-copy">
-            <span class="career-index">${lang === 'ar' ? 'طلب عام' : 'General Application'}</span>
-            <h3 class="career-title">${labels.generalTitle}</h3>
+    function renderAllCareers() {
+      const lang = document.documentElement.getAttribute('data-lang') || 'en';
+      const careers = getData('careers') || [];
+      const filtered = currentFilter === 'all' ? careers.filter(c => c.active !== false) : careers.filter(c => c.type === currentFilter && c.active !== false);
+      const grid = document.getElementById('careers-grid-full');
+      const count = document.getElementById('career-open-count');
+      if (count) count.textContent = String(careers.filter(c => c.active !== false).length);
+      if (!grid) return;
+
+      const labels = getCareerUiStrings(lang).labels;
+      const generalCard = `
+        <div class="career-card career-card-featured">
+          <div class="career-card-glow"></div>
+          <div class="career-header">
+            <div class="career-head-copy">
+              <span class="career-index">${lang === 'ar' ? 'طلب عام' : 'General Application'}</span>
+              <h3 class="career-title">${labels.generalTitle}</h3>
+            </div>
           </div>
-        </div>
-        <p class="career-desc expanded">${labels.generalSubtitle}</p>
-        <div class="career-feature-points">
-          <span>${lang === 'ar' ? 'إرسال مباشر لفريق الموارد البشرية' : 'Direct to the HR team'}</span>
-          <span>${lang === 'ar' ? 'فرص حالية ومستقبلية' : 'Current and future opportunities'}</span>
-        </div>
-        <div class="career-footer">
-          <span class="career-location"><i class="fa fa-star"></i>${lang === 'ar' ? 'مسار مهني مفتوح' : 'Open talent track'}</span>
-          <div class="career-actions">
-            <button class="btn btn-primary" style="padding:7px 16px;font-size:0.78rem" onclick="openGeneralCvModal()">${labels.submitGeneral}</button>
+          <p class="career-desc expanded">${labels.generalSubtitle}</p>
+          <div class="career-feature-points">
+            <span>${lang === 'ar' ? 'إرسال مباشر لفريق الموارد البشرية' : 'Direct to the HR team'}</span>
+            <span>${lang === 'ar' ? 'فرص حالية ومستقبلية' : 'Current and future opportunities'}</span>
           </div>
-        </div>
-      </div>`;
-    if (!filtered.length) {
-      grid.innerHTML = [
-        generalCard,
-        `<p style="text-align:center;color:var(--color-text-muted);grid-column:1/-1;padding:40px">${lang==='ar'?'لا توجد وظائف متاحة حالياً':'No positions available currently'}</p>`
-      ].join('');
-      return;
+          <div class="career-footer">
+            <span class="career-location"><i class="fa fa-star"></i>${lang === 'ar' ? 'مسار مهني مفتوح' : 'Open talent track'}</span>
+            <div class="career-actions">
+              <button class="btn btn-primary" style="padding:7px 16px;font-size:0.78rem" onclick="openGeneralCvModal()">${labels.submitGeneral}</button>
+            </div>
+          </div>
+        </div>`;
+      if (!filtered.length) {
+        grid.innerHTML = [
+          generalCard,
+          `<p style="text-align:center;color:var(--color-text-muted);grid-column:1/-1;padding:40px">${lang==='ar'?'لا توجد وظائف متاحة حالياً':'No positions available currently'}</p>`
+        ].join('');
+        return;
+      }
+      grid.innerHTML = [generalCard, ...filtered.map(c => buildCareerCard(c, lang, true))].join('');
+      wireShareBtns();
     }
-    grid.innerHTML = [generalCard, ...filtered.map(c => buildCareerCard(c, lang, true))].join('');
-    wireShareBtns();
+
+    renderAllCareers();
+    window.closeModal = function (id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; };
+    window.openModal = function (id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; };
+    document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o){o.classList.remove('open');document.body.style.overflow='';} }));
   }
 
-  document.addEventListener('DOMContentLoaded', renderAllCareers);
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
-  function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
-  document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o){o.classList.remove('open');document.body.style.overflow='';} }));
+  bootCareersPage();
 </script>
 </body>
 </html>
