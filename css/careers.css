@@ -441,7 +441,16 @@ input[type="file"] { display: none; }
 }
 
 @media (max-width: 480px) {
-  .career-card { border-radius: 20px; }
+  .careers-grid,
+  #careers-grid-full.careers-grid {
+    gap: 12px;
+    background: transparent;
+  }
+  .career-card {
+    border-radius: 20px;
+    border: 1px solid rgba(201,150,100,0.14);
+    box-shadow: 0 14px 28px rgba(17,17,17,0.05);
+  }
   .careers-hero-stat { min-width: calc(50% - 8px); }
   #careers-grid-full.careers-grid { grid-template-columns: 1fr; }
 }

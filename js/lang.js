@@ -19,6 +19,15 @@ function setLang(lang) {
   html.setAttribute('lang', lang);
   localStorage.setItem('amg_lang', lang);
 
+  const safeRun = (fnName, ...args) => {
+    if (typeof window[fnName] !== 'function') return;
+    try {
+      window[fnName](...args);
+    } catch (error) {
+      console.warn(`Language refresh skipped for ${fnName}:`, error);
+    }
+  };
+
   /* Button label:
      When site is English  → show "ع" (click to switch to Arabic)
      When site is Arabic   → show "EN" (click to switch to English)  */
@@ -37,18 +46,22 @@ function setLang(lang) {
   });
 
   /* Re-apply dynamic settings with correct language */
-  if (typeof applySettings === 'function') applySettings();
-  if (typeof applySeoSettings === 'function') applySeoSettings();
+  safeRun('applySettings');
+  safeRun('applySeoSettings');
 
   /* Re-render dynamic sections */
-  if (typeof renderProjects  === 'function') renderProjects();
-  if (typeof renderCareers   === 'function') renderCareers();
-  if (typeof renderAllCareers === 'function') renderAllCareers();
-  if (typeof renderServices  === 'function') renderServices();
-  if (typeof renderPartners  === 'function') renderPartners();
-  if (typeof renderGroup     === 'function') renderGroup();
-  if (typeof updateContactPhoneUi === 'function') updateContactPhoneUi();
-  if (typeof updateContactFileLabel === 'function') updateContactFileLabel({ files: [] });
+  safeRun('renderProjects');
+  safeRun('renderCareers');
+  safeRun('renderAllCareers');
+  safeRun('renderServices');
+  safeRun('renderPartners');
+  safeRun('renderGroup');
+  safeRun('renderOrgChart');
+  safeRun('renderCustomSections');
+  safeRun('applySectionVisibility');
+  safeRun('updateContactPhoneUi');
+  safeRun('updateContactFileLabel', { files: [] });
+  safeRun('updateNavbarState');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -6,8 +6,31 @@ let projectsData = [];
 let autoPlay = null;
 let touchStartX = 0;
 let pointerStartX = 0;
+let autoplayPausedByUser = false;
+const projectExplorerState = {
+  search: "",
+  company: "all",
+  category: "all",
+  status: "all",
+  sort: "featured",
+};
+
+function getOrderedProjects() {
+  const settings = getData("siteSettings") || {};
+  const projects = [...(getData("projects") || [])];
+  const mode = settings.projectOrderMode || "manual";
+  return projects.sort((a, b) => {
+    if (mode === "year-desc") {
+      return (Number(b.year) || 0) - (Number(a.year) || 0) ||
+        (Number(a.displayOrder) || 0) - (Number(b.displayOrder) || 0);
+    }
+    return (Number(a.displayOrder) || 0) - (Number(b.displayOrder) || 0) ||
+      (Number(b.year) || 0) - (Number(a.year) || 0);
+  });
+}
 
 function startAutoplay() {
+  if (autoplayPausedByUser) return;
   clearInterval(autoPlay);
   autoPlay = setInterval(() => goToSlide(currentSlide + 1), 6000);
 }
@@ -20,7 +43,7 @@ function stopAutoplay() {
 /* ── Render main slider ── */
 function renderProjects() {
   const lang = document.documentElement.getAttribute("data-lang") || "en";
-  projectsData = getData("projects") || [];
+  projectsData = getOrderedProjects();
   const slider = document.getElementById("projects-slider");
   const dotsWrap = document.getElementById("proj-dots");
   if (!slider) return;
@@ -32,6 +55,7 @@ function renderProjects() {
         "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=75&fit=crop";
       const name = p["name_" + lang] || p.name_en || "";
       const cat = p["category_" + lang] || p.category_en || "";
+      const subcat = p["subcategory_" + lang] || p.subcategory_en || "";
       const loc = p["location_" + lang] || p.location_en || "";
       const brief = p["brief_" + lang] || p.brief_en || "";
       const company = resolveProjectCompany(p, lang);
@@ -52,7 +76,7 @@ function renderProjects() {
         <div class="project-info">
         <div class="project-accent-line"></div>
         <div class="project-info-top">
-          <span class="project-category">${cat}</span>
+          <span class="project-category">${subcat || cat}</span>
           <h3 class="project-name">${name}</h3>
           <p class="project-brief">${brief}</p>
           ${
@@ -123,6 +147,7 @@ function bindProjectSwipe() {
   slider.addEventListener("touchend", (e) => {
     const delta = (e.changedTouches[0]?.clientX || 0) - touchStartX;
     if (Math.abs(delta) < 45) return;
+    autoplayPausedByUser = true;
     stopAutoplay();
     goToSlide(delta > 0 ? currentSlide - 1 : currentSlide + 1);
   });
@@ -133,16 +158,19 @@ function bindProjectSwipe() {
   slider.addEventListener("pointerup", (e) => {
     const delta = (e.clientX || 0) - pointerStartX;
     if (Math.abs(delta) < 45) return;
+    autoplayPausedByUser = true;
     stopAutoplay();
     goToSlide(delta > 0 ? currentSlide - 1 : currentSlide + 1);
   });
 }
 
 document.getElementById("proj-prev")?.addEventListener("click", () => {
+  autoplayPausedByUser = true;
   stopAutoplay();
   goToSlide(currentSlide - 1);
 });
 document.getElementById("proj-next")?.addEventListener("click", () => {
+  autoplayPausedByUser = true;
   stopAutoplay();
   goToSlide(currentSlide + 1);
 });
@@ -155,6 +183,7 @@ function openProjectDetail(id) {
 
   const name = p["name_" + lang] || p.name_en || "";
   const cat = p["category_" + lang] || p.category_en || "";
+  const subcat = p["subcategory_" + lang] || p.subcategory_en || "";
   const loc = p["location_" + lang] || p.location_en || "";
   const brief = p["brief_" + lang] || p.brief_en || "";
   const company = resolveProjectCompany(p, lang);
@@ -199,7 +228,7 @@ function openProjectDetail(id) {
   document.getElementById("project-modal-content").innerHTML = `
     ${galleryHtml}
     <div class="project-detail-header" style="margin-top:${imgs.length ? "16px" : "0"}">
-      <span class="project-category">${cat}</span>
+      <span class="project-category">${subcat || cat}</span>
       <h2>${name}</h2>
       <div class="project-detail-meta">
         <span><i class="fa fa-location-dot"></i>${loc}</span>
@@ -214,6 +243,11 @@ function openProjectDetail(id) {
           : ""
       }
       <div class="project-fact-card"><span>${lang === "ar" ? "التصنيف" : "Category"}</span><strong>${cat}</strong></div>
+      ${
+        subcat
+          ? `<div class="project-fact-card"><span>${lang === "ar" ? "التصنيف الفرعي" : "Subcategory"}</span><strong>${subcat}</strong></div>`
+          : ""
+      }
       <div class="project-fact-card"><span>${lang === "ar" ? "الحالة" : "Status"}</span><strong>${p.progress === 100 ? (lang === "ar" ? "مكتمل" : "Completed") : (lang === "ar" ? "قيد التنفيذ" : "In Progress")}</strong></div>
     </div>
     <div class="project-detail-progress">
@@ -253,31 +287,171 @@ function galleryNav(dir, total) {
 }
 
 /* ── All Projects Grid ── */
+function bindProjectExplorerControls() {
+  const bindings = [
+    ["projects-filter-search", "search"],
+    ["projects-filter-company", "company"],
+    ["projects-filter-category", "category"],
+    ["projects-filter-status", "status"],
+    ["projects-sort-mode", "sort"],
+  ];
+
+  bindings.forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (!el || el.dataset.bound === "true") return;
+    const eventName = key === "search" ? "input" : "change";
+    el.addEventListener(eventName, () => {
+      projectExplorerState[key] = el.value;
+      renderAllProjects();
+    });
+    el.dataset.bound = "true";
+  });
+}
+
+function populateProjectExplorerControls(projects, lang) {
+  const companySelect = document.getElementById("projects-filter-company");
+  const categorySelect = document.getElementById("projects-filter-category");
+  const statusSelect = document.getElementById("projects-filter-status");
+  const sortSelect = document.getElementById("projects-sort-mode");
+  const searchInput = document.getElementById("projects-filter-search");
+  if (!companySelect || !categorySelect || !statusSelect || !sortSelect || !searchInput) {
+    return;
+  }
+
+  const companies = [];
+  const categories = [];
+  projects.forEach((project) => {
+    const company = resolveProjectCompany(project, lang).name || "";
+    const category = project["category_" + lang] || project.category_en || "";
+    if (company && !companies.includes(company)) companies.push(company);
+    if (category && !categories.includes(category)) categories.push(category);
+  });
+
+  searchInput.value = projectExplorerState.search;
+  companySelect.innerHTML = [
+    `<option value="all">${lang === "ar" ? "كل الشركات" : "All Companies"}</option>`,
+    ...companies.sort().map((name) => `<option value="${name}">${name}</option>`),
+  ].join("");
+  if (![...companySelect.options].some((option) => option.value === projectExplorerState.company)) {
+    projectExplorerState.company = "all";
+  }
+  companySelect.value = projectExplorerState.company;
+
+  categorySelect.innerHTML = [
+    `<option value="all">${lang === "ar" ? "كل التصنيفات" : "All Categories"}</option>`,
+    ...categories.sort().map((name) => `<option value="${name}">${name}</option>`),
+  ].join("");
+  if (![...categorySelect.options].some((option) => option.value === projectExplorerState.category)) {
+    projectExplorerState.category = "all";
+  }
+  categorySelect.value = projectExplorerState.category;
+
+  statusSelect.innerHTML = `
+    <option value="all">${lang === "ar" ? "كل الحالات" : "All Statuses"}</option>
+    <option value="completed">${lang === "ar" ? "مكتمل" : "Completed"}</option>
+    <option value="progress">${lang === "ar" ? "قيد التنفيذ" : "In Progress"}</option>`;
+  statusSelect.value = projectExplorerState.status;
+
+  sortSelect.innerHTML = `
+    <option value="featured">${lang === "ar" ? "ترتيب العرض" : "Featured Order"}</option>
+    <option value="year-desc">${lang === "ar" ? "الأحدث أولاً" : "Newest First"}</option>
+    <option value="year-asc">${lang === "ar" ? "الأقدم أولاً" : "Oldest First"}</option>
+    <option value="name-asc">${lang === "ar" ? "الاسم A-Z" : "Name A-Z"}</option>`;
+  sortSelect.value = projectExplorerState.sort;
+}
+
+function getFilteredProjects(lang) {
+  const searchTerm = projectExplorerState.search.trim().toLowerCase();
+  const projects = getOrderedProjects().filter((project) => {
+    const companyName = resolveProjectCompany(project, lang).name || "";
+    const category = project["category_" + lang] || project.category_en || "";
+    const status = project.progress === 100 ? "completed" : "progress";
+    const haystack = [
+      project["name_" + lang] || project.name_en || "",
+      project["location_" + lang] || project.location_en || "",
+      companyName,
+      category,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    if (searchTerm && !haystack.includes(searchTerm)) return false;
+    if (projectExplorerState.company !== "all" && companyName !== projectExplorerState.company) {
+      return false;
+    }
+    if (projectExplorerState.category !== "all" && category !== projectExplorerState.category) {
+      return false;
+    }
+    if (projectExplorerState.status !== "all" && status !== projectExplorerState.status) {
+      return false;
+    }
+    return true;
+  });
+
+  if (projectExplorerState.sort === "year-desc") {
+    projects.sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
+  } else if (projectExplorerState.sort === "year-asc") {
+    projects.sort((a, b) => (Number(a.year) || 0) - (Number(b.year) || 0));
+  } else if (projectExplorerState.sort === "name-asc") {
+    projects.sort((a, b) =>
+      String(a["name_" + lang] || a.name_en || "").localeCompare(
+        String(b["name_" + lang] || b.name_en || ""),
+      ),
+    );
+  }
+  return projects;
+}
+
 function renderAllProjects() {
   const lang = document.documentElement.getAttribute("data-lang") || "en";
-  const projects = getData("projects") || [];
+  const allProjects = getOrderedProjects();
+  const projects = getFilteredProjects(lang);
   const grid = document.getElementById("all-projects-grid");
   if (!grid) return;
+  populateProjectExplorerControls(allProjects, lang);
+  bindProjectExplorerControls();
 
-  grid.innerHTML = projects
-    .map(
-      (p) => `
+  if (!projects.length) {
+    grid.innerHTML = `<div class="all-projects-empty">${lang === "ar" ? "لا توجد مشاريع تطابق هذه الفلاتر." : "No projects match the current filters."}</div>`;
+  } else {
+    grid.innerHTML = projects
+      .map((p) => {
+        const company = resolveProjectCompany(p, lang);
+        const companyName = company.name || "";
+        const category = p["category_" + lang] || p.category_en || "";
+        const subcategory = p["subcategory_" + lang] || p.subcategory_en || "";
+        const location = p["location_" + lang] || p.location_en || "";
+        const statusLabel = p.progress === 100
+          ? (lang === "ar" ? "مكتمل" : "Completed")
+          : (lang === "ar" ? "قيد التنفيذ" : "In Progress");
+        return `
     <div class="proj-thumb" onclick="openProjectDetail(${p.id}); closeModal('all-projects-modal'); setTimeout(()=>openModal('project-modal'),160)">
       <div class="proj-thumb-media">
         ${p.image ? `<img src="${p.image}" alt="${p["name_" + lang] || p.name_en}" loading="lazy" />` : '<div style="height:170px;background:#f0ede8;display:flex;align-items:center;justify-content:center"><i class="fas fa-building" style="font-size:2rem;color:#ccc"></i></div>'}
         ${
-          resolveProjectCompany(p, lang).logo && !p.logo_baked
-            ? `<div class="project-company-logo-badge thumb-logo-badge"><img src="${resolveProjectCompany(p, lang).logo}" alt="${resolveProjectCompany(p, lang).name}" loading="lazy" /></div>`
+          company.logo && !p.logo_baked
+            ? `<div class="project-company-logo-badge thumb-logo-badge"><img src="${company.logo}" alt="${companyName}" loading="lazy" /></div>`
             : ""
         }
       </div>
       <div class="proj-thumb-body">
+        <div class="proj-thumb-taxonomy">
+          ${category ? `<span class="proj-thumb-chip">${category}</span>` : ""}
+          ${subcategory ? `<span class="proj-thumb-chip is-secondary">${subcategory}</span>` : ""}
+        </div>
         <h4>${p["name_" + lang] || p.name_en}</h4>
-        <p><i class="fa fa-location-dot" style="color:var(--color-primary);margin-right:4px"></i>${p["location_" + lang] || p.location_en} · ${p.progress}%</p>
+        <p>${p["brief_" + lang] || p.brief_en || ""}</p>
+        <div class="proj-thumb-meta">
+          ${companyName ? `<span><i class="fa fa-building-circle-check"></i>${companyName}</span>` : ""}
+          <span><i class="fa fa-location-dot"></i>${location}</span>
+          ${p.year ? `<span><i class="fa fa-calendar"></i>${p.year}</span>` : ""}
+          <span><i class="fa fa-chart-line"></i>${statusLabel}</span>
+        </div>
       </div>
-    </div>`,
-    )
-    .join("");
+    </div>`;
+      })
+      .join("");
+  }
 
   const h2 = document.querySelector("#all-projects-modal h2");
   if (h2) h2.textContent = lang === "ar" ? "جميع المشاريع" : "All Projects";

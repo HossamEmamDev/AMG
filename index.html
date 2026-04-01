@@ -67,28 +67,26 @@
 
       <ul class="nav-links" id="nav-links">
         <li><a href="#hero" data-en="Home" data-ar="الرئيسية">Home</a></li>
+        <li><a href="#who-we-are" data-en="Who We Are" data-ar="من نحن" id="nav-label-who-we-are">Who We Are</a></li>
         <li class="has-dropdown">
-          <a href="#our-group" data-en="Our Group" data-ar="مجموعتنا">Our Group <i class="fa fa-chevron-down"></i></a>
-          <ul class="dropdown">
-            <li><a href="https://amjaad-sa.com/" target="_blank" data-en="Amjaad – KSA"
-                data-ar="أمجاد – السعودية">Amjaad – KSA</a></li>
-            <li><a href="https://electrocivic.com/" target="_blank" data-en="Electrocivic – Egypt"
-                data-ar="إلكتروسيفيك – مصر">Electrocivic – Egypt</a></li>
+          <a href="#our-group" data-en="Our Group" data-ar="مجموعتنا"><span id="nav-label-our-group">Our Group</span> <i class="fa fa-chevron-down"></i></a>
+          <ul class="dropdown" id="our-group-dropdown">
           </ul>
         </li>
-        <li><a href="#mission-vision" data-en="Our Journey" data-ar="رحلتنا">Our Journey</a></li>
-        <li><a href="#services" data-en="Services" data-ar="خدماتنا">Services</a></li>
-        <li><a href="#projects" data-en="Projects" data-ar="مشاريعنا">Projects</a></li>
+        <li><a href="#organizational-chart" data-en="Org Chart" data-ar="الهيكل التنظيمي" id="nav-label-organizational-chart">Org Chart</a></li>
+        <li><a href="#mission-vision" data-en="Our Journey" data-ar="رحلتنا" id="nav-label-mission-vision">Our Journey</a></li>
+        <li><a href="#services" data-en="Services" data-ar="خدماتنا" id="nav-label-services">Services</a></li>
+        <li><a href="#projects" data-en="Projects" data-ar="مشاريعنا" id="nav-label-projects">Projects</a></li>
         <li class="has-dropdown">
-          <a href="#careers" data-en="Careers" data-ar="الوظائف">Careers <i class="fa fa-chevron-down"></i></a>
+          <a href="#careers" data-en="Careers" data-ar="الوظائف"><span id="nav-label-careers">Careers</span> <i class="fa fa-chevron-down"></i></a>
           <ul class="dropdown">
             <li><a href="#careers" data-en="Career Overview" data-ar="نظرة عامة">Career Overview</a></li>
             <li><a href="careers.html" target="_blank" data-en="All Careers" data-ar="كل الوظائف">All Careers</a></li>
             <li><a href="javascript:void(0)" onclick="openGeneralCvModal()" data-en="Submit Your CV" data-ar="أرسل سيرتك الذاتية">Submit Your CV</a></li>
           </ul>
         </li>
-        <li><a href="#partners" data-en="Partners" data-ar="شركاؤنا">Partners</a></li>
-        <li><a href="#contact" data-en="Contact" data-ar="تواصل معنا">Contact</a></li>
+        <li><a href="#partners" data-en="Partners" data-ar="شركاؤنا" id="nav-label-partners">Partners</a></li>
+        <li><a href="#contact" data-en="Contact" data-ar="تواصل معنا" id="nav-label-contact">Contact</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -146,22 +144,54 @@
 
     </div>
 
-    <a href="#our-group" class="scroll-down-btn" aria-label="Scroll"><i class="fa fa-chevron-down"></i></a>
+    <a href="#who-we-are" class="scroll-down-btn" aria-label="Scroll"><i class="fa fa-chevron-down"></i></a>
+  </section>
+
+  <!-- ===== WHO WE ARE ===== -->
+  <section id="who-we-are" class="section who-we-are-section section-white reveal-zoom">
+    <div class="container">
+      <div class="who-we-are-shell">
+        <div class="who-we-are-copy">
+          <span class="section-tag" id="who-we-are-tag" data-en="Who We Are" data-ar="من نحن">Who We Are</span>
+          <h2 id="who-we-are-title" data-en="AMG Main Contracting Group" data-ar="مجموعة AMG للمقاولات الرئيسية">AMG Main Contracting Group</h2>
+          <p id="who-we-are-subtitle" data-en="A concise introduction to the group, its positioning, and a premium company profile entry point."
+            data-ar="نبذة مختصرة عن المجموعة ومكانتها ونقطة دخول احترافية إلى بروفايل الشركة.">
+            A concise introduction to the group, its positioning, and a premium company profile entry point.
+          </p>
+          <p class="who-we-are-brief" id="who-we-are-brief">
+            AMG Main Contracting Group delivers integrated construction, civil, MEP, and fit-out capabilities through a multi-company structure built for dependable execution and premium project delivery.
+          </p>
+          <div class="who-we-are-actions">
+            <a class="btn btn-outline" id="who-we-are-profile-cta" href="javascript:void(0)" data-en="Download Company Profile" data-ar="تحميل بروفايل الشركة">Download Company Profile</a>
+          </div>
+        </div>
+        <div class="who-we-are-visual">
+          <div class="who-we-are-orb"></div>
+          <div class="who-we-are-logo-stage">
+            <img id="who-we-are-logo-large" class="who-we-are-logo-large" src="assets/images/amg-logo.jpeg" alt="AMG Main Contracting Group logo" />
+          </div>
+          <div class="who-we-are-panel">
+            <span class="who-we-are-kicker" data-en="Delivery Footprint" data-ar="بصمة التنفيذ">Delivery Footprint</span>
+            <strong data-en="Egypt + Saudi Arabia" data-ar="مصر + السعودية">Egypt + Saudi Arabia</strong>
+            <p data-en="Integrated delivery through specialist companies under one group umbrella." data-ar="تنفيذ متكامل عبر شركات متخصصة تحت مظلة مجموعة واحدة.">
+              Integrated delivery through specialist companies under one group umbrella.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- ===== OUR GROUP ===== -->
   <section id="our-group" class="section our-group-section section-white reveal-zoom">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag" data-en="Who We Are" data-ar="من نحن">Who We Are</span>
-        <h2 data-en="Our Group Companies" data-ar="شركات مجموعتنا">Our Group Companies</h2>
-        <p data-en="Explore the group footprint through a dedicated editorial profile designed as a premium company presentation."
-          data-ar="استكشف بصمة المجموعة من خلال بروفايل تحريري مخصص تم تصميمه كعرض شركة فاخر.">
-          Explore the group footprint through a dedicated editorial profile designed as a premium company presentation.
+        <span class="section-tag" id="our-group-tag" data-en="Our Group" data-ar="مجموعتنا">Our Group</span>
+        <h2 id="our-group-title" data-en="Group Companies" data-ar="شركات المجموعة">Group Companies</h2>
+        <p id="our-group-subtitle" data-en="Discover the specialist companies that expand the group's reach across construction, MEP, and integrated project delivery."
+          data-ar="اكتشف الشركات المتخصصة التي توسع نطاق المجموعة عبر المقاولات وMEP والتنفيذ المتكامل للمشاريع.">
+          Discover the specialist companies that expand the group's reach across construction, MEP, and integrated project delivery.
         </p>
-        <div style="margin-top:18px">
-          <a class="btn btn-outline" id="company-profile-entry-cta" href="javascript:void(0)" data-en="Download Company Profile" data-ar="تحميل بروفايل الشركة">Download Company Profile</a>
-        </div>
       </div>
       <div class="group-grid" id="group-grid">
         <!-- Rendered dynamically from localStorage — editable in Dashboard → Our Group -->
@@ -238,8 +268,8 @@
   <section id="services" class="section services-section section-dark reveal-left">
     <div class="container">
       <div class="section-header centered">
-        <span class="section-tag" data-en="What We Do" data-ar="ما نقدمه">What We Do</span>
-        <h2 data-en="Our Services" data-ar="خدماتنا">Our Services</h2>
+        <span class="section-tag" id="services-tag" data-en="What We Do" data-ar="ما نقدمه">What We Do</span>
+        <h2 id="services-title" data-en="Our Services" data-ar="خدماتنا">Our Services</h2>
       </div>
       <div class="services-bento" id="services-grid">
         <!-- Populated by JS from localStorage -->
@@ -251,8 +281,8 @@
   <section id="projects" class="section projects-section section-light reveal-tilt">
     <div class="container">
       <div class="section-header centered">
-        <span class="section-tag" data-en="Our Work" data-ar="أعمالنا">Our Work</span>
-        <h2 data-en="Featured Projects" data-ar="المشاريع المميزة">Featured Projects</h2>
+        <span class="section-tag" id="projects-tag" data-en="Our Work" data-ar="أعمالنا">Our Work</span>
+        <h2 id="projects-title" data-en="Featured Projects" data-ar="المشاريع المميزة">Featured Projects</h2>
       </div>
 
       <div class="projects-slider-wrap">
@@ -273,17 +303,87 @@
     </div>
   </section>
 
+  <!-- ===== ORGANIZATIONAL CHART ===== -->
+  <section id="organizational-chart" class="section organizational-chart-section reveal-up">
+    <div class="container">
+      <div class="org-chart-shell">
+        <div class="org-chart-editorial reveal-left">
+          <div class="org-chart-copy">
+            <span class="section-tag" id="org-chart-tag" data-en="Leadership Structure" data-ar="الهيكل القيادي">Leadership Structure</span>
+            <h2 id="org-chart-title" data-en="Organizational Chart" data-ar="الهيكل التنظيمي">Organizational Chart</h2>
+            <p id="org-chart-subtitle" class="org-chart-subtitle" data-en="A premium snapshot of AMG's leadership structure, designed to clarify accountability, delivery flow, and executive oversight." data-ar="لقطة احترافية للهيكل القيادي في AMG توضح مسارات المسؤولية والتنفيذ والإشراف التنفيذي.">
+              A premium snapshot of AMG's leadership structure, designed to clarify accountability, delivery flow, and executive oversight.
+            </p>
+            <div class="org-chart-accent-line"></div>
+            <div class="org-chart-description" id="org-chart-description">
+              <p data-en="Our organizational structure is shaped around precision, ownership, and disciplined execution. Each function is positioned to support clear decision-making, dependable delivery, and long-term operational excellence across every project lifecycle." data-ar="تم تصميم هيكلنا التنظيمي حول الدقة والمسؤولية والانضباط في التنفيذ. كل وظيفة موضوعة لدعم وضوح القرار واعتمادية التسليم والتميّز التشغيلي المستدام عبر جميع مراحل المشروع.">
+                Our organizational structure is shaped around precision, ownership, and disciplined execution. Each function is positioned to support clear decision-making, dependable delivery, and long-term operational excellence across every project lifecycle.
+              </p>
+              <p data-en="From executive leadership to technical and commercial functions, the model emphasizes coordination, speed, and accountability without compromising premium quality standards." data-ar="من القيادة التنفيذية إلى الوظائف الفنية والتجارية، يركز هذا النموذج على التنسيق والسرعة والمساءلة دون المساس بمعايير الجودة الراقية.">
+                From executive leadership to technical and commercial functions, the model emphasizes coordination, speed, and accountability without compromising premium quality standards.
+              </p>
+            </div>
+          </div>
+          <div class="org-chart-visual reveal-zoom" aria-hidden="true">
+            <div class="org-chart-ornament-panel">
+              <div class="org-chart-orb"></div>
+              <div class="org-chart-ornament-copy">
+                <span class="org-chart-ornament-kicker" data-en="Design Principles" data-ar="مبادئ التصميم">Design Principles</span>
+                <div class="org-chart-principles">
+                  <span data-en="Clarity" data-ar="الوضوح">Clarity</span>
+                  <span data-en="Hierarchy" data-ar="التراتب">Hierarchy</span>
+                  <span data-en="Accountability" data-ar="المساءلة">Accountability</span>
+                  <span data-en="Flow" data-ar="الانسياب">Flow</span>
+                </div>
+              </div>
+              <div class="org-chart-mini-grid">
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="org-chart-stage reveal-stagger">
+          <div class="org-chart-stage-head">
+            <span class="org-chart-stage-kicker" data-en="Structure Overview" data-ar="نظرة على الهيكل">Structure Overview</span>
+          </div>
+          <div class="org-chart-stage-grid">
+            <article class="org-chart-stat-card">
+              <strong id="org-chart-total-count">0</strong>
+              <span data-en="Leadership Positions" data-ar="مناصب قيادية">Leadership Positions</span>
+            </article>
+            <article class="org-chart-stat-card">
+              <strong id="org-chart-level-count">0</strong>
+              <span data-en="Hierarchy Levels" data-ar="مستويات إدارية">Hierarchy Levels</span>
+            </article>
+            <article class="org-chart-stat-card">
+              <strong data-en="Premium" data-ar="احترافي">Premium</strong>
+              <span data-en="Compact, readable, and structured for quick decisions" data-ar="عرض مضغوط وواضح ومنظم لاتخاذ القرار بسرعة">Compact, readable, and structured for quick decisions</span>
+            </article>
+          </div>
+          <div class="org-chart-stage-actions">
+            <button type="button" class="btn btn-primary" onclick="openModal('org-chart-modal')">
+              <span data-en="View Full Chart" data-ar="عرض الهيكل الكامل">View Full Chart</span>
+              <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== CAREERS ===== -->
   <section id="careers" class="section careers-section section-light reveal-up">
     <div class="container">
       <div class="section-header centered">
-        <span class="section-tag" data-en="Join Our Team" data-ar="انضم لفريقنا">Join Our Team</span>
-        <h2 data-en="Career Opportunities" data-ar="الفرص الوظيفية">Career Opportunities</h2>
+        <span class="section-tag" id="careers-tag" data-en="Join Our Team" data-ar="انضم لفريقنا">Join Our Team</span>
+        <h2 id="careers-title" data-en="Career Opportunities" data-ar="الفرص الوظيفية">Career Opportunities</h2>
       </div>
       <div class="careers-intro-shell">
         <div class="careers-intro-copy">
-          <span class="careers-kicker" data-en="Craft Your Next Chapter" data-ar="ابدأ فصلك المهني القادم">Craft Your Next Chapter</span>
-          <p data-en="Join a team delivering landmark construction, MEP, and infrastructure work across Egypt and Saudi Arabia, or share your CV for future premium opportunities." data-ar="انضم إلى فريق ينفذ مشاريع إنشائية وكهروميكانيكية وبنية تحتية بارزة في مصر والسعودية، أو شارك سيرتك الذاتية لفرص نوعية مستقبلية.">
+          <span class="careers-kicker" id="careers-kicker" data-en="Craft Your Next Chapter" data-ar="ابدأ فصلك المهني القادم">Craft Your Next Chapter</span>
+          <p id="careers-subtitle" data-en="Join a team delivering landmark construction, MEP, and infrastructure work across Egypt and Saudi Arabia, or share your CV for future premium opportunities." data-ar="انضم إلى فريق ينفذ مشاريع إنشائية وكهروميكانيكية وبنية تحتية بارزة في مصر والسعودية، أو شارك سيرتك الذاتية لفرص نوعية مستقبلية.">
             Join a team delivering landmark construction, MEP, and infrastructure work across Egypt and Saudi Arabia, or share your CV for future premium opportunities.
           </p>
         </div>
@@ -302,13 +402,13 @@
   <section id="partners" class="section partners-section section-dark2 reveal-right">
     <div class="container">
       <div class="section-header centered">
-        <span class="section-tag" data-en="Trusted By" data-ar="يثق بنا">Trusted By</span>
-        <h2 data-en="Our Partners" data-ar="شركاؤنا">Our Partners</h2>
+        <span class="section-tag" id="partners-tag" data-en="Trusted By" data-ar="يثق بنا">Trusted By</span>
+        <h2 id="partners-title" data-en="Our Partners" data-ar="شركاؤنا">Our Partners</h2>
       </div>
       <div class="partners-showcase">
         <div class="partners-intro">
           <span class="partners-intro-line"></span>
-          <p data-en="A selected network of brands and institutions that trust AMG across construction, fit-out, MEP, and large-scale delivery."
+          <p id="partners-subtitle" data-en="A selected network of brands and institutions that trust AMG across construction, fit-out, MEP, and large-scale delivery."
             data-ar="شبكة مختارة من العلامات التجارية والمؤسسات التي تثق في AMG عبر المقاولات والتشطيبات وأعمال MEP والتنفيذ واسع النطاق.">
             A selected network of brands and institutions that trust AMG across construction, fit-out, MEP, and large-scale delivery.
           </p>
@@ -327,8 +427,8 @@
   <section id="contact" class="section contact-section section-dark reveal-left">
     <div class="container">
       <div class="section-header centered">
-        <span class="section-tag" data-en="Get In Touch" data-ar="تواصل معنا">Get In Touch</span>
-        <h2 data-en="Contact Us" data-ar="اتصل بنا">Contact Us</h2>
+        <span class="section-tag" id="contact-tag" data-en="Get In Touch" data-ar="تواصل معنا">Get In Touch</span>
+        <h2 id="contact-title" data-en="Contact Us" data-ar="اتصل بنا">Contact Us</h2>
       </div>
       <div class="contact-grid">
         <div class="contact-info reveal-left">
@@ -397,6 +497,8 @@
       </div>
     </div>
   </section>
+
+  <div id="dynamic-sections-root"></div>
 
   <!-- ===== FOOTER ===== -->
   <footer id="footer" class="site-footer">
@@ -479,6 +581,18 @@
     <div class="modal-box xlarge">
       <button class="modal-close" onclick="closeModal('all-projects-modal')"><i class="fa fa-times"></i></button>
       <h2 style="margin-bottom:2rem;" data-en="All Projects" data-ar="جميع المشاريع">All Projects</h2>
+      <div class="projects-explorer-toolbar">
+        <div class="projects-explorer-search">
+          <i class="fa fa-search"></i>
+          <input id="projects-filter-search" type="search" placeholder="Search projects..." data-placeholder-en="Search projects..." data-placeholder-ar="ابحث في المشاريع..." />
+        </div>
+        <div class="projects-explorer-filters">
+          <select id="projects-filter-company"></select>
+          <select id="projects-filter-category"></select>
+          <select id="projects-filter-status"></select>
+          <select id="projects-sort-mode"></select>
+        </div>
+      </div>
       <div class="all-projects-grid" id="all-projects-grid"></div>
     </div>
   </div>
@@ -488,6 +602,25 @@
     <div class="modal-box large">
       <button class="modal-close" onclick="closeModal('career-modal')"><i class="fa fa-times"></i></button>
       <div id="career-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Org Chart Modal -->
+  <div class="modal-overlay" id="org-chart-modal">
+    <div class="modal-box xlarge org-chart-modal-box">
+      <button class="modal-close" onclick="closeModal('org-chart-modal')"><i class="fa fa-times"></i></button>
+      <div class="org-chart-modal-head">
+        <span class="section-tag" id="org-chart-modal-tag" data-en="Leadership Structure" data-ar="الهيكل القيادي">Leadership Structure</span>
+        <h2 id="org-chart-modal-title" data-en="Organizational Chart" data-ar="الهيكل التنظيمي">Organizational Chart</h2>
+        <p id="org-chart-modal-subtitle" data-en="Explore the complete reporting structure in a focused, presentation-ready view." data-ar="استعرض الهيكل الإداري الكامل في عرض مركز وجاهز للتقديم.">
+          Explore the complete reporting structure in a focused, presentation-ready view.
+        </p>
+      </div>
+      <div class="org-chart-modal-tree-wrap">
+        <div class="org-chart-tree org-chart-tree-modal" id="org-chart-modal-tree">
+          <!-- Rendered dynamically from localStorage -->
+        </div>
+      </div>
     </div>
   </div>
 
@@ -501,6 +634,7 @@
   <script src="js/contact.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/mission-vision.js"></script>
+  <script src="js/org-chart.js"></script>
   <script src="js/whatsapp-float.js"></script>
 </body>
 

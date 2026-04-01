@@ -37,7 +37,12 @@ const PARTNER_ACCENT_PRESETS = [
 ];
 
 function getSuperAdmin() {
-  return JSON.parse(localStorage.getItem("amg_super_admin") || JSON.stringify(SUPER_ADMIN));
+  try {
+    return JSON.parse(localStorage.getItem("amg_super_admin") || JSON.stringify(SUPER_ADMIN));
+  } catch (error) {
+    localStorage.setItem("amg_super_admin", JSON.stringify(SUPER_ADMIN));
+    return { ...SUPER_ADMIN };
+  }
 }
 
 function setSuperAdmin(admin) {
@@ -45,36 +50,57 @@ function setSuperAdmin(admin) {
 }
 
 function getTeam() {
-  return JSON.parse(localStorage.getItem("amg_team") || "[]");
+  try {
+    const parsed = JSON.parse(localStorage.getItem("amg_team") || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    localStorage.setItem("amg_team", "[]");
+    return [];
+  }
 }
 function setTeam(t) {
   localStorage.setItem("amg_team", JSON.stringify(t));
 }
 
+function safeDashboardRun(label, fn) {
+  try {
+    return fn();
+  } catch (error) {
+    console.error(`Dashboard init failed at ${label}:`, error);
+    return null;
+  }
+}
+
 function handleLogin(e) {
   e.preventDefault();
-  const u = document.getElementById("login-user").value.trim();
-  const p = document.getElementById("login-pass").value;
   const err = document.getElementById("login-error");
 
-  let user = null;
-  const superAdmin = getSuperAdmin();
-  if (u === superAdmin.username && p === superAdmin.password) {
-    user = { username: u, role: superAdmin.role };
-  } else {
-    user = getTeam().find((m) => m.username === u && m.password === p);
-  }
+  try {
+    const u = document.getElementById("login-user").value.trim();
+    const p = document.getElementById("login-pass").value;
 
-  if (user) {
-    sessionStorage.setItem("amg_session", JSON.stringify(user));
-    err.textContent = "";
-    document.getElementById("login-screen").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-    document.getElementById("current-user-label").textContent =
-      user.role || "Sub-Admin";
-    initDashboard();
-  } else {
-    err.textContent = "Invalid credentials. Please try again.";
+    let user = null;
+    const superAdmin = getSuperAdmin();
+    if (u === superAdmin.username && p === superAdmin.password) {
+      user = { username: u, role: superAdmin.role };
+    } else {
+      user = getTeam().find((m) => m.username === u && m.password === p);
+    }
+
+    if (user) {
+      sessionStorage.setItem("amg_session", JSON.stringify(user));
+      err.textContent = "";
+      document.getElementById("login-screen").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      document.getElementById("current-user-label").textContent =
+        user.role || "Sub-Admin";
+      initDashboard();
+    } else {
+      err.textContent = "Invalid credentials. Please try again.";
+    }
+  } catch (error) {
+    console.error("Dashboard login failed:", error);
+    err.textContent = "Dashboard failed to load login data. Please refresh and try again.";
   }
 }
 
@@ -97,33 +123,42 @@ function togglePass() {
 
 // Check session on load
 window.addEventListener("DOMContentLoaded", () => {
-  const sess = sessionStorage.getItem("amg_session");
-  if (sess) {
-    const user = JSON.parse(sess);
-    document.getElementById("login-screen").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-    document.getElementById("current-user-label").textContent =
-      user.role || "Sub-Admin";
-    initDashboard();
+  try {
+    const sess = sessionStorage.getItem("amg_session");
+    if (sess) {
+      const user = JSON.parse(sess);
+      document.getElementById("login-screen").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+      document.getElementById("current-user-label").textContent =
+        user.role || "Sub-Admin";
+      initDashboard();
+    }
+  } catch (error) {
+    console.error("Dashboard session restore failed:", error);
+    sessionStorage.removeItem("amg_session");
   }
 });
 
 // ── Init ──
 function initDashboard() {
-  renderOurGroupList();
-  loadSettings();
-  loadSeoSettings();
-  renderOverview();
-  renderSectionsManager();
-  renderServicesList();
-  renderProjectCompaniesList();
-  renderProjectsList();
-  renderCareersList();
-  renderPartnersList();
-  renderTestimonialsList();
-  renderMessagesList();
-  renderApplicationsList();
-  renderTeamList();
+  safeDashboardRun("renderOurGroupList", () => renderOurGroupList());
+  safeDashboardRun("loadOurGroupSettings", () => loadOurGroupSettings());
+  safeDashboardRun("loadOrgChart", () => loadOrgChart());
+  safeDashboardRun("renderOrgChartList", () => renderOrgChartList());
+  safeDashboardRun("loadSettings", () => loadSettings());
+  safeDashboardRun("loadSeoSettings", () => loadSeoSettings());
+  safeDashboardRun("renderOverview", () => renderOverview());
+  safeDashboardRun("renderSectionsManager", () => renderSectionsManager());
+  safeDashboardRun("renderServicesList", () => renderServicesList());
+  safeDashboardRun("renderProjectCompaniesList", () => renderProjectCompaniesList());
+  safeDashboardRun("renderProjectsList", () => renderProjectsList());
+  safeDashboardRun("renderCareersList", () => renderCareersList());
+  safeDashboardRun("renderPartnersList", () => renderPartnersList());
+  safeDashboardRun("renderTestimonialsList", () => renderTestimonialsList());
+  safeDashboardRun("renderMessagesList", () => renderMessagesList());
+  safeDashboardRun("renderApplicationsList", () => renderApplicationsList());
+  safeDashboardRun("renderTeamList", () => renderTeamList());
+  safeDashboardRun("syncSectionRegistry", () => syncSectionRegistry());
 
   // Sidebar toggle
   document.getElementById("menu-toggle").addEventListener("click", () => {
@@ -160,6 +195,8 @@ function switchTab(tab) {
   // Load tab-specific data
   if (tab === "settings") loadSettings();
   if (tab === "seo") loadSeoSettings();
+  if (tab === "who-we-are") loadOurGroupSettings();
+  if (tab === "org-chart") loadOrgChart();
   if (tab === "mission-vision") loadMissionVision();
 }
 
@@ -186,6 +223,8 @@ function loadSettings() {
   const fha = document.getElementById("s-font-heading-ar");
   if (fha) fha.value = s.fontHeadingAr || s.fontAr || "IBM Plex Sans Arabic";
   document.getElementById("s-default-lang").value = s.defaultLang || "auto";
+  const projectOrderMode = document.getElementById("s-project-order-mode");
+  if (projectOrderMode) projectOrderMode.value = s.projectOrderMode || "manual";
   setVal("s-hero-video", s.heroVideo);
   setVal("s-hero-title-en", s.heroTitle_en);
   setVal("s-hero-title-ar", s.heroTitle_ar);
@@ -260,6 +299,8 @@ function saveSettings() {
   const fha2 = document.getElementById("s-font-heading-ar");
   if (fha2) s.fontHeadingAr = fha2.value;
   s.defaultLang = document.getElementById("s-default-lang").value;
+  const pom = document.getElementById("s-project-order-mode");
+  if (pom) s.projectOrderMode = pom.value;
   s.heroVideo = document.getElementById("s-hero-video").value;
   s.heroTitle_en = document.getElementById("s-hero-title-en").value;
   s.heroTitle_ar = document.getElementById("s-hero-title-ar").value;
@@ -484,28 +525,80 @@ function removeSocialLink(i) {
 
 // ── Sections ──
 let sectionOrderTemp = [];
+let customSectionDraft = null;
+
+const BUILT_IN_SECTION_META = {
+  "who-we-are": { label: "Who We Are", editTab: "who-we-are", icon: "fas fa-building-columns" },
+  "our-group": { label: "Our Group", editTab: "ourgroup", icon: "fas fa-city" },
+  "organizational-chart": { label: "Org Chart", editTab: "org-chart", icon: "fas fa-sitemap" },
+  "mission-vision": { label: "Our Journey", editTab: "mission-vision", icon: "fas fa-lightbulb" },
+  services: { label: "Services", editTab: "services", icon: "fas fa-tools" },
+  projects: { label: "Projects", editTab: "projects", icon: "fas fa-building" },
+  careers: { label: "Careers", editTab: "careers", icon: "fas fa-briefcase" },
+  partners: { label: "Partners", editTab: "partners", icon: "fas fa-handshake" },
+  contact: { label: "Contact", editTab: "settings", icon: "fas fa-envelope" },
+};
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
 
 function renderSectionsManager(nextOrder = null) {
+  syncSectionRegistry();
   const sections = getData("sections");
+  const customSections = getCustomSections();
+  const builtInContent = getBuiltInSectionContent();
   sectionOrderTemp = Array.isArray(nextOrder) ? [...nextOrder] : getSectionOrder();
   const wrap = document.getElementById("sections-manager");
   if (!wrap) return;
   const names = {
-    "our-group": "Our Group",
-    "mission-vision": "Our Journey",
-    services: "Services",
-    projects: "Projects",
-    careers: "Careers",
-    partners: "Partners",
-    contact: "Contact",
+    ...Object.fromEntries(
+      Object.entries(BUILT_IN_SECTION_META).map(([id, meta]) => {
+        const entry = builtInContent[id] || {};
+        return [id, entry.navEn || entry.titleEn || meta.label];
+      }),
+    ),
   };
+  customSections.forEach((section) => {
+    names[section.id] = section.navLabelEn || section.sectionTitleEn || section.id;
+  });
   wrap.innerHTML = sectionOrderTemp
-    .map(
-      (id) => `
+    .map((id) => {
+      const builtIn = BUILT_IN_SECTION_META[id];
+      const custom = customSections.find((section) => section.id === id);
+      const badge = builtIn ? "Built-in" : "Custom";
+      const editTitlesButton = builtIn
+        ? `<button class="btn-edit btn-section-action" type="button" onclick="openBuiltInSectionModal('${escapeHtml(id)}')"><i class="fas fa-heading"></i> Edit Titles</button>`
+        : custom
+          ? `<button class="btn-edit btn-section-action" type="button" onclick="openCustomSectionModal('${escapeHtml(id)}')"><i class="fas fa-pen-ruler"></i> Edit Fields</button>`
+          : "";
+      const editContentButton = builtIn?.editTab
+        ? `<button class="btn-edit btn-section-action" type="button" onclick="switchTab('${builtIn.editTab}')"><i class="${builtIn.icon}"></i> Content Tab</button>`
+        : "";
+      const deleteButton = custom
+        ? `<button class="btn-del btn-section-action" type="button" onclick="deleteCustomSection('${escapeHtml(id)}')"><i class="fas fa-trash"></i> Delete</button>`
+        : "";
+      const summary = custom
+        ? `${custom.blocks.length} content block${custom.blocks.length === 1 ? "" : "s"}`
+        : "Managed from its dedicated content tab";
+      const sectionName = escapeHtml(names[id] || id);
+      return `
     <div class="section-row" data-section-id="${id}">
-      <button class="section-row-drag" type="button" draggable="true" aria-label="Drag ${names[id] || id}"><i class="fas fa-grip-vertical"></i></button>
-      <span class="section-row-name">${names[id] || id}</span>
+      <button class="section-row-drag" type="button" draggable="true" aria-label="Drag ${sectionName}"><i class="fas fa-grip-vertical"></i></button>
+      <div class="section-row-main">
+        <span class="section-row-name">${sectionName}</span>
+        <span class="section-row-badge">${badge}</span>
+        <p class="section-row-summary">${escapeHtml(summary)}</p>
+      </div>
       <div class="section-controls">
+        ${editTitlesButton}
+        ${editContentButton}
+        ${deleteButton}
         <div class="toggle-wrap">
           <span class="toggle-label">Visible</span>
           <label class="toggle-switch">
@@ -521,15 +614,16 @@ function renderSectionsManager(nextOrder = null) {
           </label>
         </div>
       </div>
-    </div>`,
-    )
+    </div>`;
+    })
     .join("");
   bindSectionDragAndDrop();
 }
 
 function updateSection(id, key, val) {
   const sections = getData("sections");
-  if (sections[id]) sections[id][key] = val;
+  if (!sections[id]) sections[id] = { visible: true, inNav: true };
+  sections[id][key] = val;
   setData("sections", sections);
 }
 
@@ -584,6 +678,468 @@ function bindSectionDragAndDrop() {
 function saveSections() {
   setData("sectionOrder", sectionOrderTemp);
   showMsg("sections-msg", "Section settings saved!", true);
+  pushToServer();
+}
+
+function chooseSectionCreationFlow() {
+  openDashModal(`
+    <h3>Create New Section</h3>
+    <div class="custom-builder-layout">
+      <div class="custom-builder-card">
+        <h4>Choose Your Starting Point</h4>
+        <div class="builder-choice-grid">
+          <button class="builder-choice-card" type="button" onclick="openCustomSectionModal()">
+            <i class="fas fa-shapes"></i>
+            <strong>Custom Section</strong>
+            <p>Start from a blank flexible section and add your own blocks.</p>
+          </button>
+          <button class="builder-choice-card" type="button" onclick="openBuiltInTemplatePicker()">
+            <i class="fas fa-clone"></i>
+            <strong>Built-In Style</strong>
+            <p>Start with a template inspired by one of the built-in website sections.</p>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
+    </div>`);
+}
+
+function openBuiltInTemplatePicker() {
+  const builtInContent = getBuiltInSectionContent();
+  const options = Object.entries(BUILT_IN_SECTION_META)
+    .map(([id, meta]) => {
+      const entry = builtInContent[id] || {};
+      return `<option value="${id}">${escapeHtml(entry.navEn || entry.titleEn || meta.label)}</option>`;
+    })
+    .join("");
+
+  openDashModal(`
+    <h3>Choose Built-In Template</h3>
+    <div class="form-field">
+      <label>Template Source</label>
+      <select id="built-in-template-source">${options}</select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="chooseSectionCreationFlow()">Back</button>
+      <button class="btn-modal-save" onclick="createSectionFromBuiltInTemplate()">Use Template</button>
+    </div>`);
+}
+
+function getBuiltInTemplateDraft(sourceId) {
+  const content = getBuiltInSectionContent()[sourceId] || {};
+  const base = getDefaultCustomSection();
+  const presets = {
+    "who-we-are": [
+      { type: "title", titleEn: "About The Group", titleAr: "عن المجموعة", textEn: "Introduce the group story, footprint, and operating philosophy.", textAr: "قدّم قصة المجموعة وبصمتها وفلسفة عملها." },
+      { type: "stat", value: "2", suffix: "", labelEn: "Core Markets", labelAr: "أسواق رئيسية" },
+      { type: "button", labelEn: "Download Profile", labelAr: "تحميل البروفايل", url: "#who-we-are", style: "secondary" },
+    ],
+    "our-group": [
+      { type: "title", titleEn: "Corporate Profile", titleAr: "الملف المؤسسي", textEn: "Introduce the group structure, positioning, and core footprint.", textAr: "قدّم هيكل المجموعة ومكانتها ونطاق أعمالها." },
+      { type: "image", image: "", altEn: "Group showcase", altAr: "عرض المجموعة", captionEn: "Add a premium company image.", captionAr: "أضف صورة احترافية للشركة." },
+      { type: "button", labelEn: "Download Profile", labelAr: "تحميل البروفايل", url: "#", style: "secondary" },
+    ],
+    services: [
+      { type: "icon", icon: "fas fa-tools", titleEn: "Service Pillar", titleAr: "محور خدمة", textEn: "Describe one service area with a short premium summary.", textAr: "صف أحد مجالات الخدمة بملخص احترافي قصير." },
+      { type: "icon", icon: "fas fa-bolt", titleEn: "Technical Expertise", titleAr: "الخبرة الفنية", textEn: "Highlight a technical capability or specialty.", textAr: "أبرز قدرة فنية أو تخصصاً مميزاً." },
+      { type: "stat", value: "24", suffix: "+", labelEn: "Service Modules", labelAr: "وحدات الخدمة" },
+    ],
+    projects: [
+      { type: "title", titleEn: "Project Spotlight", titleAr: "مشروع مميز", textEn: "Showcase one standout project or delivery story.", textAr: "اعرض مشروعاً مميزاً أو قصة تنفيذ بارزة." },
+      { type: "image", image: "", altEn: "Project visual", altAr: "صورة المشروع", captionEn: "Add a hero project visual.", captionAr: "أضف صورة رئيسية للمشروع." },
+      { type: "button", labelEn: "Explore Work", labelAr: "استكشف الأعمال", url: "#projects", style: "primary" },
+    ],
+    "mission-vision": [
+      { type: "icon", icon: "fas fa-bullseye", titleEn: "Mission", titleAr: "المهمة", textEn: "State what this section stands for.", textAr: "وضّح ما الذي تمثله هذه الفقرة." },
+      { type: "icon", icon: "fas fa-binoculars", titleEn: "Vision", titleAr: "الرؤية", textEn: "Describe where the message is heading next.", textAr: "اشرح الاتجاه المستقبلي للمحتوى." },
+    ],
+    "organizational-chart": [
+      { type: "title", titleEn: "Leadership Snapshot", titleAr: "لقطة قيادية", textEn: "Add structured context before the chart or hierarchy content.", textAr: "أضف مقدمة منظمة قبل محتوى الهيكل أو التسلسل الإداري." },
+      { type: "stat", value: "8", suffix: "", labelEn: "Key Roles", labelAr: "أدوار رئيسية" },
+      { type: "button", labelEn: "Open Full Structure", labelAr: "عرض الهيكل الكامل", url: "#", style: "primary" },
+    ],
+    careers: [
+      { type: "title", titleEn: "Join The Team", titleAr: "انضم للفريق", textEn: "Promote a hiring message with premium positioning.", textAr: "قدّم رسالة توظيف بصياغة احترافية." },
+      { type: "button", labelEn: "Apply Now", labelAr: "قدّم الآن", url: "#careers", style: "primary" },
+      { type: "stat", value: "12", suffix: "", labelEn: "Open Roles", labelAr: "وظائف متاحة" },
+    ],
+    partners: [
+      { type: "title", titleEn: "Trusted Network", titleAr: "شبكة موثوقة", textEn: "Position partner relationships and credibility.", textAr: "اعرض العلاقات والشراكات بثقة ووضوح." },
+      { type: "icon", icon: "fas fa-handshake", titleEn: "Strategic Partner", titleAr: "شريك استراتيجي", textEn: "Use icon cards for logos, sectors, or partnership value.", textAr: "استخدم بطاقات الأيقونات للشعارات أو القطاعات أو قيمة الشراكة." },
+    ],
+    contact: [
+      { type: "title", titleEn: "Let’s Talk", titleAr: "لنتحدث", textEn: "Invite clients to start the conversation.", textAr: "ادعُ العملاء لبدء التواصل." },
+      { type: "button", labelEn: "Contact Us", labelAr: "تواصل معنا", url: "#contact", style: "primary" },
+      { type: "icon", icon: "fas fa-location-dot", titleEn: "Regional Presence", titleAr: "الوجود الإقليمي", textEn: "Add office, phone, or response details.", textAr: "أضف بيانات المكتب أو الهاتف أو وقت الاستجابة." },
+    ],
+  };
+
+  const blocks = (presets[sourceId] || presets.services).map((block, index) => ({
+    id: `block-${Date.now()}-${index}`,
+    image: "",
+    altEn: "",
+    altAr: "",
+    captionEn: "",
+    captionAr: "",
+    value: "",
+    suffix: "",
+    labelEn: "",
+    labelAr: "",
+    url: "#",
+    style: "primary",
+    icon: "fas fa-star",
+    textEn: "",
+    textAr: "",
+    titleEn: "",
+    titleAr: "",
+    ...block,
+  }));
+
+  return {
+    ...base,
+    navLabelEn: `${content.navEn || BUILT_IN_SECTION_META[sourceId]?.label || "New"} Copy`,
+    navLabelAr: `${content.navAr || "قسم"} نسخة`,
+    sectionTagEn: content.tagEn || base.sectionTagEn,
+    sectionTagAr: content.tagAr || base.sectionTagAr,
+    sectionTitleEn: content.titleEn || base.sectionTitleEn,
+    sectionTitleAr: content.titleAr || base.sectionTitleAr,
+    subtitleEn: content.subtitleEn || base.subtitleEn,
+    subtitleAr: content.subtitleAr || base.subtitleAr,
+    blocks,
+  };
+}
+
+function createSectionFromBuiltInTemplate() {
+  const sourceId = document.getElementById("built-in-template-source")?.value || "services";
+  customSectionDraft = getBuiltInTemplateDraft(sourceId);
+  renderCustomSectionModal();
+}
+
+function openBuiltInSectionModal(id) {
+  const content = getBuiltInSectionContent();
+  const entry = content[id] || {};
+  openDashModal(`
+    <h3>Edit Built-In Titles</h3>
+    <div class="form-grid-2">
+      <div class="form-field"><label>Nav Label (EN)</label><input id="built-section-navEn" value="${escapeHtml(entry.navEn || "")}" /></div>
+      <div class="form-field"><label>Nav Label (AR)</label><input id="built-section-navAr" value="${escapeHtml(entry.navAr || "")}" dir="rtl" /></div>
+      <div class="form-field"><label>Section Tag (EN)</label><input id="built-section-tagEn" value="${escapeHtml(entry.tagEn || "")}" /></div>
+      <div class="form-field"><label>Section Tag (AR)</label><input id="built-section-tagAr" value="${escapeHtml(entry.tagAr || "")}" dir="rtl" /></div>
+      <div class="form-field"><label>Section Title (EN)</label><input id="built-section-titleEn" value="${escapeHtml(entry.titleEn || "")}" /></div>
+      <div class="form-field"><label>Section Title (AR)</label><input id="built-section-titleAr" value="${escapeHtml(entry.titleAr || "")}" dir="rtl" /></div>
+      <div class="form-field"><label>Subtitle (EN)</label><textarea id="built-section-subtitleEn" rows="3">${escapeHtml(entry.subtitleEn || "")}</textarea></div>
+      <div class="form-field"><label>Subtitle (AR)</label><textarea id="built-section-subtitleAr" rows="3" dir="rtl">${escapeHtml(entry.subtitleAr || "")}</textarea></div>
+      <div class="form-field"><label>Kicker (EN)</label><input id="built-section-kickerEn" value="${escapeHtml(entry.kickerEn || "")}" /></div>
+      <div class="form-field"><label>Kicker (AR)</label><input id="built-section-kickerAr" value="${escapeHtml(entry.kickerAr || "")}" dir="rtl" /></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
+      <button class="btn-modal-save" onclick="saveBuiltInSectionContent('${escapeHtml(id)}')">Save Titles</button>
+    </div>`);
+}
+
+function saveBuiltInSectionContent(id) {
+  const content = getBuiltInSectionContent();
+  content[id] = {
+    ...content[id],
+    navEn: document.getElementById("built-section-navEn").value,
+    navAr: document.getElementById("built-section-navAr").value,
+    tagEn: document.getElementById("built-section-tagEn").value,
+    tagAr: document.getElementById("built-section-tagAr").value,
+    titleEn: document.getElementById("built-section-titleEn").value,
+    titleAr: document.getElementById("built-section-titleAr").value,
+    subtitleEn: document.getElementById("built-section-subtitleEn").value,
+    subtitleAr: document.getElementById("built-section-subtitleAr").value,
+    kickerEn: document.getElementById("built-section-kickerEn").value,
+    kickerAr: document.getElementById("built-section-kickerAr").value,
+  };
+  setData("builtInSectionContent", content);
+  closeDashModal();
+  renderSectionsManager();
+  showMsg("sections-msg", "Built-in section titles saved.", true);
+  pushToServer();
+}
+
+function getDefaultCustomSection() {
+  return {
+    id: null,
+    navLabelEn: "New Section",
+    navLabelAr: "قسم جديد",
+    sectionTagEn: "Flexible Content",
+    sectionTagAr: "محتوى مرن",
+    sectionTitleEn: "Design A New Section",
+    sectionTitleAr: "صمم قسمًا جديدًا",
+    subtitleEn: "Build a premium SaaS-style section with reusable blocks.",
+    subtitleAr: "أنشئ قسماً احترافياً مرناً باستخدام عناصر قابلة لإعادة الاستخدام.",
+    theme: "light",
+    mediaAlign: "right",
+    blocks: [
+      {
+        id: `block-${Date.now()}-intro`,
+        type: "icon",
+        icon: "fas fa-layer-group",
+        titleEn: "Start with a value card",
+        titleAr: "ابدأ ببطاقة قيمة",
+        textEn: "Use icons, text, media, buttons, and stat blocks to compose your new section quickly.",
+        textAr: "استخدم الأيقونات والنصوص والوسائط والأزرار وبطاقات الإحصاء لبناء القسم بسرعة.",
+      },
+    ],
+  };
+}
+
+function getCustomSectionById(id) {
+  return getCustomSections().find((section) => section.id === id) || null;
+}
+
+function openCustomSectionModal(id = null) {
+  const existing = id ? getCustomSectionById(id) : null;
+  customSectionDraft = existing
+    ? JSON.parse(JSON.stringify(existing))
+    : getDefaultCustomSection();
+  renderCustomSectionModal();
+}
+
+function syncCustomSectionDraftFields() {
+  if (!customSectionDraft) return;
+  const fields = [
+    "navLabelEn",
+    "navLabelAr",
+    "sectionTagEn",
+    "sectionTagAr",
+    "sectionTitleEn",
+    "sectionTitleAr",
+    "subtitleEn",
+    "subtitleAr",
+    "theme",
+    "mediaAlign",
+  ];
+  fields.forEach((field) => {
+    const el = document.getElementById(`custom-section-${field}`);
+    if (el) customSectionDraft[field] = el.value;
+  });
+}
+
+function renderCustomSectionModal() {
+  const draft = customSectionDraft || getDefaultCustomSection();
+  const deleteSectionAction = draft.id
+    ? `<button class="btn-del" type="button" onclick="deleteCustomSection('${escapeHtml(draft.id)}')"><i class="fas fa-trash"></i> Delete Section</button>`
+    : "";
+  const blockCards = draft.blocks.length
+    ? draft.blocks
+        .map(
+          (block, index) => `
+            <div class="builder-block-card">
+              <div>
+                <span class="builder-block-type">${escapeHtml(block.type)}</span>
+                <strong>${escapeHtml(block.titleEn || block.labelEn || block.captionEn || `Block ${index + 1}`)}</strong>
+                <p>${escapeHtml(block.textEn || block.labelAr || block.captionAr || "Reusable content block")}</p>
+              </div>
+              <div class="builder-block-actions">
+                <button class="btn-edit" type="button" onclick="openCustomBlockModal(${index})"><i class="fas fa-pen"></i> Edit</button>
+                <button class="btn-del" type="button" onclick="removeCustomBlock(${index})"><i class="fas fa-trash"></i> Remove</button>
+              </div>
+            </div>`,
+        )
+        .join("")
+    : '<div class="empty-state" style="padding:24px"><i class="fas fa-shapes"></i><p>No blocks yet. Add your first title, image, icon card, text area, stat, or button below.</p></div>';
+
+  openDashModal(`
+    <h3>${draft.id ? "Edit Custom Section" : "Create Custom Section"}</h3>
+    <div class="custom-builder-layout">
+      <div class="custom-builder-card">
+        <h4>Section Basics</h4>
+        <div class="form-grid-2">
+          <div class="form-field"><label>Nav Label (EN)</label><input id="custom-section-navLabelEn" value="${escapeHtml(draft.navLabelEn)}" /></div>
+          <div class="form-field"><label>Nav Label (AR)</label><input id="custom-section-navLabelAr" value="${escapeHtml(draft.navLabelAr)}" dir="rtl" /></div>
+          <div class="form-field"><label>Section Tag (EN)</label><input id="custom-section-sectionTagEn" value="${escapeHtml(draft.sectionTagEn)}" /></div>
+          <div class="form-field"><label>Section Tag (AR)</label><input id="custom-section-sectionTagAr" value="${escapeHtml(draft.sectionTagAr)}" dir="rtl" /></div>
+          <div class="form-field"><label>Section Title (EN)</label><input id="custom-section-sectionTitleEn" value="${escapeHtml(draft.sectionTitleEn)}" /></div>
+          <div class="form-field"><label>Section Title (AR)</label><input id="custom-section-sectionTitleAr" value="${escapeHtml(draft.sectionTitleAr)}" dir="rtl" /></div>
+          <div class="form-field"><label>Subtitle (EN)</label><textarea id="custom-section-subtitleEn" rows="3">${escapeHtml(draft.subtitleEn)}</textarea></div>
+          <div class="form-field"><label>Subtitle (AR)</label><textarea id="custom-section-subtitleAr" rows="3" dir="rtl">${escapeHtml(draft.subtitleAr)}</textarea></div>
+          <div class="form-field">
+            <label>Theme</label>
+            <select id="custom-section-theme">
+              <option value="light" ${draft.theme === "light" ? "selected" : ""}>Light</option>
+              <option value="dark" ${draft.theme === "dark" ? "selected" : ""}>Dark</option>
+              <option value="accent" ${draft.theme === "accent" ? "selected" : ""}>Accent</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Visual Balance</label>
+            <select id="custom-section-mediaAlign">
+              <option value="right" ${draft.mediaAlign === "right" ? "selected" : ""}>Content + media right</option>
+              <option value="left" ${draft.mediaAlign === "left" ? "selected" : ""}>Media left</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="custom-builder-card">
+        <div class="builder-header-row">
+          <div>
+            <h4>Content Blocks</h4>
+            <p>Mix the same core website ingredients: titles, text, images, icons, stats, and CTA buttons.</p>
+          </div>
+          <button class="btn-add" type="button" onclick="openCustomBlockModal()"><i class="fas fa-plus"></i> Add Block</button>
+        </div>
+        <div class="builder-block-list">${blockCards}</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      ${deleteSectionAction}
+      <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
+      <button class="btn-modal-save" onclick="saveCustomSection()">${draft.id ? "Update Section" : "Create Section"}</button>
+    </div>`);
+}
+
+function openCustomBlockModal(index = null) {
+  syncCustomSectionDraftFields();
+  const block = index !== null
+    ? customSectionDraft.blocks[index]
+    : {
+        id: `block-${Date.now()}`,
+        type: "icon",
+        icon: "fas fa-star",
+        titleEn: "",
+        titleAr: "",
+        textEn: "",
+        textAr: "",
+        image: "",
+        altEn: "",
+        altAr: "",
+        captionEn: "",
+        captionAr: "",
+        value: "",
+        suffix: "",
+        labelEn: "",
+        labelAr: "",
+        url: "#",
+        style: "primary",
+      };
+
+  const iconOptions = ICONS.map((icon) => `<option value="${icon}" ${block.icon === icon ? "selected" : ""}>${icon}</option>`).join("");
+
+  openDashModal(`
+    <h3>${index !== null ? "Edit Block" : "Add Block"}</h3>
+    <div class="form-grid-2">
+      <div class="form-field">
+        <label>Block Type</label>
+        <select id="custom-block-type">
+          <option value="icon" ${block.type === "icon" ? "selected" : ""}>Icon Card</option>
+          <option value="title" ${block.type === "title" ? "selected" : ""}>Title / Heading</option>
+          <option value="text" ${block.type === "text" ? "selected" : ""}>Text</option>
+          <option value="image" ${block.type === "image" ? "selected" : ""}>Image</option>
+          <option value="stat" ${block.type === "stat" ? "selected" : ""}>Stat</option>
+          <option value="button" ${block.type === "button" ? "selected" : ""}>Button</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Icon</label>
+        <select id="custom-block-icon">${iconOptions}</select>
+      </div>
+      <div class="form-field"><label>Title (EN)</label><input id="custom-block-titleEn" value="${escapeHtml(block.titleEn)}" /></div>
+      <div class="form-field"><label>Title (AR)</label><input id="custom-block-titleAr" value="${escapeHtml(block.titleAr)}" dir="rtl" /></div>
+      <div class="form-field"><label>Text (EN)</label><textarea id="custom-block-textEn" rows="4">${escapeHtml(block.textEn)}</textarea></div>
+      <div class="form-field"><label>Text (AR)</label><textarea id="custom-block-textAr" rows="4" dir="rtl">${escapeHtml(block.textAr)}</textarea></div>
+      <div class="form-field"><label>Image URL</label><input id="custom-block-image" value="${escapeHtml(block.image)}" placeholder="https://... or upload below" /></div>
+      <div class="form-field"><label>Upload Image</label><input type="file" accept="image/*" onchange="previewUpload(this,'custom-block-image')" style="color:var(--dash-muted)" /></div>
+      <div class="form-field"><label>Image Alt (EN)</label><input id="custom-block-altEn" value="${escapeHtml(block.altEn)}" /></div>
+      <div class="form-field"><label>Image Alt (AR)</label><input id="custom-block-altAr" value="${escapeHtml(block.altAr)}" dir="rtl" /></div>
+      <div class="form-field"><label>Caption / Label (EN)</label><input id="custom-block-labelEn" value="${escapeHtml(block.labelEn || block.captionEn)}" /></div>
+      <div class="form-field"><label>Caption / Label (AR)</label><input id="custom-block-labelAr" value="${escapeHtml(block.labelAr || block.captionAr)}" dir="rtl" /></div>
+      <div class="form-field"><label>Stat Value</label><input id="custom-block-value" value="${escapeHtml(block.value)}" placeholder="250" /></div>
+      <div class="form-field"><label>Suffix</label><input id="custom-block-suffix" value="${escapeHtml(block.suffix)}" placeholder="+" /></div>
+      <div class="form-field"><label>Button URL</label><input id="custom-block-url" value="${escapeHtml(block.url)}" placeholder="#contact or https://..." /></div>
+      <div class="form-field">
+        <label>Button Style</label>
+        <select id="custom-block-style">
+          <option value="primary" ${block.style === "primary" ? "selected" : ""}>Primary</option>
+          <option value="secondary" ${block.style === "secondary" ? "selected" : ""}>Secondary</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="renderCustomSectionModal()">Back</button>
+      <button class="btn-modal-save" onclick="saveCustomBlock(${index === null ? "null" : index})">${index !== null ? "Update Block" : "Add Block"}</button>
+    </div>`);
+}
+
+function saveCustomBlock(index = null) {
+  const block = {
+    id: index !== null ? customSectionDraft.blocks[index].id : `block-${Date.now()}`,
+    type: document.getElementById("custom-block-type").value,
+    icon: document.getElementById("custom-block-icon").value,
+    titleEn: document.getElementById("custom-block-titleEn").value,
+    titleAr: document.getElementById("custom-block-titleAr").value,
+    textEn: document.getElementById("custom-block-textEn").value,
+    textAr: document.getElementById("custom-block-textAr").value,
+    image: document.getElementById("custom-block-image").value,
+    altEn: document.getElementById("custom-block-altEn").value,
+    altAr: document.getElementById("custom-block-altAr").value,
+    captionEn: document.getElementById("custom-block-labelEn").value,
+    captionAr: document.getElementById("custom-block-labelAr").value,
+    labelEn: document.getElementById("custom-block-labelEn").value,
+    labelAr: document.getElementById("custom-block-labelAr").value,
+    value: document.getElementById("custom-block-value").value,
+    suffix: document.getElementById("custom-block-suffix").value,
+    url: document.getElementById("custom-block-url").value,
+    style: document.getElementById("custom-block-style").value,
+  };
+
+  if (index !== null) customSectionDraft.blocks[index] = block;
+  else customSectionDraft.blocks.push(block);
+
+  renderCustomSectionModal();
+}
+
+function removeCustomBlock(index) {
+  customSectionDraft.blocks.splice(index, 1);
+  renderCustomSectionModal();
+}
+
+function slugifySectionId(value) {
+  return String(value || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60);
+}
+
+function saveCustomSection() {
+  syncCustomSectionDraftFields();
+  const sections = getCustomSections();
+  const baseLabel = customSectionDraft.navLabelEn || customSectionDraft.sectionTitleEn || "section";
+  const nextId = customSectionDraft.id || `custom-${slugifySectionId(baseLabel) || Date.now()}`;
+  const section = { ...customSectionDraft, id: nextId };
+  const existingIndex = sections.findIndex((item) => item.id === nextId);
+
+  if (existingIndex > -1) sections[existingIndex] = section;
+  else sections.push(section);
+
+  setData("customSections", sections);
+  syncSectionRegistry();
+
+  if (!sectionOrderTemp.includes(nextId)) sectionOrderTemp.push(nextId);
+
+  closeDashModal();
+  renderSectionsManager();
+  showMsg("sections-msg", `Section "${section.navLabelEn || section.sectionTitleEn}" saved successfully.`, true);
+  pushToServer();
+}
+
+function deleteCustomSection(id) {
+  if (!confirm("Delete this custom section? This cannot be undone.")) return;
+  setData(
+    "customSections",
+    getCustomSections().filter((section) => section.id !== id),
+  );
+  syncSectionRegistry();
+  sectionOrderTemp = getSectionOrder();
+  renderSectionsManager();
+  showMsg("sections-msg", "Custom section deleted.", true);
   pushToServer();
 }
 
@@ -643,6 +1199,179 @@ function renderOverview() {
         )
         .join("");
   }
+}
+
+// ── Org Chart ──
+function getOrgChartState() {
+  return (
+    getData("orgChart") || {
+      intro: {
+        sectionTagEn: "Leadership Structure",
+        sectionTagAr: "الهيكل القيادي",
+        sectionTitleEn: "Organizational Chart",
+        sectionTitleAr: "الهيكل التنظيمي",
+        subtitleEn: "",
+        subtitleAr: "",
+        descriptionEn: "",
+        descriptionAr: "",
+      },
+      nodes: [],
+    }
+  );
+}
+
+function loadOrgChart() {
+  const data = getOrgChartState();
+  document.getElementById("org-section-tag-en").value = data.intro?.sectionTagEn || "";
+  document.getElementById("org-section-tag-ar").value = data.intro?.sectionTagAr || "";
+  document.getElementById("org-section-title-en").value = data.intro?.sectionTitleEn || "";
+  document.getElementById("org-section-title-ar").value = data.intro?.sectionTitleAr || "";
+  document.getElementById("org-section-subtitle-en").value = data.intro?.subtitleEn || "";
+  document.getElementById("org-section-subtitle-ar").value = data.intro?.subtitleAr || "";
+  document.getElementById("org-section-description-en").value = data.intro?.descriptionEn || "";
+  document.getElementById("org-section-description-ar").value = data.intro?.descriptionAr || "";
+}
+
+function renderOrgChartList() {
+  const data = getOrgChartState();
+  const list = document.getElementById("org-chart-list");
+  if (!list) return;
+  const nodes = Array.isArray(data.nodes) ? [...data.nodes] : [];
+  const byId = new Map(nodes.map((node) => [String(node.id), node]));
+  const sorted = nodes.sort((a, b) => {
+    const aOrder = Number.isFinite(Number(a.sortOrder)) ? Number(a.sortOrder) : Number.MAX_SAFE_INTEGER;
+    const bOrder = Number.isFinite(Number(b.sortOrder)) ? Number(b.sortOrder) : Number.MAX_SAFE_INTEGER;
+    return aOrder - bOrder || String(a.titleEn || a.roleEn || "").localeCompare(String(b.titleEn || b.roleEn || ""));
+  });
+
+  if (!sorted.length) {
+    list.innerHTML =
+      '<div class="empty-state" style="grid-column:1/-1"><i class="fas fa-sitemap"></i>No org chart members yet</div>';
+    return;
+  }
+
+  list.innerHTML = sorted
+    .map((node) => {
+      const parent = node.parentId ? byId.get(String(node.parentId)) : null;
+      const title = node.titleEn || node.roleEn || "Untitled Position";
+      const parentTitle = parent?.titleEn || parent?.roleEn || "Top level";
+      return `
+        <div class="item-card">
+          <div class="item-card-header">
+            <div>
+              <span class="item-card-title">${title}</span>
+            </div>
+          </div>
+          <div class="item-card-meta">
+            <span>${node.titleAr || node.roleAr || ""}</span>
+            <span>Order ${node.sortOrder || 0}</span>
+          </div>
+          <p class="item-card-hint org-node-parent">Reports to: ${parentTitle}</p>
+          <div class="item-card-actions">
+            <button class="btn-edit" onclick="openOrgChartNodeModal('${String(node.id).replace(/'/g, "\\'")}')"><i class="fas fa-edit"></i> Edit</button>
+            <button class="btn-del" onclick="deleteOrgChartNode('${String(node.id).replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i> Delete</button>
+          </div>
+        </div>`;
+    })
+    .join("");
+}
+
+function saveOrgChartIntro() {
+  const data = getOrgChartState();
+  data.intro = {
+    sectionTagEn: document.getElementById("org-section-tag-en").value,
+    sectionTagAr: document.getElementById("org-section-tag-ar").value,
+    sectionTitleEn: document.getElementById("org-section-title-en").value,
+    sectionTitleAr: document.getElementById("org-section-title-ar").value,
+    subtitleEn: document.getElementById("org-section-subtitle-en").value,
+    subtitleAr: document.getElementById("org-section-subtitle-ar").value,
+    descriptionEn: document.getElementById("org-section-description-en").value,
+    descriptionAr: document.getElementById("org-section-description-ar").value,
+  };
+  setData("orgChart", data);
+  showMsg("org-chart-msg", "✓ Organizational chart saved successfully!", true);
+  pushToServer();
+}
+
+function openOrgChartNodeModal(id = null) {
+  const data = getOrgChartState();
+  const nodes = Array.isArray(data.nodes) ? data.nodes : [];
+  const node = id ? nodes.find((item) => String(item.id) === String(id)) : null;
+  const parentOptions = nodes
+    .filter((item) => String(item.id) !== String(id))
+    .map(
+      (item) =>
+        `<option value="${item.id}" ${String(node?.parentId || "") === String(item.id) ? "selected" : ""}>${item.titleEn || item.roleEn || item.id}</option>`,
+    )
+    .join("");
+
+  openDashModal(`
+    <h3>${node ? "Edit Position" : "Add Position"}</h3>
+    <div class="form-grid-2">
+      <div class="form-field"><label>Job Title (EN)</label><input id="org-node-title-en" value="${node?.titleEn || node?.roleEn || ""}" /></div>
+      <div class="form-field"><label>Job Title (AR)</label><input id="org-node-title-ar" value="${node?.titleAr || node?.roleAr || ""}" dir="rtl" /></div>
+      <div class="form-field">
+        <label>Reports To</label>
+        <select id="org-node-parent-id">
+          <option value="">Top level position</option>
+          ${parentOptions}
+        </select>
+      </div>
+      <div class="form-field"><label>Sort Order</label><input id="org-node-sort-order" type="number" min="1" value="${node?.sortOrder || nodes.length + 1}" /></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
+      <button class="btn-modal-save" onclick="saveOrgChartNode(${node ? `'${String(node.id).replace(/'/g, "\\'")}'` : "null"})">Save Position</button>
+    </div>`);
+}
+
+function saveOrgChartNode(id = null) {
+  const data = getOrgChartState();
+  const nodes = Array.isArray(data.nodes) ? [...data.nodes] : [];
+  const item = {
+    id: id || `org-${Date.now()}`,
+    parentId: document.getElementById("org-node-parent-id").value,
+    sortOrder: Number(document.getElementById("org-node-sort-order").value) || nodes.length + 1,
+    titleEn: document.getElementById("org-node-title-en").value,
+    titleAr: document.getElementById("org-node-title-ar").value,
+  };
+
+  if (String(item.parentId) === String(item.id)) {
+    item.parentId = "";
+  }
+
+  if (id) {
+    const index = nodes.findIndex((node) => String(node.id) === String(id));
+    if (index > -1) nodes[index] = item;
+  } else {
+    nodes.push(item);
+  }
+
+  data.nodes = nodes;
+  setData("orgChart", data);
+  closeDashModal();
+  renderOrgChartList();
+  pushToServer();
+}
+
+function deleteOrgChartNode(id) {
+  const data = getOrgChartState();
+  const nodes = Array.isArray(data.nodes) ? [...data.nodes] : [];
+  const target = nodes.find((node) => String(node.id) === String(id));
+  if (!target) return;
+
+  const nextNodes = nodes
+    .filter((node) => String(node.id) !== String(id))
+    .map((node) =>
+      String(node.parentId) === String(id)
+        ? { ...node, parentId: target.parentId || "" }
+        : node,
+    );
+
+  data.nodes = nextNodes;
+  setData("orgChart", data);
+  renderOrgChartList();
+  pushToServer();
 }
 
 // ── Services ──
@@ -762,7 +1491,13 @@ function saveService(id) {
 
 // ── Projects ──
 function renderProjectsList() {
-  const projects = getData("projects") || [];
+  const settings = getData("siteSettings") || {};
+  const projects = [...(getData("projects") || [])].sort((a, b) => {
+    if ((settings.projectOrderMode || "manual") === "year-desc") {
+      return (Number(b.year) || 0) - (Number(a.year) || 0) || (Number(a.displayOrder) || 0) - (Number(b.displayOrder) || 0);
+    }
+    return (Number(a.displayOrder) || 0) - (Number(b.displayOrder) || 0) || (Number(b.year) || 0) - (Number(a.year) || 0);
+  });
   const projectCompanies = getData("projectCompanies") || [];
   const list = document.getElementById("projects-list");
   if (!list) return;
@@ -784,6 +1519,7 @@ function renderProjectsList() {
         <span><i class="fas fa-building-circle-check"></i> ${company?.name_en || p.implementing_company_en || "No company selected"}</span>
         <span><i class="fas fa-location-dot"></i> ${p.location_en}</span>
         <span><i class="fas fa-calendar"></i> ${p.year || ""}</span>
+        <span><i class="fas fa-arrow-down-1-9"></i> ${p.displayOrder || 0}</span>
         <span><i class="fas fa-percent"></i> ${p.progress}%</span>
       </div>
       <div class="item-card-actions">
@@ -877,6 +1613,8 @@ function openProjectModal(id) {
       <div class="form-field"><label>Name (AR)</label><input id="m-name-ar" value="${p?.name_ar || ""}" dir="rtl" /></div>
       <div class="form-field"><label>Category (EN)</label><input id="m-cat-en" value="${p?.category_en || ""}" /></div>
       <div class="form-field"><label>Category (AR)</label><input id="m-cat-ar" value="${p?.category_ar || ""}" dir="rtl" /></div>
+      <div class="form-field"><label>Subcategory (EN)</label><input id="m-subcat-en" value="${p?.subcategory_en || ""}" /></div>
+      <div class="form-field"><label>Subcategory (AR)</label><input id="m-subcat-ar" value="${p?.subcategory_ar || ""}" dir="rtl" /></div>
       <div class="form-field">
         <label>Implementing Company</label>
         <select id="m-company-id">
@@ -890,6 +1628,7 @@ function openProjectModal(id) {
       <div class="form-field"><label>Location (EN)</label><input id="m-loc-en" value="${p?.location_en || ""}" /></div>
       <div class="form-field"><label>Location (AR)</label><input id="m-loc-ar" value="${p?.location_ar || ""}" dir="rtl" /></div>
       <div class="form-field"><label>Year</label><input id="m-year" type="number" value="${p?.year || new Date().getFullYear()}" /></div>
+      <div class="form-field"><label>Manual Order</label><input id="m-display-order" type="number" min="0" value="${p?.displayOrder || 0}" /></div>
       <div class="form-field">
         <label>Completion %</label>
         <div class="progress-input">
@@ -1096,12 +1835,15 @@ async function saveProject(id) {
     name_ar: document.getElementById("m-name-ar").value,
     category_en: document.getElementById("m-cat-en").value,
     category_ar: document.getElementById("m-cat-ar").value,
+    subcategory_en: document.getElementById("m-subcat-en").value,
+    subcategory_ar: document.getElementById("m-subcat-ar").value,
     company_id: company?.id || "",
     implementing_company_en: company?.name_en || "",
     implementing_company_ar: company?.name_ar || "",
     company_logo: company?.logo || "",
     location_en: document.getElementById("m-loc-en").value,
     location_ar: document.getElementById("m-loc-ar").value,
+    displayOrder: parseInt(document.getElementById("m-display-order").value) || 0,
     year:
       parseInt(document.getElementById("m-year").value) ||
       new Date().getFullYear(),
@@ -1573,8 +2315,10 @@ function renderOurGroupList() {
       </div>
       <div class="item-card-meta">
         <span><i class="fas fa-location-dot"></i> ${c.location_en}</span>
-        <span><i class="fas fa-file-lines"></i> Uses global company profile settings</span>
+        <span><i class="fas fa-file-lines"></i> ${c.profile ? "Custom profile" : "Uses main group profile"}</span>
+        <span><i class="fas fa-link"></i> ${c.website || "No website set"}</span>
       </div>
+      <p class="item-card-hint">Profile CTA: ${c.showProfileButton !== false ? "Visible" : "Hidden"} · Website CTA: ${c.showWebsiteButton !== false ? "Visible" : "Hidden"}</p>
       ${c.image ? `<img src="${c.image}" alt="" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-top:8px;" />` : ""}
       <div class="item-card-actions">
         <button class="btn-edit" onclick="openGroupModal(${c.id})"><i class="fas fa-edit"></i> Edit</button>
@@ -1583,6 +2327,39 @@ function renderOurGroupList() {
     </div>`,
     )
     .join("");
+}
+
+function loadOurGroupSettings() {
+  const settings = getData("siteSettings") || {};
+  const logoInput = document.getElementById("wg-logo-url");
+  if (logoInput) {
+    logoInput.value = settings.whoWeAreLogo || settings.logo || "assets/images/amg-logo.jpeg";
+  }
+  const logoPreview = document.getElementById("wg-logo-preview");
+  if (logoPreview) {
+    logoPreview.src = settings.whoWeAreLogo || settings.logo || "../assets/images/amg-logo.jpeg";
+  }
+  const profileInput = document.getElementById("wg-profile-url");
+  if (profileInput) profileInput.value = settings.manualCompanyProfile || "";
+  const briefEn = document.getElementById("wg-brief-en");
+  if (briefEn) briefEn.value = settings.whoWeAreBrief_en || "";
+  const briefAr = document.getElementById("wg-brief-ar");
+  if (briefAr) briefAr.value = settings.whoWeAreBrief_ar || "";
+  const showCta = document.getElementById("wg-show-profile-cta");
+  if (showCta) showCta.checked = settings.showWhoWeAreProfileCta !== false;
+}
+
+function saveOurGroupSettings() {
+  const settings = getData("siteSettings") || {};
+  settings.whoWeAreLogo =
+    document.getElementById("wg-logo-url")?.value || settings.logo || "assets/images/amg-logo.jpeg";
+  settings.manualCompanyProfile = document.getElementById("wg-profile-url")?.value || "";
+  settings.whoWeAreBrief_en = document.getElementById("wg-brief-en")?.value || "";
+  settings.whoWeAreBrief_ar = document.getElementById("wg-brief-ar")?.value || "";
+  settings.showWhoWeAreProfileCta = Boolean(document.getElementById("wg-show-profile-cta")?.checked);
+  setData("siteSettings", settings);
+  showMsg("ourgroup-msg", "Who We Are settings saved.", true);
+  pushToServer();
 }
 
 function openGroupModal(id) {
@@ -1602,6 +2379,25 @@ function openGroupModal(id) {
     </div>
     <div class="form-field"><label>Image URL</label><input id="m-gimage" value="${c?.image || ""}" placeholder="https://... or upload below" /></div>
     <div class="form-field"><label>Upload Image</label><input type="file" accept="image/*" onchange="previewUpload(this,'m-gimage')" style="color:var(--dash-muted)" /></div>
+    <div class="form-grid-2">
+      <div class="form-field"><label>Company Website</label><input id="m-gwebsite" value="${c?.website || ""}" placeholder="https://company.com" /></div>
+      <div class="form-field"><label>Company Profile PDF</label><input id="m-gprofile" value="${c?.profile || ""}" placeholder="PDF URL or uploaded PDF data" /></div>
+    </div>
+    <div class="form-field"><label>Upload Company Profile PDF</label><input type="file" accept="application/pdf,.pdf" onchange="previewUpload(this,'m-gprofile')" style="color:var(--dash-muted)" /></div>
+    <div class="form-grid-2">
+      <div class="form-field">
+        <label style="display:flex;align-items:center;gap:10px">
+          <input type="checkbox" id="m-gshow-profile" ${c?.showProfileButton !== false ? "checked" : ""} />
+          <span>Show Profile Button</span>
+        </label>
+      </div>
+      <div class="form-field">
+        <label style="display:flex;align-items:center;gap:10px">
+          <input type="checkbox" id="m-gshow-website" ${c?.showWebsiteButton !== false ? "checked" : ""} />
+          <span>Show Visit Website Button</span>
+        </label>
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn-modal-cancel" onclick="closeDashModal()">Cancel</button>
       <button class="btn-modal-save" onclick="saveGroup(${id || "null"})">Save Company</button>
@@ -1619,7 +2415,10 @@ function saveGroup(id) {
     desc_en: document.getElementById("m-gdesc-en").value,
     desc_ar: document.getElementById("m-gdesc-ar").value,
     image: document.getElementById("m-gimage").value,
-    profile: id ? companies.find((x) => x.id === id)?.profile || "" : "",
+    website: document.getElementById("m-gwebsite").value,
+    profile: document.getElementById("m-gprofile").value,
+    showProfileButton: Boolean(document.getElementById("m-gshow-profile").checked),
+    showWebsiteButton: Boolean(document.getElementById("m-gshow-website").checked),
   };
   if (id) {
     const idx = companies.findIndex((x) => x.id === id);
@@ -1649,6 +2448,10 @@ function deleteItem(key, id) {
   if (key === "projects") renderProjectsList();
   if (key === "careers") renderCareersList();
   if (key === "groupCompanies") renderOurGroupList();
+  if (key === "orgChart") {
+    loadOrgChart();
+    renderOrgChartList();
+  }
 }
 
 // ── Helpers ──
@@ -1665,13 +2468,15 @@ document.getElementById("dash-modal")?.addEventListener("click", (e) => {
   if (e.target === document.getElementById("dash-modal")) closeDashModal();
 });
 
-function previewUpload(input, targetId) {
+function previewUpload(input, targetId, previewId) {
   const file = input.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = (e) => {
     const el = document.getElementById(targetId);
     if (el) el.value = e.target.result;
+    const preview = previewId ? document.getElementById(previewId) : null;
+    if (preview && preview.tagName === "IMG") preview.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
@@ -1690,6 +2495,9 @@ function pushToServer() {
     "siteSettings",
     "seoSettings",
     "sections",
+    "sectionOrder",
+    "builtInSectionContent",
+    "orgChart",
     "services",
     "projectCompanies",
     "projects",
@@ -1697,6 +2505,7 @@ function pushToServer() {
     "partners",
     "testimonials",
     "groupCompanies",
+    "customSections",
   ];
   keys.forEach((k) => {
     const val = localStorage.getItem("amg_" + k);
@@ -1820,6 +2629,9 @@ pushToServer = function pushToServerWithMissionVision() {
     "siteSettings",
     "seoSettings",
     "sections",
+    "sectionOrder",
+    "builtInSectionContent",
+    "orgChart",
     "services",
     "projectCompanies",
     "projects",
@@ -1828,6 +2640,7 @@ pushToServer = function pushToServerWithMissionVision() {
     "testimonials",
     "groupCompanies",
     "missionVision",
+    "customSections",
   ];
   keys.forEach((k) => {
     const val = localStorage.getItem("amg_" + k);

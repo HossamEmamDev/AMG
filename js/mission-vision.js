@@ -57,8 +57,18 @@
     }
   }
 
+  function getBuiltInOverrides() {
+    try {
+      const stored = JSON.parse(localStorage.getItem("amg_builtInSectionContent") || "{}");
+      return stored["mission-vision"] || {};
+    } catch (error) {
+      return {};
+    }
+  }
+
   function loadMissionVision() {
     const data = getMissionVisionData();
+    const overrides = getBuiltInOverrides();
     const lang = document.documentElement.getAttribute("data-lang") || "en";
 
     const introKicker = document.getElementById("mv-intro-kicker");
@@ -71,16 +81,24 @@
     const visionIcon = document.getElementById("vision-icon");
 
     if (sectionTag) {
-      sectionTag.textContent = lang === "ar" ? data.intro.sectionTagAr : data.intro.sectionTagEn;
+      sectionTag.textContent = lang === "ar"
+        ? overrides.tagAr || data.intro.sectionTagAr
+        : overrides.tagEn || data.intro.sectionTagEn;
     }
     if (sectionTitle) {
-      sectionTitle.textContent = lang === "ar" ? data.intro.sectionTitleAr : data.intro.sectionTitleEn;
+      sectionTitle.textContent = lang === "ar"
+        ? overrides.titleAr || data.intro.sectionTitleAr
+        : overrides.titleEn || data.intro.sectionTitleEn;
     }
     if (introKicker) {
-      introKicker.textContent = lang === "ar" ? data.intro.kickerAr : data.intro.kickerEn;
+      introKicker.textContent = lang === "ar"
+        ? overrides.kickerAr || data.intro.kickerAr
+        : overrides.kickerEn || data.intro.kickerEn;
     }
     if (introText) {
-      introText.textContent = lang === "ar" ? data.intro.textAr : data.intro.textEn;
+      introText.textContent = lang === "ar"
+        ? overrides.subtitleAr || data.intro.textAr
+        : overrides.subtitleEn || data.intro.textEn;
     }
     if (missionLabel) {
       missionLabel.textContent = lang === "ar" ? data.mission.labelAr : data.mission.labelEn;

@@ -15,6 +15,7 @@ const DEFAULT_DATA = {
     fontAr: "IBM Plex Sans Arabic",
     fontHeadingEn: "Oswald",
     fontHeadingAr: "IBM Plex Sans Arabic",
+    projectOrderMode: "manual",
     heroVideo: "",
     heroTitle_en: "We Build|Iconic Landmarks|With Precision & Integrity",
     heroTitle_ar: "نحن نبني|معالم أيقونية|بدقة ومصداقية",
@@ -64,6 +65,12 @@ const DEFAULT_DATA = {
     hrEmail: "hr@amgcontracting.com",
     phone: "+20 100 000 0000",
     manualCompanyProfile: "",
+    showWhoWeAreProfileCta: true,
+    whoWeAreLogo: "assets/images/amg-logo.jpeg",
+    whoWeAreBrief_en:
+      "AMG Main Contracting Group delivers integrated construction, civil, MEP, and fit-out capabilities through a multi-company structure built for dependable execution and premium project delivery.",
+    whoWeAreBrief_ar:
+      "تقدم مجموعة AMG للمقاولات الرئيسية قدرات متكاملة في الإنشاءات والأعمال المدنية وMEP والتشطيبات من خلال هيكل متعدد الشركات مصمم للتنفيذ الموثوق وتسليم المشاريع بمعايير احترافية.",
     address_en: "Cairo, Egypt & Riyadh, KSA",
     address_ar: "القاهرة، مصر والرياض، المملكة العربية السعودية",
     footerDesc_en:
@@ -129,7 +136,9 @@ const DEFAULT_DATA = {
 
   // ── Sections Visibility ──
   sections: {
+    "who-we-are": { visible: true, inNav: true },
     "our-group": { visible: true, inNav: true },
+    "organizational-chart": { visible: true, inNav: true },
     "mission-vision": { visible: true, inNav: true },
     services: { visible: true, inNav: true },
     projects: { visible: true, inNav: true },
@@ -138,15 +147,121 @@ const DEFAULT_DATA = {
     contact: { visible: true, inNav: true },
   },
   sectionOrder: [
+    "who-we-are",
     "our-group",
     "mission-vision",
     "services",
     "projects",
+    "organizational-chart",
     "careers",
     "partners",
     "contact",
   ],
 
+  customSections: [],
+
+  builtInSectionContent: {
+    "who-we-are": {
+      navEn: "Who We Are",
+      navAr: "من نحن",
+      tagEn: "Who We Are",
+      tagAr: "من نحن",
+      titleEn: "AMG Main Contracting Group",
+      titleAr: "مجموعة AMG للمقاولات الرئيسية",
+      subtitleEn:
+        "A concise introduction to the group, its positioning, and a premium company profile entry point.",
+      subtitleAr:
+        "نبذة مختصرة عن المجموعة ومكانتها ونقطة دخول احترافية إلى بروفايل الشركة.",
+    },
+    "our-group": {
+      navEn: "Our Group",
+      navAr: "مجموعتنا",
+      tagEn: "Our Group",
+      tagAr: "مجموعتنا",
+      titleEn: "Group Companies",
+      titleAr: "شركات المجموعة",
+      subtitleEn:
+        "Discover the specialist companies that expand the group's reach across construction, MEP, and integrated project delivery.",
+      subtitleAr:
+        "اكتشف الشركات المتخصصة التي توسع نطاق المجموعة عبر المقاولات وMEP والتنفيذ المتكامل للمشاريع.",
+    },
+    "mission-vision": {
+      navEn: "Our Journey",
+      navAr: "رحلتنا",
+      tagEn: "Our Journey",
+      tagAr: "رحلتنا",
+      titleEn: "Mission & Vision",
+      titleAr: "مهمتنا ورؤيتنا",
+      subtitleEn:
+        "The mission explains how AMG executes every project. The vision explains where the group is heading next.",
+      subtitleAr:
+        "المهمة توضح كيف تنفذ AMG كل مشروع. والرؤية توضح الاتجاه الذي تسير إليه المجموعة في المرحلة القادمة.",
+      kickerEn: "Built on purpose",
+      kickerAr: "مبني على هدف",
+    },
+    services: {
+      navEn: "Services",
+      navAr: "خدماتنا",
+      tagEn: "What We Do",
+      tagAr: "ما نقدمه",
+      titleEn: "Our Services",
+      titleAr: "خدماتنا",
+    },
+    projects: {
+      navEn: "Projects",
+      navAr: "مشاريعنا",
+      tagEn: "Our Work",
+      tagAr: "أعمالنا",
+      titleEn: "Featured Projects",
+      titleAr: "المشاريع المميزة",
+    },
+    "organizational-chart": {
+      navEn: "Org Chart",
+      navAr: "الهيكل التنظيمي",
+      tagEn: "Leadership Structure",
+      tagAr: "الهيكل القيادي",
+      titleEn: "Organizational Chart",
+      titleAr: "الهيكل التنظيمي",
+      subtitleEn:
+        "A premium snapshot of AMG's leadership structure, designed to clarify accountability, delivery flow, and executive oversight.",
+      subtitleAr:
+        "لقطة احترافية للهيكل القيادي في AMG توضح مسارات المسؤولية والتنفيذ والإشراف التنفيذي.",
+    },
+    careers: {
+      navEn: "Careers",
+      navAr: "الوظائف",
+      tagEn: "Join Our Team",
+      tagAr: "انضم لفريقنا",
+      titleEn: "Career Opportunities",
+      titleAr: "الفرص الوظيفية",
+      subtitleEn:
+        "Join a team delivering landmark construction, MEP, and infrastructure work across Egypt and Saudi Arabia, or share your CV for future premium opportunities.",
+      subtitleAr:
+        "انضم إلى فريق ينفذ مشاريع إنشائية وكهروميكانيكية وبنية تحتية بارزة في مصر والسعودية، أو شارك سيرتك الذاتية لفرص نوعية مستقبلية.",
+      kickerEn: "Craft Your Next Chapter",
+      kickerAr: "ابدأ فصلك المهني القادم",
+    },
+    partners: {
+      navEn: "Partners",
+      navAr: "شركاؤنا",
+      tagEn: "Trusted By",
+      tagAr: "يثق بنا",
+      titleEn: "Our Partners",
+      titleAr: "شركاؤنا",
+      subtitleEn:
+        "A selected network of brands and institutions that trust AMG across construction, fit-out, MEP, and large-scale delivery.",
+      subtitleAr:
+        "شبكة مختارة من العلامات التجارية والمؤسسات التي تثق في AMG عبر المقاولات والتشطيبات وأعمال MEP والتنفيذ واسع النطاق.",
+    },
+    contact: {
+      navEn: "Contact",
+      navAr: "تواصل معنا",
+      tagEn: "Get In Touch",
+      tagAr: "تواصل معنا",
+      titleEn: "Contact Us",
+      titleAr: "اتصل بنا",
+    },
+  },
   missionVision: {
     intro: {
       sectionTagEn: "Our Journey",
@@ -182,6 +297,270 @@ const DEFAULT_DATA = {
       descriptionAr:
         "نطمح لأن نصبح شركاء بناء مدى الحياة لكل عميل نتعامل معه، بما في ذلك العميل والمتخصصون في التصميم والمقاولون من الباطن والحرفيون، من خلال توفيرنا المستمر للحل الهندسي والمالي والخدمات الرائدة. من خلال تحسين قدراتنا وإمكانياتنا، نسعى لعرض قوة مهندسي المقاولات عندما يتعلق الأمر بتطبيق الخبرة الفنية على المشاكل العملية، ليس فقط في مصر بل في منطقة الشرق الأوسط وشمال أفريقيا بأسرها.",
     },
+  },
+
+  orgChart: {
+    intro: {
+      sectionTagEn: "Leadership Structure",
+      sectionTagAr: "الهيكل القيادي",
+      sectionTitleEn: "Organizational Chart",
+      sectionTitleAr: "الهيكل التنظيمي",
+      subtitleEn:
+        "A premium snapshot of AMG's leadership structure, designed to clarify accountability, delivery flow, and executive oversight.",
+      subtitleAr:
+        "لقطة احترافية للهيكل القيادي في AMG توضح مسارات المسؤولية والتنفيذ والإشراف التنفيذي.",
+      descriptionEn:
+        "Our organizational structure is shaped around precision, ownership, and disciplined execution. Each function is positioned to support clear decision-making, dependable delivery, and long-term operational excellence across every project lifecycle.\n\nFrom executive leadership to technical and commercial functions, the model emphasizes coordination, speed, and accountability without compromising premium quality standards.",
+      descriptionAr:
+        "تم تصميم هيكلنا التنظيمي حول الدقة والمسؤولية والانضباط في التنفيذ. كل وظيفة موضوعة لدعم وضوح القرار واعتمادية التسليم والتميّز التشغيلي المستدام عبر جميع مراحل المشروع.\n\nمن القيادة التنفيذية إلى الوظائف الفنية والتجارية، يركز هذا النموذج على التنسيق والسرعة والمساءلة دون المساس بمعايير الجودة الراقية.",
+    },
+    nodes: [
+      {
+        id: "org-1",
+        parentId: "",
+        sortOrder: 1,
+        titleEn: "Chairman",
+        titleAr: "رئيس مجلس الإدارة",
+      },
+      {
+        id: "org-2",
+        parentId: "org-1",
+        sortOrder: 1,
+        titleEn: "COO",
+        titleAr: "المدير التنفيذي للعمليات",
+      },
+      {
+        id: "org-3",
+        parentId: "org-1",
+        sortOrder: 2,
+        titleEn: "CEO",
+        titleAr: "الرئيس التنفيذي",
+      },
+      {
+        id: "org-4",
+        parentId: "org-2",
+        sortOrder: 1,
+        titleEn: "Site Management",
+        titleAr: "إدارة المواقع",
+      },
+      {
+        id: "org-5",
+        parentId: "org-2",
+        sortOrder: 2,
+        titleEn: "Projects Management",
+        titleAr: "إدارة المشروعات",
+      },
+      {
+        id: "org-6",
+        parentId: "org-2",
+        sortOrder: 3,
+        titleEn: "Technical Office Management",
+        titleAr: "إدارة المكتب الفني",
+      },
+      {
+        id: "org-7",
+        parentId: "org-3",
+        sortOrder: 1,
+        titleEn: "Development Management",
+        titleAr: "إدارة التطوير",
+      },
+      {
+        id: "org-8",
+        parentId: "org-3",
+        sortOrder: 2,
+        titleEn: "Finance Management",
+        titleAr: "الإدارة المالية",
+      },
+      {
+        id: "org-9",
+        parentId: "org-4",
+        sortOrder: 1,
+        titleEn: "Site Management Director",
+        titleAr: "مدير إدارة المواقع",
+      },
+      {
+        id: "org-10",
+        parentId: "org-9",
+        sortOrder: 1,
+        titleEn: "Projects Manager",
+        titleAr: "مدير المشروعات",
+      },
+      {
+        id: "org-11",
+        parentId: "org-10",
+        sortOrder: 1,
+        titleEn: "Team Leader",
+        titleAr: "قائد الفريق",
+      },
+      {
+        id: "org-12",
+        parentId: "org-11",
+        sortOrder: 1,
+        titleEn: "Site Engineers",
+        titleAr: "مهندسو الموقع",
+      },
+      {
+        id: "org-13",
+        parentId: "org-12",
+        sortOrder: 1,
+        titleEn: "Supervisors Arch & MEP",
+        titleAr: "مشرفو المعماري وMEP",
+      },
+      {
+        id: "org-14",
+        parentId: "org-13",
+        sortOrder: 1,
+        titleEn: "Foremen",
+        titleAr: "الفورمان",
+      },
+      {
+        id: "org-15",
+        parentId: "org-5",
+        sortOrder: 1,
+        titleEn: "Projects Management Manager",
+        titleAr: "مدير إدارة المشروعات",
+      },
+      {
+        id: "org-16",
+        parentId: "org-15",
+        sortOrder: 1,
+        titleEn: "Planning Engineer",
+        titleAr: "مهندس التخطيط",
+      },
+      {
+        id: "org-17",
+        parentId: "org-16",
+        sortOrder: 1,
+        titleEn: "Tendering Engineer",
+        titleAr: "مهندس العطاءات",
+      },
+      {
+        id: "org-18",
+        parentId: "org-17",
+        sortOrder: 1,
+        titleEn: "Procurement & Subcontractor",
+        titleAr: "المشتريات والمقاولون",
+      },
+      {
+        id: "org-19",
+        parentId: "org-18",
+        sortOrder: 1,
+        titleEn: "Cost Control Engineer",
+        titleAr: "مهندس ضبط التكاليف",
+      },
+      {
+        id: "org-20",
+        parentId: "org-19",
+        sortOrder: 1,
+        titleEn: "MEP Engineer",
+        titleAr: "مهندس MEP",
+      },
+      {
+        id: "org-21",
+        parentId: "org-6",
+        sortOrder: 1,
+        titleEn: "Technical Office Manager",
+        titleAr: "مدير المكتب الفني",
+      },
+      {
+        id: "org-22",
+        parentId: "org-21",
+        sortOrder: 1,
+        titleEn: "Coordination",
+        titleAr: "التنسيق",
+      },
+      {
+        id: "org-23",
+        parentId: "org-22",
+        sortOrder: 1,
+        titleEn: "Shop Drawings Engineer",
+        titleAr: "مهندس الرسومات التنفيذية",
+      },
+      {
+        id: "org-24",
+        parentId: "org-23",
+        sortOrder: 1,
+        titleEn: "QS Engineer & Close Out",
+        titleAr: "مهندس الحصر والإقفال",
+      },
+      {
+        id: "org-25",
+        parentId: "org-7",
+        sortOrder: 1,
+        titleEn: "QC & QA Engineer",
+        titleAr: "مهندس الجودة وضبط الجودة",
+      },
+      {
+        id: "org-26",
+        parentId: "org-25",
+        sortOrder: 1,
+        titleEn: "HSE Engineer",
+        titleAr: "مهندس السلامة",
+      },
+      {
+        id: "org-27",
+        parentId: "org-26",
+        sortOrder: 1,
+        titleEn: "Marketing & Sales",
+        titleAr: "التسويق والمبيعات",
+      },
+      {
+        id: "org-28",
+        parentId: "org-27",
+        sortOrder: 1,
+        titleEn: "HR Management",
+        titleAr: "إدارة الموارد البشرية",
+      },
+      {
+        id: "org-29",
+        parentId: "org-28",
+        sortOrder: 1,
+        titleEn: "Office Management",
+        titleAr: "إدارة المكتب",
+      },
+      {
+        id: "org-30",
+        parentId: "org-29",
+        sortOrder: 1,
+        titleEn: "IT Management",
+        titleAr: "إدارة تقنية المعلومات",
+      },
+      {
+        id: "org-31",
+        parentId: "org-30",
+        sortOrder: 1,
+        titleEn: "Client Care",
+        titleAr: "خدمة العملاء",
+      },
+      {
+        id: "org-32",
+        parentId: "org-8",
+        sortOrder: 1,
+        titleEn: "Financial Audit",
+        titleAr: "المراجعة المالية",
+      },
+      {
+        id: "org-33",
+        parentId: "org-32",
+        sortOrder: 1,
+        titleEn: "Legal Accounting",
+        titleAr: "المحاسبة القانونية",
+      },
+      {
+        id: "org-34",
+        parentId: "org-32",
+        sortOrder: 2,
+        titleEn: "Financial Accounting",
+        titleAr: "المحاسبة المالية",
+      },
+      {
+        id: "org-35",
+        parentId: "org-34",
+        sortOrder: 1,
+        titleEn: "Storekeeper",
+        titleAr: "أمين المخزن",
+      },
+    ],
   },
 
   // ── Services ──
@@ -308,6 +687,8 @@ const DEFAULT_DATA = {
       name_ar: "أبراج النخيل",
       category_en: "Residential",
       category_ar: "سكني",
+      subcategory_en: "Luxury Towers",
+      subcategory_ar: "أبراج فاخرة",
       company_id: 2,
       implementing_company_en: "Amjaad Construction",
       implementing_company_ar: "أمجاد للإنشاءات",
@@ -333,6 +714,8 @@ const DEFAULT_DATA = {
       name_ar: "مركز القاهرة الجديدة التجاري",
       category_en: "Commercial",
       category_ar: "تجاري",
+      subcategory_en: "Mixed Use",
+      subcategory_ar: "متعدد الاستخدامات",
       company_id: 3,
       implementing_company_en: "Electrocivic",
       implementing_company_ar: "إلكتروسيفيك",
@@ -358,6 +741,8 @@ const DEFAULT_DATA = {
       name_ar: "المجمع الصناعي بجدة",
       category_en: "Industrial",
       category_ar: "صناعي",
+      subcategory_en: "Logistics Complex",
+      subcategory_ar: "مجمع لوجستي",
       company_id: 2,
       implementing_company_en: "Amjaad Construction",
       implementing_company_ar: "أمجاد للإنشاءات",
@@ -381,6 +766,8 @@ const DEFAULT_DATA = {
       name_ar: "مشروع MEP القرية الذكية",
       category_en: "MEP",
       category_ar: "كهروميكانيك",
+      subcategory_en: "Technology Campus",
+      subcategory_ar: "حرم تقني",
       company_id: 3,
       implementing_company_en: "Electrocivic",
       implementing_company_ar: "إلكتروسيفيك",
@@ -405,6 +792,8 @@ const DEFAULT_DATA = {
       name_ar: "محطة مترو الرياض",
       category_en: "Infrastructure",
       category_ar: "بنية تحتية",
+      subcategory_en: "Transit Hub",
+      subcategory_ar: "مركز نقل",
       company_id: 2,
       implementing_company_en: "Amjaad Construction",
       implementing_company_ar: "أمجاد للإنشاءات",
@@ -514,6 +903,9 @@ const DEFAULT_DATA = {
       desc_ar:
         "قوة إنشائية رائدة في المملكة العربية السعودية، متخصصة في المشاريع السكنية والتجارية والبنية التحتية الكبيرة بالتزام برؤية 2030.",
       profile: "",
+      website: "https://amjaad-sa.com/",
+      showProfileButton: true,
+      showWebsiteButton: true,
       image: "assets/images/amjaad.avif",
     },
     {
@@ -527,6 +919,9 @@ const DEFAULT_DATA = {
       desc_ar:
         "شركة مصر الرائدة في المقاولات الكهروميكانيكية والمدنية، تقدم حلول MEP المتكاملة والمنشآت الصناعية والبنية التحتية المتقدمة.",
       profile: "",
+      website: "https://electrocivic.com/",
+      showProfileButton: true,
+      showWebsiteButton: true,
       image: "assets/images/electrocivic.avif",
     },
   ],
@@ -590,6 +985,9 @@ function cleanupLegacyGroupCompanies() {
   const cleaned = companies.map(({ url, ...company }) => ({
     ...company,
     profile: company.profile || "",
+    website: company.website || url || "",
+    showProfileButton: company.showProfileButton !== false,
+    showWebsiteButton: company.showWebsiteButton !== false,
   }));
   setData("groupCompanies", cleaned);
 }
@@ -601,6 +999,18 @@ function migrateLegacyBranding() {
   }
   if (typeof settings.manualCompanyProfile !== "string") {
     settings.manualCompanyProfile = "";
+  }
+  if (typeof settings.showWhoWeAreProfileCta !== "boolean") {
+    settings.showWhoWeAreProfileCta = DEFAULT_DATA.siteSettings.showWhoWeAreProfileCta;
+  }
+  if (typeof settings.whoWeAreBrief_en !== "string") {
+    settings.whoWeAreBrief_en = DEFAULT_DATA.siteSettings.whoWeAreBrief_en;
+  }
+  if (typeof settings.whoWeAreBrief_ar !== "string") {
+    settings.whoWeAreBrief_ar = DEFAULT_DATA.siteSettings.whoWeAreBrief_ar;
+  }
+  if (typeof settings.whoWeAreLogo !== "string" || !settings.whoWeAreLogo.trim()) {
+    settings.whoWeAreLogo = settings.logo || DEFAULT_DATA.siteSettings.whoWeAreLogo;
   }
   if (settings.heroTitle_en === "Building Tomorrow's World") {
     settings.heroTitle_en = DEFAULT_DATA.siteSettings.heroTitle_en;
@@ -639,6 +1049,16 @@ function migrateLegacyBranding() {
     ...DEFAULT_DATA.seoSettings,
     ...seo,
   });
+
+  const builtInSectionContent = getData("builtInSectionContent") || {};
+  const normalizedBuiltInSectionContent = {};
+  Object.keys(DEFAULT_DATA.builtInSectionContent || {}).forEach((id) => {
+    normalizedBuiltInSectionContent[id] = {
+      ...DEFAULT_DATA.builtInSectionContent[id],
+      ...(builtInSectionContent[id] || {}),
+    };
+  });
+  setData("builtInSectionContent", normalizedBuiltInSectionContent);
 
   const sectionOrder = getData("sectionOrder");
   if (!Array.isArray(sectionOrder) || !sectionOrder.length) {
@@ -695,6 +1115,7 @@ initData();
 ensureDefaultKeys();
 cleanupLegacyGroupCompanies();
 migrateLegacyBranding();
+migrateCustomSections();
 
 function getProjectCompanies() {
   return getData("projectCompanies") || [];
@@ -885,6 +1306,7 @@ function applySettings() {
   if (heroSubtitle) {
     heroSubtitle.textContent = s["heroSubtitle_" + lang] || s.heroSubtitle_en || "";
   }
+  applyBuiltInSectionContent();
   renderHeroStats();
   applyContactFormRequirements();
 
@@ -940,6 +1362,215 @@ function getSectionOrder() {
     if (!ordered.includes(id)) ordered.push(id);
   });
   return ordered;
+}
+
+function getBuiltInSectionContent() {
+  const stored = getData("builtInSectionContent") || {};
+  const defaults = DEFAULT_DATA.builtInSectionContent || {};
+  const next = {};
+  Object.keys(defaults).forEach((id) => {
+    next[id] = {
+      ...defaults[id],
+      ...(stored[id] || {}),
+    };
+  });
+  return next;
+}
+
+function applyBuiltInSectionContent() {
+  const lang = document.documentElement.getAttribute("data-lang") || "en";
+  const content = getBuiltInSectionContent();
+  const setLocalized = (id, enValue, arValue) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (typeof enValue === "string") el.setAttribute("data-en", enValue);
+    if (typeof arValue === "string") el.setAttribute("data-ar", arValue);
+    el.textContent = lang === "ar" ? arValue || enValue || "" : enValue || arValue || "";
+  };
+
+  Object.entries(content).forEach(([sectionId, entry]) => {
+    setLocalized(`nav-label-${sectionId}`, entry.navEn, entry.navAr);
+    setLocalized(`${sectionId}-tag`, entry.tagEn, entry.tagAr);
+    setLocalized(`${sectionId}-title`, entry.titleEn, entry.titleAr);
+    setLocalized(`${sectionId}-subtitle`, entry.subtitleEn, entry.subtitleAr);
+    setLocalized(`${sectionId}-kicker`, entry.kickerEn, entry.kickerAr);
+  });
+}
+
+function getBuiltInSectionIds() {
+  return Object.keys(DEFAULT_DATA.sections || {});
+}
+
+function getCustomSections() {
+  const stored = getData("customSections");
+  if (!Array.isArray(stored)) return [];
+  return stored
+    .filter((section) => section && section.id)
+    .map((section, index) => ({
+      id: String(section.id || `custom-section-${index + 1}`),
+      navLabelEn: section.navLabelEn || section.sectionTitleEn || "New Section",
+      navLabelAr: section.navLabelAr || section.sectionTitleAr || "قسم جديد",
+      sectionTagEn: section.sectionTagEn || "",
+      sectionTagAr: section.sectionTagAr || "",
+      sectionTitleEn: section.sectionTitleEn || "New Section",
+      sectionTitleAr: section.sectionTitleAr || "قسم جديد",
+      subtitleEn: section.subtitleEn || "",
+      subtitleAr: section.subtitleAr || "",
+      theme: section.theme || "light",
+      mediaAlign: section.mediaAlign || "right",
+      blocks: Array.isArray(section.blocks) ? section.blocks : [],
+    }));
+}
+
+function syncSectionRegistry() {
+  const builtInIds = getBuiltInSectionIds();
+  const customSections = getCustomSections();
+  const customIds = customSections.map((section) => section.id);
+  const currentSections = getData("sections") || {};
+  const nextSections = {};
+
+  builtInIds.forEach((id) => {
+    nextSections[id] = {
+      ...DEFAULT_DATA.sections[id],
+      ...(currentSections[id] || {}),
+    };
+  });
+
+  customSections.forEach((section) => {
+    nextSections[section.id] = {
+      visible: currentSections[section.id]?.visible ?? true,
+      inNav: currentSections[section.id]?.inNav ?? true,
+    };
+  });
+
+  const currentOrder = Array.isArray(getData("sectionOrder")) ? getData("sectionOrder") : [];
+  const validIds = [...builtInIds, ...customIds];
+  const nextOrder = currentOrder.filter((id) => validIds.includes(id));
+  validIds.forEach((id) => {
+    if (!nextOrder.includes(id)) nextOrder.push(id);
+  });
+
+  setData("sections", nextSections);
+  setData("sectionOrder", nextOrder);
+}
+
+function escapeCustomSectionHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function customSectionParagraphs(text) {
+  return String(text || "")
+    .split(/\n{2,}/)
+    .filter(Boolean)
+    .map((paragraph) => `<p>${escapeCustomSectionHtml(paragraph)}</p>`)
+    .join("");
+}
+
+function renderCustomSectionBlock(block, lang) {
+  const title = lang === "ar" ? block.titleAr || block.titleEn : block.titleEn || block.titleAr;
+  const text = lang === "ar" ? block.textAr || block.textEn : block.textEn || block.textAr;
+  const label = lang === "ar" ? block.labelAr || block.labelEn : block.labelEn || block.labelAr;
+  const alt = lang === "ar" ? block.altAr || block.altEn : block.altEn || block.altAr;
+  const caption = lang === "ar" ? block.captionAr || block.captionEn : block.captionEn || block.captionAr;
+  const icon = block.icon || "fas fa-star";
+  const buttonClass = block.style === "secondary" ? "btn btn-outline" : "btn btn-primary";
+
+  switch (block.type) {
+    case "title":
+      return `
+        <article class="custom-block custom-block-title">
+          <h3>${escapeCustomSectionHtml(title)}</h3>
+          ${text ? `<div class="custom-block-copy">${customSectionParagraphs(text)}</div>` : ""}
+        </article>`;
+    case "text":
+      return `
+        <article class="custom-block custom-block-text">
+          ${title ? `<h3>${escapeCustomSectionHtml(title)}</h3>` : ""}
+          <div class="custom-block-copy">${customSectionParagraphs(text)}</div>
+        </article>`;
+    case "image":
+      return `
+        <figure class="custom-block custom-block-image">
+          <img src="${escapeCustomSectionHtml(block.image || "")}" alt="${escapeCustomSectionHtml(alt || title || "AMG section image")}" loading="lazy" />
+          ${caption ? `<figcaption>${escapeCustomSectionHtml(caption)}</figcaption>` : ""}
+        </figure>`;
+    case "stat":
+      return `
+        <article class="custom-block custom-block-stat">
+          <strong>${escapeCustomSectionHtml(block.value || "0")}${block.suffix ? `<span>${escapeCustomSectionHtml(block.suffix)}</span>` : ""}</strong>
+          <p>${escapeCustomSectionHtml(label || title)}</p>
+        </article>`;
+    case "button":
+      return `
+        <article class="custom-block custom-block-button">
+          <a class="${buttonClass}" href="${escapeCustomSectionHtml(block.url || "#")}">${escapeCustomSectionHtml(label || "Learn More")}</a>
+        </article>`;
+    case "icon":
+    default:
+      return `
+        <article class="custom-block custom-block-icon">
+          <div class="custom-block-icon-badge"><i class="${escapeCustomSectionHtml(icon)}"></i></div>
+          ${title ? `<h3>${escapeCustomSectionHtml(title)}</h3>` : ""}
+          ${text ? `<div class="custom-block-copy">${customSectionParagraphs(text)}</div>` : ""}
+        </article>`;
+  }
+}
+
+function renderCustomSections() {
+  const root = document.getElementById("dynamic-sections-root");
+  const nav = document.getElementById("nav-links");
+  if (!root || !nav) return;
+
+  const lang = document.documentElement.getAttribute("data-lang") || "en";
+  const customSections = getCustomSections();
+
+  root.innerHTML = customSections
+    .map((section) => {
+      const themeClass = `custom-admin-section--${section.theme || "light"}`;
+      const mediaClass = section.mediaAlign === "left" ? "media-left" : "media-right";
+      const tag = lang === "ar" ? section.sectionTagAr || section.sectionTagEn : section.sectionTagEn || section.sectionTagAr;
+      const title = lang === "ar" ? section.sectionTitleAr || section.sectionTitleEn : section.sectionTitleEn || section.sectionTitleAr;
+      const subtitle = lang === "ar" ? section.subtitleAr || section.subtitleEn : section.subtitleEn || section.subtitleAr;
+      const blocks = (section.blocks || []).map((block) => renderCustomSectionBlock(block, lang)).join("");
+
+      return `
+        <section id="${escapeCustomSectionHtml(section.id)}" class="section custom-admin-section ${themeClass} reveal-up" data-custom-section="true">
+          <div class="container">
+            <div class="custom-admin-shell ${mediaClass}">
+              <div class="custom-admin-header">
+                ${tag ? `<span class="section-tag">${escapeCustomSectionHtml(tag)}</span>` : ""}
+                <h2>${escapeCustomSectionHtml(title)}</h2>
+                ${subtitle ? `<p class="custom-admin-subtitle">${escapeCustomSectionHtml(subtitle)}</p>` : ""}
+              </div>
+              <div class="custom-admin-grid">
+                ${blocks || '<div class="custom-block custom-block-text"><div class="custom-block-copy"><p>Content will appear here after the admin adds blocks from the dashboard.</p></div></div>'}
+              </div>
+            </div>
+          </div>
+        </section>`;
+    })
+    .join("");
+
+  nav.querySelectorAll(".custom-nav-item").forEach((item) => item.remove());
+  customSections.forEach((section) => {
+    const navLabel = lang === "ar" ? section.navLabelAr || section.navLabelEn : section.navLabelEn || section.navLabelAr;
+    const item = document.createElement("li");
+    item.className = "custom-nav-item";
+    item.innerHTML = `<a href="#${escapeCustomSectionHtml(section.id)}">${escapeCustomSectionHtml(navLabel || "Section")}</a>`;
+    nav.appendChild(item);
+  });
+
+  if (typeof setupScrollReveal === "function") {
+    setTimeout(setupScrollReveal, 60);
+  }
+  if (typeof updateNavbarState === "function") {
+    setTimeout(updateNavbarState, 0);
+  }
 }
 
 function setFieldRequiredState(field, required, label) {
@@ -1072,6 +1703,8 @@ function renderFooterSocial() {
 
 // Apply section visibility
 function applySectionVisibility() {
+  syncSectionRegistry();
+  renderCustomSections();
   const sections = getData("sections");
   Object.entries(sections).forEach(([id, cfg]) => {
     const el = document.getElementById(id);
@@ -1111,42 +1744,85 @@ function renderGroup() {
   const settings = getData("siteSettings") || {};
   const profileLabel =
     lang === "ar" ? "تحميل بروفايل الشركة" : "Download Company Profile";
+  const websiteLabel = lang === "ar" ? "زيارة الموقع" : "Visit Website";
   const manualUrl = settings.manualCompanyProfile || "";
   const profileHref = manualUrl;
   const profileName = "amg-company-profile.pdf";
-  const commonLinkAttrs = profileHref
-    ? `href="${profileHref}" target="_blank" download="${profileName}"`
-    : `href="javascript:void(0)" aria-disabled="true"`;
-  const headerCta = document.getElementById("company-profile-entry-cta");
-  if (headerCta) {
-    headerCta.textContent = profileLabel;
-    headerCta.setAttribute("href", profileHref || "javascript:void(0)");
-    if (profileHref) {
-      headerCta.setAttribute("target", "_blank");
-      headerCta.setAttribute("download", profileName);
+  const whoWeAreBrief = settings[`whoWeAreBrief_${lang}`] || settings.whoWeAreBrief_en || "";
+  const whoWeAreBriefEl = document.getElementById("who-we-are-brief");
+  if (whoWeAreBriefEl) whoWeAreBriefEl.textContent = whoWeAreBrief;
+  const whoWeAreLogo = settings.whoWeAreLogo || settings.logo || "assets/images/amg-logo.jpeg";
+  const whoWeAreLogoLarge = document.getElementById("who-we-are-logo-large");
+  if (whoWeAreLogoLarge) whoWeAreLogoLarge.src = whoWeAreLogo;
+
+  const whoWeAreCta = document.getElementById("who-we-are-profile-cta");
+  if (whoWeAreCta) {
+    whoWeAreCta.textContent = profileLabel;
+    if (settings.showWhoWeAreProfileCta !== false && profileHref) {
+      whoWeAreCta.style.display = "";
+      whoWeAreCta.setAttribute("href", profileHref);
+      whoWeAreCta.setAttribute("target", "_blank");
+      whoWeAreCta.setAttribute("download", profileName);
+      whoWeAreCta.removeAttribute("aria-disabled");
     } else {
-      headerCta.removeAttribute("target");
-      headerCta.removeAttribute("download");
+      whoWeAreCta.style.display = "none";
+      whoWeAreCta.setAttribute("href", "javascript:void(0)");
+      whoWeAreCta.removeAttribute("target");
+      whoWeAreCta.removeAttribute("download");
+      whoWeAreCta.setAttribute("aria-disabled", "true");
     }
+  }
+
+  const dropdown = document.getElementById("our-group-dropdown");
+  if (dropdown) {
+    const websiteItems = companies.filter((company) => company.website);
+    dropdown.innerHTML = websiteItems
+      .map((company) => `
+        <li>
+          <a href="${company.website}" target="_blank" rel="noopener noreferrer">
+            ${company["name_" + lang] || company.name_en}
+          </a>
+        </li>`)
+      .join("");
+    dropdown.style.display = websiteItems.length ? "" : "none";
   }
 
   grid.innerHTML = companies
     .map(
       (c) => {
+        const companyName = c["name_" + lang] || c.name_en;
+        const profileLink = c.profile || profileHref;
+        const profileAttrs = profileLink
+          ? `href="${profileLink}" target="_blank" download="${profileName}"`
+          : `href="javascript:void(0)" aria-disabled="true"`;
+        const websiteAttrs = c.website
+          ? `href="${c.website}" target="_blank" rel="noopener noreferrer"`
+          : `href="javascript:void(0)" aria-disabled="true"`;
+        const overlayWebsiteCta = c.showWebsiteButton !== false
+          ? `<a ${websiteAttrs} class="btn btn-primary group-card-cta">${websiteLabel}</a>`
+          : "";
+        const footerLinks = [
+          c.showWebsiteButton !== false
+            ? `<a ${websiteAttrs} class="group-link">${websiteLabel}<i class="fa fa-arrow-up-right-from-square"></i></a>`
+            : "",
+          c.showProfileButton !== false
+            ? `<a ${profileAttrs} class="group-link">${profileLabel}<i class="fa fa-file-arrow-down"></i></a>`
+            : "",
+        ]
+          .filter(Boolean)
+          .join("");
         return `
     <div class="group-card reveal-zoom">
       <div class="group-card-image">
-        <img src="${c.image || ""}" alt="${c["name_" + lang] || c.name_en}"
+        <img src="${c.image || ""}" alt="${companyName}"
              onerror="this.style.background='#1a1a1a';this.style.display='block'" loading="lazy" />
-        <div class="group-card-overlay">
-          <a ${commonLinkAttrs} class="btn btn-primary">${profileLabel}</a>
-        </div>
+        ${overlayWebsiteCta ? `<div class="group-card-overlay">${overlayWebsiteCta}</div>` : ""}
       </div>
       <div class="group-card-body">
         <div class="group-card-flag"><i class="fa fa-location-dot"></i> ${c["location_" + lang] || c.location_en}</div>
-        <h3>${c["name_" + lang] || c.name_en}</h3>
+        <h3>${companyName}</h3>
         <p>${c["desc_" + lang] || c.desc_en}</p>
-        <a ${commonLinkAttrs} class="group-link">${profileLabel}<i class="fa fa-file-arrow-down"></i></a>
+        <div class="group-links">${footerLinks}</div>
       </div>
     </div>`;
       },
@@ -1172,9 +1848,15 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch(() => {}) // if fetch fails, fall back to localStorage silently
     .finally(() => {
+      syncSectionRegistry();
       applySettings();
       applySeoSettings();
       applySectionVisibility();
       renderGroup();
+      if (typeof renderOrgChart === "function") renderOrgChart();
     });
 });
+
+function migrateCustomSections() {
+  syncSectionRegistry();
+}

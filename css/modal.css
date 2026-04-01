@@ -44,8 +44,66 @@
 }
 [data-lang="ar"] #all-projects-modal h2 { padding-right: 0; padding-left: 40px; }
 
+.org-chart-modal-box {
+  background:
+    radial-gradient(circle at top right, rgba(201,150,100,0.1), transparent 22%),
+    linear-gradient(180deg, #fffdf8 0%, #f6efe3 100%);
+}
+
+.org-chart-modal-head {
+  margin-bottom: 24px;
+  padding-right: 40px;
+}
+
+.org-chart-modal-head h2 {
+  font-size: clamp(1.16rem, 2vw, 1.5rem);
+  color: var(--charcoal);
+  line-height: 1.1;
+}
+
+.org-chart-modal-head p {
+  margin-top: 10px;
+  max-width: 62ch;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
+.org-chart-modal-tree-wrap {
+  border: 1px solid rgba(201,150,100,0.16);
+  background: rgba(255,255,255,0.72);
+  padding: 18px;
+  overflow-x: auto;
+}
+
+.org-chart-tree-modal .org-chart-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f3eb 100%);
+}
+
+.org-chart-tree-modal .org-chart-card.is-root {
+  background:
+    linear-gradient(135deg, rgba(29,29,30,0.98), rgba(17,17,18,0.98)),
+    linear-gradient(180deg, rgba(201,150,100,0.22), rgba(201,150,100,0));
+}
+
+[data-lang="ar"] .org-chart-modal-head {
+  padding-right: 0;
+  padding-left: 40px;
+  text-align: right;
+}
+
 @media (max-width: 600px) {
   .modal-box { padding: 24px 16px; }
   .modal-close { top: 12px; right: 12px; }
   [data-lang="ar"] .modal-close { right: auto; left: 12px; }
+  .org-chart-modal-head {
+    padding-right: 28px;
+  }
+  [data-lang="ar"] .org-chart-modal-head {
+    padding-right: 0;
+    padding-left: 28px;
+  }
+  .org-chart-modal-tree-wrap {
+    padding: 12px;
+  }
 }
