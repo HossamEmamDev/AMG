@@ -482,6 +482,36 @@ function getInputValue(id) {
   return document.getElementById(id)?.value?.trim() || "";
 }
 
+let pendingUploads = 0;
+
+function updateUploadSaveState() {
+  const isUploading = pendingUploads > 0;
+  document
+    .querySelectorAll(".btn-save, .btn-modal-save")
+    .forEach((button) => {
+      if (!button.dataset.originalText) {
+        button.dataset.originalText = button.innerHTML;
+      }
+      button.disabled = isUploading;
+      button.classList.toggle("is-disabled", isUploading);
+      if (isUploading) {
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+      } else {
+        button.innerHTML = button.dataset.originalText;
+      }
+    });
+}
+
+function startUploadLock() {
+  pendingUploads += 1;
+  updateUploadSaveState();
+}
+
+function finishUploadLock() {
+  pendingUploads = Math.max(0, pendingUploads - 1);
+  updateUploadSaveState();
+}
+
 function buildUploadConfig(targetId) {
   switch (targetId) {
     case "wg-logo-url":
@@ -544,8 +574,10 @@ async function uploadFileToServer(file, config) {
   formData.append("folder", config.folder);
   formData.append("filename", config.filename);
   formData.append("file", file, file.name || `${config.filename}.bin`);
+  if (config.overwrite) formData.append("overwrite", "1");
+  if (config.replacePath) formData.append("replace_path", config.replacePath);
 
-  const response = await fetch("../php/upload_file.php", {
+  const response = await fetch("../php/upload_file_v2.php", {
     method: "POST",
     body: formData,
   });
@@ -561,15 +593,21 @@ async function previewUpload(input, targetId, previewId) {
   if (!file) return;
 
   try {
+    startUploadLock();
     input.disabled = true;
-    const path = await uploadFileToServer(file, buildUploadConfig(targetId));
     const el = document.getElementById(targetId);
+    const path = await uploadFileToServer(file, {
+      ...buildUploadConfig(targetId),
+      overwrite: true,
+      replacePath: el?.value?.trim() || "",
+    });
     if (el) el.value = path;
     if (previewId) syncAssetPreview(path, previewId);
   } catch (error) {
     console.error("Upload failed:", error);
     alert(`Upload failed: ${error.message}`);
   } finally {
+    finishUploadLock();
     input.disabled = false;
     input.value = "";
   }
@@ -579,20 +617,24 @@ async function handleLogoUpload(input) {
   const file = input.files?.[0];
   if (!file) return;
   try {
+    startUploadLock();
     input.disabled = true;
+    const s = getData("siteSettings");
     const path = await uploadFileToServer(file, {
       folder: "images/logo",
       filename: "site-logo",
+      overwrite: true,
+      replacePath: s.logo || "",
     });
     document.getElementById("logo-preview").src = toDashboardAssetPath(path);
     document.getElementById("dash-logo").src = toDashboardAssetPath(path);
-    const s = getData("siteSettings");
     s.logo = path;
     setData("siteSettings", s);
   } catch (error) {
     console.error("Logo upload failed:", error);
     alert(`Logo upload failed: ${error.message}`);
   } finally {
+    finishUploadLock();
     input.disabled = false;
     input.value = "";
   }
@@ -602,19 +644,23 @@ async function handleFaviconUpload(input) {
   const file = input.files?.[0];
   if (!file) return;
   try {
+    startUploadLock();
     input.disabled = true;
+    const s = getData("siteSettings");
     const path = await uploadFileToServer(file, {
       folder: "images/logo",
       filename: "favicon",
+      overwrite: true,
+      replacePath: s.favicon || "",
     });
     document.getElementById("fav-preview").src = toDashboardAssetPath(path);
-    const s = getData("siteSettings");
     s.favicon = path;
     setData("siteSettings", s);
   } catch (error) {
     console.error("Favicon upload failed:", error);
     alert(`Favicon upload failed: ${error.message}`);
   } finally {
+    finishUploadLock();
     input.disabled = false;
     input.value = "";
   }
@@ -1792,7 +1838,7 @@ function openProjectModal(id) {
     </div>
 
     <div class="form-field">
-      <label>Project Images <span class="badge-info">First image = cover</span></label>
+      <label>Project Images <span class="badge-info">Choose any image as cover</span></label>
       <div id="proj-imgs-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px"></div>
       <div style="display:flex;gap:8px;align-items:center">
         <input id="m-img-url" placeholder="Paste image URL..." style="flex:1;background:var(--dash-surface2);border:1px solid var(--dash-border);border-radius:6px;padding:8px 12px;color:var(--dash-text);font-family:inherit;font-size:0.85rem" />
@@ -1800,8 +1846,8 @@ function openProjectModal(id) {
       </div>
       <div style="margin-top:8px">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.78rem;color:var(--dash-muted)">
-          <i class="fas fa-upload" style="color:var(--dash-accent)"></i> Upload image file
-          <input type="file" accept="image/*" onchange="uploadProjectImage(this)" style="display:none" />
+          <i class="fas fa-upload" style="color:var(--dash-accent)"></i> Upload image files
+          <input type="file" accept="image/*" multiple onchange="uploadProjectImage(this)" style="display:none" />
         </label>
       </div>
     </div>
@@ -1828,6 +1874,11 @@ function renderProjectImgList() {
     <div style="position:relative;flex-shrink:0">
       <img src="${toDashboardAssetPath(src)}" style="width:80px;height:56px;object-fit:cover;border-radius:6px;border:2px solid ${i === 0 ? "var(--dash-accent)" : "var(--dash-border)"}" />
       ${i === 0 ? '<span style="position:absolute;bottom:2px;left:2px;background:var(--dash-accent);color:#fff;font-size:0.55rem;padding:1px 4px;border-radius:2px;font-weight:700">COVER</span>' : ""}
+      ${
+        i !== 0
+          ? `<button onclick="setProjectCover(${i})" style="position:absolute;bottom:2px;right:2px;background:rgba(17,17,17,0.88);border:1px solid rgba(255,255,255,0.18);color:#fff;font-size:0.52rem;padding:2px 5px;border-radius:3px;cursor:pointer;font-weight:700">SET COVER</button>`
+          : ""
+      }
       <button onclick="removeProjectImg(${i})" style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:#ef4444;border:none;color:#fff;font-size:0.55rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1">×</button>
     </div>`,
     )
@@ -1842,26 +1893,71 @@ function addProjectImage() {
   renderProjectImgList();
 }
 
+async function convertImageFileToJpeg(file) {
+  const objectUrl = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = objectUrl;
+    });
+
+    const canvas = document.createElement("canvas");
+    canvas.width = img.naturalWidth || img.width;
+    canvas.height = img.naturalHeight || img.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Could not prepare image conversion");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    const blob = await new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (result) => (result ? resolve(result) : reject(new Error("JPEG conversion failed"))),
+        "image/jpeg",
+        0.9,
+      );
+    });
+
+    const baseName = slugifyUploadPart(
+      file.name.replace(/\.[^.]+$/, ""),
+      "project-image",
+    );
+    return new File([blob], `${baseName}.jpg`, { type: "image/jpeg" });
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 async function uploadProjectImage(input) {
-  const file = input.files?.[0];
-  if (!file) return;
+  const files = Array.from(input.files || []);
+  if (!files.length) return;
   const projectSlug = slugifyUploadPart(
     getInputValue("m-name-en") || getInputValue("m-name-ar"),
     "project",
   );
-  const imageIndex = projectImagesTemp.length + 1;
   try {
+    startUploadLock();
     input.disabled = true;
-    const path = await uploadFileToServer(file, {
-      folder: `images/projects/${projectSlug}`,
-      filename: `${projectSlug}-${imageIndex}`,
-    });
-    projectImagesTemp.push(path);
+    const uploadedPaths = [];
+    for (const [offset, file] of files.entries()) {
+      const imageIndex = projectImagesTemp.length + uploadedPaths.length + 1;
+      const jpegFile = await convertImageFileToJpeg(file);
+      const path = await uploadFileToServer(jpegFile, {
+        folder: `images/projects/${projectSlug}`,
+        filename: `${projectSlug}-${imageIndex}`,
+        overwrite: true,
+      });
+      uploadedPaths.push(path);
+    }
+    projectImagesTemp.push(...uploadedPaths);
     renderProjectImgList();
   } catch (error) {
     console.error("Project image upload failed:", error);
     alert(`Project image upload failed: ${error.message}`);
   } finally {
+    finishUploadLock();
     input.disabled = false;
     input.value = "";
   }
@@ -1869,6 +1965,13 @@ async function uploadProjectImage(input) {
 
 function removeProjectImg(i) {
   projectImagesTemp.splice(i, 1);
+  renderProjectImgList();
+}
+
+function setProjectCover(i) {
+  if (i <= 0 || i >= projectImagesTemp.length) return;
+  const [selected] = projectImagesTemp.splice(i, 1);
+  projectImagesTemp.unshift(selected);
   renderProjectImgList();
 }
 
@@ -1997,22 +2100,7 @@ async function saveProject(id) {
   const companyId = document.getElementById("m-company-id").value;
   const company =
     projectCompanies.find((item) => String(item.id) === String(companyId)) || null;
-  let normalizedImages = await prepareProjectImagesForSaving(imgs, company?.logo);
-  if (String(normalizedImages[0] || "").startsWith("data:")) {
-    const projectSlug = slugifyUploadPart(
-      document.getElementById("m-name-en").value ||
-        document.getElementById("m-name-ar").value,
-      "project",
-    );
-    const coverBlob = await dataUrlToBlob(normalizedImages[0]);
-    normalizedImages[0] = await uploadFileToServer(
-      new File([coverBlob], `${projectSlug}-cover.jpg`, { type: "image/jpeg" }),
-      {
-        folder: `images/projects/${projectSlug}`,
-        filename: `${projectSlug}-cover`,
-      },
-    );
-  }
+  const normalizedImages = imgs;
   const item = {
     id: id || Date.now(),
     name_en: document.getElementById("m-name-en").value,
@@ -2034,10 +2122,7 @@ async function saveProject(id) {
     progress: parseInt(document.getElementById("m-progress").value) || 0,
     brief_en: document.getElementById("m-brief-en").value,
     brief_ar: document.getElementById("m-brief-ar").value,
-    logo_baked:
-      Boolean(company?.logo) &&
-      Boolean(normalizedImages[0]) &&
-      normalizedImages[0] !== imgs[0],
+    logo_baked: false,
     image: normalizedImages[0] || "", // first image = cover
     images: normalizedImages,
   };

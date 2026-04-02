@@ -165,12 +165,23 @@
 .project-meta { display: flex; flex-direction: column; gap: 6px; }
 .project-meta span { display: flex; align-items: center; gap: 7px; font-family: var(--font-body); font-size: clamp(0.72rem, 1.2vw, 0.78rem); color: rgba(255,255,255,0.52); }
 .project-meta i { color: var(--gold); width: 13px; text-align: center; }
+.project-detail-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 18px;
+}
+.project-download-btn {
+  min-width: 220px;
+}
 [data-lang="ar"] .project-info,
 [data-lang="ar"] .project-detail-header,
 [data-lang="ar"] .project-detail-desc,
 [data-lang="ar"] .project-fact-card,
 [data-lang="ar"] .proj-thumb-body {
   text-align: right;
+}
+[data-lang="ar"] .project-detail-actions {
+  justify-content: flex-end;
 }
 [data-lang="ar"] .project-category,
 [data-lang="ar"] .project-detail-meta span,

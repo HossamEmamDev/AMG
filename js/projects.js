@@ -258,7 +258,16 @@ function openProjectDetail(id) {
       <div class="progress-bar-full">
         <div class="progress-bar-fill" style="width:0%" data-target="${p.progress}"></div>
       </div>
-    </div>`;
+    </div>
+    ${
+      company.logo
+        ? `<div class="project-detail-actions">
+            <button class="btn btn-primary project-download-btn" type="button" onclick="downloadBrandedProjectImage(${p.id})">
+              ${lang === "ar" ? "تحميل الصورة بالشعار" : "Download Branded Image"}
+            </button>
+          </div>`
+        : ""
+    }`;
 
   openModal("project-modal");
   setTimeout(() => {
@@ -284,6 +293,121 @@ function galleryNav(dir, total) {
   const thumbs = document.querySelectorAll(".gallery-thumb");
   const newIdx = (galleryIdx + dir + total) % total;
   if (thumbs[newIdx]) thumbs[newIdx].click();
+}
+
+function slugifyProjectPart(value, fallback = "project") {
+  const slug = String(value || "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+  return slug || fallback;
+}
+
+function loadProjectImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    if (!String(src || "").startsWith("data:")) img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+async function downloadBrandedProjectImage(id) {
+  const lang = document.documentElement.getAttribute("data-lang") || "en";
+  const project = (getData("projects") || []).find((item) => item.id === id);
+  if (!project) return;
+
+  const company = resolveProjectCompany(project, lang);
+  const logoSrc = company.logo;
+  const mainImage = document.getElementById("gallery-main-img");
+  const imageSrc =
+    mainImage?.getAttribute("src") ||
+    (project.images && project.images.length ? project.images[galleryIdx] || project.images[0] : project.image);
+
+  if (!imageSrc || !logoSrc) return;
+
+  try {
+    const [baseImage, logoImage] = await Promise.all([
+      loadProjectImage(imageSrc),
+      loadProjectImage(logoSrc),
+    ]);
+
+    const canvas = document.createElement("canvas");
+    canvas.width = baseImage.naturalWidth || baseImage.width || 1600;
+    canvas.height = baseImage.naturalHeight || baseImage.height || 1000;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
+
+    const logoSize = Math.max(canvas.width * 0.14, 120);
+    const inset = Math.max(canvas.width * 0.035, 26);
+    const badgeX = canvas.width - logoSize - inset;
+    const badgeY = canvas.height - logoSize - inset;
+    const radius = logoSize / 2;
+
+    ctx.save();
+    ctx.shadowColor = "rgba(0, 0, 0, 0.24)";
+    ctx.shadowBlur = Math.max(canvas.width * 0.015, 16);
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.beginPath();
+    ctx.arc(badgeX + radius, badgeY + radius, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(badgeX + radius, badgeY + radius, radius * 0.84, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(
+      logoImage,
+      badgeX + logoSize * 0.16,
+      badgeY + logoSize * 0.16,
+      logoSize * 0.68,
+      logoSize * 0.68,
+    );
+    ctx.restore();
+
+    ctx.save();
+    const stroke = ctx.createLinearGradient(
+      badgeX,
+      badgeY,
+      badgeX + logoSize,
+      badgeY + logoSize,
+    );
+    stroke.addColorStop(0, "rgba(255,255,255,0.95)");
+    stroke.addColorStop(1, "rgba(201,150,100,0.92)");
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = Math.max(canvas.width * 0.005, 6);
+    ctx.beginPath();
+    ctx.arc(badgeX + radius, badgeY + radius, radius * 0.9, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    const fileName = `${slugifyProjectPart(
+      project["name_" + lang] || project.name_en || "project",
+      "project",
+    )}-branded.jpg`;
+
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }, "image/jpeg", 0.92);
+  } catch (error) {
+    console.error("Branded image download failed:", error);
+  }
 }
 
 /* ── All Projects Grid ── */

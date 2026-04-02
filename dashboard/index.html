@@ -12,7 +12,17 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/dashboard.css" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <script>
+    window.__dashAssetVersion = String(Date.now());
+    window.appendDashVersion = function (path) {
+      if (!path || /^https?:\/\//i.test(path) || path.includes("?")) return path;
+      return `${path}?v=${window.__dashAssetVersion}`;
+    };
+    document.write(`<link rel="stylesheet" href="${window.appendDashVersion("css/dashboard.css")}" />`);
+  </script>
 </head>
 
 <body>
@@ -851,8 +861,12 @@
     </div>
   </div>
 
-  <script src="../js/data.js"></script>
-  <script src="js/dashboard.js"></script>
+  <script>
+    document.write(`
+      <script src="${window.appendDashVersion("../js/data.js")}"><\/script>
+      <script src="${window.appendDashVersion("js/dashboard.js")}"><\/script>
+    `);
+  </script>
 </body>
 
 </html>

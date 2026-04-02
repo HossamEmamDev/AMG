@@ -1741,13 +1741,20 @@ function renderGroup() {
   const grid = document.getElementById("group-grid");
   if (!grid) return;
 
+  const getDownloadName = (path, fallback) => {
+    const cleanPath = String(path || "").split("?")[0];
+    const parts = cleanPath.split("/");
+    const lastPart = parts[parts.length - 1] || "";
+    return lastPart || fallback;
+  };
+
   const settings = getData("siteSettings") || {};
   const profileLabel =
     lang === "ar" ? "تحميل بروفايل الشركة" : "Download Company Profile";
   const websiteLabel = lang === "ar" ? "زيارة الموقع" : "Visit Website";
   const manualUrl = settings.manualCompanyProfile || "";
   const profileHref = manualUrl;
-  const profileName = "amg-company-profile.pdf";
+  const profileName = getDownloadName(profileHref, "amg-company-profile.pdf");
   const whoWeAreBrief = settings[`whoWeAreBrief_${lang}`] || settings.whoWeAreBrief_en || "";
   const whoWeAreBriefEl = document.getElementById("who-we-are-brief");
   if (whoWeAreBriefEl) whoWeAreBriefEl.textContent = whoWeAreBrief;
@@ -1792,8 +1799,12 @@ function renderGroup() {
       (c) => {
         const companyName = c["name_" + lang] || c.name_en;
         const profileLink = c.profile || profileHref;
+        const companyProfileName = getDownloadName(
+          profileLink,
+          `${String(companyName || "company").trim().replace(/\s+/g, "-").toLowerCase()}-profile.pdf`,
+        );
         const profileAttrs = profileLink
-          ? `href="${profileLink}" target="_blank" download="${profileName}"`
+          ? `href="${profileLink}" target="_blank" download="${companyProfileName}"`
           : `href="javascript:void(0)" aria-disabled="true"`;
         const websiteAttrs = c.website
           ? `href="${c.website}" target="_blank" rel="noopener noreferrer"`

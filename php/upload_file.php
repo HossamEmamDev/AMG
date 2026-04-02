@@ -23,6 +23,28 @@ function sanitize_segment($value) {
     return $value ?: 'file';
 }
 
+function delete_asset_if_exists($relativePath) {
+    $relativePath = preg_replace('/\?.*$/', '', ltrim((string) $relativePath, '/'));
+    if ($relativePath === '' || strpos($relativePath, 'assets/') !== 0) {
+        return;
+    }
+
+    $assetsRoot = realpath(__DIR__ . '/../assets');
+    if ($assetsRoot === false) {
+        return;
+    }
+
+    $fullPath = __DIR__ . '/../' . $relativePath;
+    $parentDir = realpath(dirname($fullPath));
+    if ($parentDir === false || strpos($parentDir, $assetsRoot) !== 0) {
+        return;
+    }
+
+    if (is_file($fullPath)) {
+        @unlink($fullPath);
+    }
+}
+
 $folder = trim((string) ($_POST['folder'] ?? ''), '/');
 $segments = array_values(array_filter(explode('/', $folder), static function ($segment) {
     return $segment !== '';
@@ -83,7 +105,24 @@ if (!is_dir($targetDir) && !mkdir($targetDir, 0755, true) && !is_dir($targetDir)
     exit;
 }
 
-$finalName = $requestedName . '-' . date('Ymd-His') . '-' . substr(bin2hex(random_bytes(4)), 0, 8) . '.' . $extension;
+$overwrite = ($_POST['overwrite'] ?? '') === '1';
+$replacePath = $_POST['replace_path'] ?? '';
+
+if ($replacePath !== '') {
+    delete_asset_if_exists($replacePath);
+}
+
+if ($overwrite) {
+    foreach (glob($targetDir . '/' . $requestedName . '.*') ?: [] as $existingFile) {
+        if (is_file($existingFile)) {
+            @unlink($existingFile);
+        }
+    }
+    $finalName = $requestedName . '.' . $extension;
+} else {
+    $finalName = $requestedName . '-' . date('Ymd-His') . '-' . substr(bin2hex(random_bytes(4)), 0, 8) . '.' . $extension;
+}
+
 $targetPath = $targetDir . '/' . $finalName;
 
 if (!move_uploaded_file($tmpPath, $targetPath)) {
@@ -93,5 +132,8 @@ if (!move_uploaded_file($tmpPath, $targetPath)) {
 }
 
 $publicPath = 'assets/' . implode('/', $safeSegments) . '/' . $finalName;
+if ($overwrite) {
+    $publicPath .= '?v=' . time();
+}
 echo json_encode(['success' => true, 'path' => $publicPath]);
 ?>
