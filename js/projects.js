@@ -206,6 +206,13 @@ function openProjectDetail(id) {
               : ""
           }
           ${
+            company.logo
+              ? `<button class="project-image-download" type="button" onclick="downloadBrandedProjectImage(${p.id})" aria-label="${lang === "ar" ? "تحميل الصورة بالشعار" : "Download branded image"}">
+                  <i class="fa fa-download"></i>
+                </button>`
+              : ""
+          }
+          ${
             imgs.length > 1
               ? `
             <button class="gallery-nav prev" onclick="galleryNav(-1,${imgs.length})"><i class="fa fa-chevron-left"></i></button>
@@ -258,16 +265,7 @@ function openProjectDetail(id) {
       <div class="progress-bar-full">
         <div class="progress-bar-fill" style="width:0%" data-target="${p.progress}"></div>
       </div>
-    </div>
-    ${
-      company.logo
-        ? `<div class="project-detail-actions">
-            <button class="btn btn-primary project-download-btn" type="button" onclick="downloadBrandedProjectImage(${p.id})">
-              ${lang === "ar" ? "تحميل الصورة بالشعار" : "Download Branded Image"}
-            </button>
-          </div>`
-        : ""
-    }`;
+    </div>`;
 
   openModal("project-modal");
   setTimeout(() => {

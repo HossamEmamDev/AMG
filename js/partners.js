@@ -27,22 +27,47 @@ const PARTNER_ACCENT_PRESETS = [
 function renderPartners() {
   const partners = getData('partners') || [];
   const track    = document.getElementById('partners-track');
+  const isRtl    = (document.documentElement.getAttribute('dir') || 'ltr') === 'rtl';
   if (!track) return;
 
-  track.innerHTML = partners.map((p, i) => `
+  if (!partners.length) {
+    track.innerHTML = `
+      <div class="partners-empty">
+        <span>No partners added yet.</span>
+      </div>`;
+    renderTestimonials();
+    return;
+  }
+
+  const partnerCards = partners.map((p, i) => `
     <div class="partner-logo" style="--partner-accent:${p.accent || PARTNER_ACCENT_PRESETS[i % PARTNER_ACCENT_PRESETS.length].value}">
       <div class="partner-logo-core">
         ${p.logo
-          ? `<img
-               src="${p.logo}"
-               alt="${p.name}"
-               loading="lazy"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
-             /><span class="partner-logo-text" style="display:none">${p.name}</span>`
+          ? `<div class="partner-logo-media">
+               <img
+                 src="${p.logo}"
+                 alt="${p.name}"
+                 loading="lazy"
+                 onerror="this.parentElement.style.display='none';this.parentElement.nextElementSibling.style.display='flex'"
+               />
+             </div><span class="partner-logo-text partner-logo-text-fallback" style="display:none">${p.name}</span>`
           : `<span class="partner-logo-text">${p.name}</span>`
         }
       </div>
     </div>`).join('');
+
+  const repeatedCards = `${partnerCards}${partnerCards}`;
+  const animationSeconds = Math.max(34, partners.length * 4);
+  const animationName = isRtl ? 'partnersMarqueeRtl' : 'partnersMarquee';
+
+  track.innerHTML = `
+    <div class="partners-slider-shell">
+      <div class="partners-marquee" dir="ltr" aria-label="Partner logos">
+        <div class="partners-marquee-track" style="--partners-duration:${animationSeconds}s;--partners-animation:${animationName};">
+          ${repeatedCards}
+        </div>
+      </div>
+    </div>`;
 
   renderTestimonials();
 }
@@ -71,4 +96,8 @@ function renderTestimonials() {
   if (typeof setupScrollReveal === 'function') setupScrollReveal();
 }
 
-document.addEventListener('DOMContentLoaded', renderPartners);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', renderPartners);
+} else {
+  renderPartners();
+}
