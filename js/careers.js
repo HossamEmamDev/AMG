@@ -1,6 +1,41 @@
 /* ===== CAREERS.JS ===== */
 'use strict';
 
+function normalizeCareerItem(career) {
+  const item = career && typeof career === 'object' ? career : {};
+  const normalizeText = (value) => (typeof value === 'string' ? value : '');
+  const requirementsRaw = item.requirements;
+  let requirements = [];
+
+  if (Array.isArray(requirementsRaw)) {
+    requirements = requirementsRaw.map((entry) => normalizeText(entry).trim()).filter(Boolean);
+  } else if (typeof requirementsRaw === 'string') {
+    requirements = requirementsRaw
+      .split(/\r?\n|,|•|-/)
+      .map((entry) => entry.trim())
+      .filter(Boolean);
+  }
+
+  return {
+    id: item.id ?? null,
+    type: normalizeText(item.type) || 'full-time',
+    title_en: normalizeText(item.title_en),
+    title_ar: normalizeText(item.title_ar),
+    desc_en: normalizeText(item.desc_en),
+    desc_ar: normalizeText(item.desc_ar),
+    location_en: normalizeText(item.location_en),
+    location_ar: normalizeText(item.location_ar),
+    active: item.active !== false,
+    requirements,
+  };
+}
+
+function getActiveCareers() {
+  return (getData('careers') || [])
+    .map(normalizeCareerItem)
+    .filter((career) => career.active !== false);
+}
+
 function getCareerUiStrings(lang) {
   return {
     typeLabel: {
@@ -28,24 +63,28 @@ function getCareerUiStrings(lang) {
 
 function buildCareerCard(c, lang, expanded = false) {
   const { typeLabel } = getCareerUiStrings(lang);
+  const career = normalizeCareerItem(c);
+  const title = career['title_' + lang] || career.title_en || (lang === 'ar' ? 'وظيفة متاحة' : 'Open Role');
+  const description = career['desc_' + lang] || career.desc_en || (lang === 'ar' ? 'تفاصيل الوظيفة ستظهر هنا قريباً.' : 'Role details will appear here soon.');
+  const location = career['location_' + lang] || career.location_en || (lang === 'ar' ? 'سيتم التحديد' : 'To be confirmed');
   return `
-    <div class="career-card reveal-up">
+    <div class="career-card">
       <div class="career-header">
-        <h3 class="career-title">${c['title_'+lang] || c.title_en}</h3>
-        <span class="career-type ${c.type||'full-time'}">${typeLabel[c.type] || typeLabel['full-time']}</span>
+        <h3 class="career-title">${title}</h3>
+        <span class="career-type ${career.type||'full-time'}">${typeLabel[career.type] || typeLabel['full-time']}</span>
       </div>
-      <p class="career-desc ${expanded ? 'expanded' : ''}">${c['desc_'+lang] || c.desc_en}</p>
+      <p class="career-desc ${expanded ? 'expanded' : ''}">${description}</p>
       <div class="career-requirements">
         <div class="career-req-title">${lang==='ar'?'المتطلبات':'Requirements'}</div>
         <ul class="career-req-list">
-          ${(c.requirements||[]).map(r=>`<li>${r}</li>`).join('')}
+          ${(career.requirements||[]).map(r=>`<li>${r}</li>`).join('')}
         </ul>
       </div>
       <div class="career-footer">
-        <span class="career-location"><i class="fa fa-location-dot"></i>${c['location_'+lang]||c.location_en}</span>
+        <span class="career-location"><i class="fa fa-location-dot"></i>${location}</span>
         <div class="career-actions">
-          ${buildShareBtn(c, lang)}
-          <button class="btn btn-primary" style="padding:7px 16px;font-size:0.78rem" onclick="openApplyModal(${c.id})">
+          ${buildShareBtn(career, lang)}
+          <button class="btn btn-primary" style="padding:7px 16px;font-size:0.78rem" onclick="openApplyModal(${career.id})">
             ${lang==='ar'?'تقدم الآن':'Apply'}
           </button>
         </div>
@@ -55,12 +94,16 @@ function buildCareerCard(c, lang, expanded = false) {
 
 function renderCareers() {
   const lang = document.documentElement.getAttribute('data-lang') || 'en';
-  const careers = getData('careers') || [];
+  const careers = getActiveCareers();
   const grid = document.getElementById('careers-grid');
   if (!grid) return;
 
-  const active = careers.filter(c => c.active !== false).slice(0, 3);
-  grid.innerHTML = active.map((c) => buildCareerCard(c, lang)).join('');
+  if (!careers.length) {
+    grid.innerHTML = `<div class="career-empty-state"><h3>${lang === 'ar' ? 'لا توجد وظائف متاحة حالياً' : 'No openings available right now'}</h3><p>${lang === 'ar' ? 'يمكنك إرسال سيرتك الذاتية من خلال الزر المخصص وسيتواصل معك فريق الموارد البشرية عند توفر فرصة مناسبة.' : 'You can submit your CV using the dedicated button and our HR team will contact you when a relevant role opens.'}</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = careers.map((c) => buildCareerCard(c, lang)).join('');
 
   // Wire up share popovers
   wireShareBtns();
@@ -119,9 +162,12 @@ function openGeneralCvModal() {
   openCareerApplicationModal(null, true);
 }
 
+window.openApplyModal = openApplyModal;
+window.openGeneralCvModal = openGeneralCvModal;
+
 function openCareerApplicationModal(careerId, isGeneral) {
   const lang    = document.documentElement.getAttribute('data-lang') || 'en';
-  const careers = getData('careers') || [];
+  const careers = (getData('careers') || []).map(normalizeCareerItem);
   const job     = careers.find(c => c.id === careerId);
   if (!isGeneral && !job) return;
   const L = getCareerUiStrings(lang).labels;
@@ -172,6 +218,8 @@ function openCareerApplicationModal(careerId, isGeneral) {
   openModal('career-modal');
 }
 
+window.openCareerApplicationModal = openCareerApplicationModal;
+
 function updateFileLabel(input, isGeneral = false) {
   const lbl = document.getElementById('cv-label');
   if (!lbl) return;
@@ -186,6 +234,8 @@ function updateFileLabel(input, isGeneral = false) {
     : (req ? 'Choose required CV file' : 'Choose CV file');
 }
 
+window.updateFileLabel = updateFileLabel;
+
 function submitApplyForm(e, careerId, isGeneral = false) {
   e.preventDefault();
   const form     = e.target;
@@ -193,7 +243,7 @@ function submitApplyForm(e, careerId, isGeneral = false) {
   const lang     = document.documentElement.getAttribute('data-lang') || 'en';
   const settings = getData('siteSettings');
   const hrEmail  = settings.hrEmail || 'hr@amgcontracting.com';
-  const careers  = getData('careers') || [];
+  const careers  = (getData('careers') || []).map(normalizeCareerItem);
   const job      = careers.find(c => c.id === careerId);
   const jobTitle = isGeneral
     ? (lang === 'ar' ? 'طلب عام / إرسال سيرة ذاتية' : 'General CV Submission')
@@ -204,6 +254,7 @@ function submitApplyForm(e, careerId, isGeneral = false) {
   data.append('hr_email', hrEmail);
   data.append('job_title', jobTitle);
   data.append('application_type', isGeneral ? 'general' : 'job');
+  data.append('career_id', careerId || '');
   data.append('lang', lang);
   data.append('required_config', JSON.stringify(requiredConfig));
 
@@ -242,5 +293,7 @@ function submitApplyForm(e, careerId, isGeneral = false) {
     })
     .finally(() => { btn.disabled=false; btn.textContent=lang==='ar'?'إرسال الطلب':'Submit Application'; });
 }
+
+window.submitApplyForm = submitApplyForm;
 
 document.addEventListener('DOMContentLoaded', renderCareers);

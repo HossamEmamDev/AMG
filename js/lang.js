@@ -52,6 +52,7 @@ function setLang(lang) {
   /* Re-render dynamic sections */
   safeRun('renderProjects');
   safeRun('renderCareers');
+  safeRun('applyCareersPageContent');
   safeRun('renderAllCareers');
   safeRun('renderServices');
   safeRun('renderPartners');

@@ -7,6 +7,8 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
+require_once __DIR__ . '/inbox_store.php';
+
 function sanitize($val) {
     return htmlspecialchars(strip_tags(trim($val)), ENT_QUOTES, 'UTF-8');
 }
@@ -27,6 +29,7 @@ $message    = sanitize($_POST['message']    ?? '');
 $jobTitle   = sanitize($_POST['job_title']  ?? 'Open Application');
 $hrEmail    = sanitize($_POST['hr_email']   ?? 'hr@amgcontracting.com');
 $applicationType = sanitize($_POST['application_type'] ?? 'job');
+$careerId   = isset($_POST['career_id']) ? (int) $_POST['career_id'] : null;
 $lang       = sanitize($_POST['lang']       ?? 'en');
 $requiredConfig = json_decode($_POST['required_config'] ?? '{}', true);
 
@@ -145,4 +148,20 @@ if ($cvAttachment) {
 }
 
 $sent = mail($hrEmail, $emailSubject, $body, $headers);
+if ($sent) {
+    inbox_append_item('applications', [
+        'careerId' => $careerId ?? null,
+        'jobTitle' => $jobTitle ?: 'Open Application',
+        'type' => $applicationType,
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'linkedin' => $linkedin,
+        'education' => $education,
+        'experience' => $experience,
+        'message' => $message,
+        'cvName' => $cvAttachment['name'] ?? '',
+        'date' => gmdate('c'),
+    ]);
+}
 jsonResponse($sent, $sent ? 'Application sent' : 'Mail delivery failed');

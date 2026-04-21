@@ -1,1 +1,38 @@
 /* Contact section styles already in partners.css */
+
+.phone-country-select {
+  font-size: 0.9rem;
+  font-weight: 700;
+  width: 200px;
+  min-width: 200px;
+  text-align: start;
+  direction: ltr;
+}
+
+.phone-country-select option {
+  color: #111111;
+  background: #ffffff;
+}
+
+.phone-input-wrap {
+  grid-template-columns: 200px minmax(0, 1fr);
+}
+
+.contact-attachment-group {
+  width: 100%;
+}
+
+.contact-file-label {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .phone-country-select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .phone-input-wrap {
+    grid-template-columns: 1fr;
+  }
+}

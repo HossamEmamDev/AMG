@@ -205,6 +205,7 @@ body {
 .msg-row-email { font-size:0.76rem; color:var(--db-accent); margin-bottom:5px; }
 .msg-row-subject { font-size:0.80rem; font-weight:700; color:var(--db-text); margin-bottom:3px; }
 .msg-row-body { font-size:0.78rem; color:var(--db-muted); }
+.msg-row-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:10px; }
 .empty-state { text-align:center; padding:44px; color:var(--db-muted); }
 .empty-state i { font-size:2.5rem; margin-bottom:10px; opacity:.25; display:block; }
 

@@ -33,6 +33,7 @@
   background: var(--gold-light);
 }
 
+.who-we-are-copy h1,
 .who-we-are-copy h2 {
   color: var(--white);
   margin: 0;
@@ -200,7 +201,7 @@
   .group-grid { grid-template-columns: 1fr; }
 }
 
-/* Phone: stack image on top */
+/* Phone: keep desktop-style side image, but compact */
 @media (max-width: 520px) {
   .who-we-are-shell { padding: 18px; }
   .who-we-are-visual { min-height: 220px; }
@@ -220,14 +221,33 @@
     padding: 14px 15px;
     gap: 8px;
   }
-  .group-card { grid-template-columns: 1fr; }
-  [data-lang="ar"] .group-card { grid-template-columns: 1fr; }
-  .group-card-image { height: clamp(140px, 35vw, 180px); min-height: unset; order: 1 !important; }
-  .group-card-body  { order: 2 !important; text-align: left; padding: 14px 16px; }
+  .group-card {
+    grid-template-columns: 112px minmax(0, 1fr);
+    min-height: 0;
+  }
+  [data-lang="ar"] .group-card { grid-template-columns: minmax(0, 1fr) 112px; }
+  .group-card-image {
+    height: 100%;
+    min-height: 104px;
+    order: 1;
+  }
+  .group-card-image img {
+    object-fit: cover;
+  }
+  .group-card-body  { order: 2; text-align: left; padding: 8px 9px; gap: 4px; }
+  .group-card-body h3 { font-size: 0.78rem; line-height: 1.15; }
+  .group-card-body p {
+    font-size: 0.62rem;
+    line-height: 1.32;
+    -webkit-line-clamp: 2;
+  }
+  .group-card-flag { font-size: 0.48rem; letter-spacing: 0.9px; }
   [data-lang="ar"] .group-card-body { text-align: right; }
-  .group-card-overlay { opacity: 1; position: static; background: rgba(20,18,14,0.94); justify-content: stretch; }
-  .group-card-cta { width: 100%; min-width: 0; }
-  .group-links { flex-direction: column; gap: 8px; }
+  [data-lang="ar"] .group-card-image { order: 2; }
+  [data-lang="ar"] .group-card-body { order: 1; }
+  .group-card-overlay { display: none; }
+  .group-links { flex-direction: column; gap: 3px; }
+  .group-link { font-size: 0.5rem; letter-spacing: 0.8px; }
 }
 
 /* ===== ORGANIZATIONAL CHART ===== */

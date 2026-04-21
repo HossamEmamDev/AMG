@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMG Website Features & Delivery Scope</title>
+  <style>
+    :root {
+      --ink: #1d1a16;
+      --muted: #6b6258;
+      --line: #dcc8a7;
+      --gold: #c99664;
+      --gold-deep: #9a6a2d;
+      --paper: #fbf8f3;
+      --card: #ffffff;
+      --dark: #161616;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: #e9e3d8; color: var(--ink); }
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 297mm;
+      min-height: 210mm;
+      margin: 0 auto;
+      background: var(--paper);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.12);
+    }
+
+    .page-inner {
+      padding: 18mm 16mm;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at top right, rgba(201,150,100,0.28), transparent 28%),
+        linear-gradient(135deg, #181716 0%, #221c15 42%, #f6efe4 42%, #fbf8f3 100%);
+      color: #fff;
+      min-height: 210mm;
+    }
+
+    .hero .page-inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 210mm;
+      padding-bottom: 18mm;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand-row img {
+      width: 88px;
+      height: 88px;
+      object-fit: contain;
+      background: rgba(255,255,255,0.95);
+      padding: 10px;
+      border-radius: 18px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.16);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 11px;
+      font-weight: 700;
+      color: #f2d8b8;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.05;
+      font-family: "Arial Narrow", "Segoe UI", Arial, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-title {
+      max-width: 720px;
+      font-size: 34px;
+      margin-top: 18px;
+    }
+
+    .hero-title span {
+      color: #f0c98f;
+    }
+
+    .hero-subtitle {
+      max-width: 640px;
+      margin-top: 18px;
+      font-size: 15px;
+      color: rgba(255,255,255,0.78);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      align-items: end;
+    }
+
+    .summary-card,
+    .metric-card,
+    .content-card {
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(201,150,100,0.24);
+      color: var(--ink);
+    }
+
+    .summary-card {
+      padding: 18px;
+      border-radius: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .summary-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .summary-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .cover-credit {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(201,150,100,0.24);
+    }
+
+    .cover-credit strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--dark);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .cover-credit p {
+      margin: 0 0 5px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .cover-credit a {
+      color: var(--gold-deep);
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .metric-card {
+      padding: 16px;
+      border-radius: 18px;
+      min-height: 110px;
+    }
+
+    .metric-card strong {
+      display: block;
+      font-size: 28px;
+      color: var(--gold-deep);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric-card span {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .metric-card p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--ink);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--line);
+    }
+
+    .section-head .eyebrow {
+      color: var(--gold-deep);
+    }
+
+    .section-head h2 {
+      font-size: 28px;
+    }
+
+    .section-note {
+      max-width: 280px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .cards-2,
+    .cards-3 {
+      display: grid;
+      gap: 14px;
+    }
+
+    .cards-2 { grid-template-columns: repeat(2, 1fr); }
+    .cards-3 { grid-template-columns: repeat(3, 1fr); }
+
+    .content-card {
+      border-radius: 18px;
+      padding: 16px;
+      background: linear-gradient(180deg, #fff 0%, #fcf8f2 100%);
+    }
+
+    .content-card h3 {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .content-card p {
+      margin: 0 0 8px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+
+    li {
+      margin-bottom: 6px;
+      font-size: 12.5px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .visual-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .visual-card {
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(201,150,100,0.24);
+      background: #fff;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.08);
+    }
+
+    .visual-card img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      background: #f2ede3;
+    }
+
+    .visual-card figcaption {
+      padding: 12px 14px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .visual-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 12.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .feature-box {
+      border: 1px solid rgba(201,150,100,0.22);
+      border-radius: 16px;
+      padding: 14px;
+      background: rgba(255,255,255,0.7);
+    }
+
+    .feature-box h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(201,150,100,0.14);
+      border: 1px solid rgba(201,150,100,0.26);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold-deep);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .timeline-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-deep);
+      padding-top: 4px;
+    }
+
+    .timeline-body {
+      border-left: 2px solid var(--line);
+      padding-left: 14px;
+    }
+
+    .timeline-body h3 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .designer-credit {
+      margin-top: 22px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(201,150,100,0.24);
+      background: linear-gradient(180deg, #fff 0%, #f9f4ec 100%);
+    }
+
+    .designer-credit h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .designer-credit p {
+      margin: 0 0 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .designer-credit a {
+      color: var(--gold-deep);
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .footer-strip {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    @media print {
+      html, body { background: transparent; }
+      .page {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+        break-after: page;
+      }
+      .page:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="page hero">
+    <div class="page-inner">
+      <div class="brand-row">
+        <div>
+          <div class="eyebrow">Website Sales Brochure</div>
+          <h1 class="hero-title">AMG Main Contracting <span>Website Feature Portfolio</span></h1>
+          <p class="hero-subtitle">
+            A premium bilingual corporate website and admin dashboard built for presentation, lead generation, recruitment,
+            project showcasing, SEO readiness, and day-to-day content management.
+          </p>
+        </div>
+        <img src="assets/images/logo/amg-logo.jpeg" alt="AMG Main Contracting" />
+      </div>
+
+      <div class="hero-grid">
+        <div class="summary-card">
+          <h3>Executive Summary</h3>
+          <p>
+            This website was developed as a full digital company platform, not only a static landing page.
+            It combines premium brand presentation, multilingual public pages, lead capture, career recruitment,
+            project showcase tools, SEO controls, analytics integration, and a working admin dashboard for content operations.
+          </p>
+          <div class="cover-credit">
+            <strong>Designer & Developer</strong>
+            <p>Hossam Emam</p>
+            <p>Email: <a href="mailto:hossamemamdev@gmail.com">hossamemamdev@gmail.com</a></p>
+            <p>Phone: 01124711154</p>
+            <p>LinkedIn: <a href="https://www.linkedin.com/in/hossamemamdev/" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/hossamemamdev/</a></p>
+          </div>
+        </div>
+        <div class="metrics">
+          <div class="metric-card">
+            <span>Public Pages</span>
+            <strong>2+</strong>
+            <p>Main landing page and dedicated careers page, with modal-based detail views.</p>
+          </div>
+          <div class="metric-card">
+            <span>Admin Panels</span>
+            <strong>10+</strong>
+            <p>Dashboard modules for content, SEO, careers, projects, inbox, settings, and more.</p>
+          </div>
+          <div class="metric-card">
+            <span>Languages</span>
+            <strong>2</strong>
+            <p>Full English and Arabic support with RTL/LTR behavior and translated content fields.</p>
+          </div>
+          <div class="metric-card">
+            <span>Business Goals</span>
+            <strong>4</strong>
+            <p>Branding, lead generation, recruitment, and operational self-management.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="page-inner">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Public Website</div>
+          <h2>Core Frontend Features</h2>
+        </div>
+        <div class="section-note">Designed as a premium contractor website optimized for credibility, conversion, and ease of content updates.</div>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-box">
+          <h3>Hero Section with Premium Brand Positioning</h3>
+          <ul>
+            <li>Video-enabled hero area with branded copy and CTA buttons.</li>
+            <li>Dynamic hero titles, subtitle, and statistics managed from settings.</li>
+            <li>Strong first-screen layout intended for high-end corporate presentation.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Who We Are / Group Introduction</h3>
+          <ul>
+            <li>Dedicated company identity section with main group positioning.</li>
+            <li>Visual stage, logo emphasis, group profile CTA, and delivery footprint summary.</li>
+            <li>SEO-focused heading structure with company-name emphasis.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Group Companies Showcase</h3>
+          <ul>
+            <li>Dynamic company cards rendered from dashboard-managed data.</li>
+            <li>Per-company image, description, location, profile download, and website link.</li>
+            <li>Mobile-optimized layout adjustments for compact browsing.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Mission & Vision Storytelling</h3>
+          <ul>
+            <li>Editorial two-card presentation for mission and vision content.</li>
+            <li>Supports bilingual messaging and branding consistency.</li>
+            <li>Structured to strengthen corporate trust and strategic narrative.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Services Presentation</h3>
+          <ul>
+            <li>Service blocks managed through admin CRUD tools.</li>
+            <li>Premium presentation style aligned with construction / engineering sectors.</li>
+            <li>Icon-supported layout for readability and visual hierarchy.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Featured Projects Slider</h3>
+          <ul>
+            <li>Interactive featured projects slider with progress percentages.</li>
+            <li>Project card detail area includes category, brief, company, location, and year.</li>
+            <li>Mobile refinements completed to improve content visibility.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Project Detail & Explorer</h3>
+          <ul>
+            <li>Project modal with gallery support and branded image download.</li>
+            <li>“View all projects” explorer with search, filters, sort, and status logic.</li>
+            <li>Supports structured project portfolios for sales and operations.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Organizational Chart Module</h3>
+          <ul>
+            <li>Dedicated leadership structure section with modal-based full view.</li>
+            <li>Visual editorial intro, stats, principles, and hierarchy display.</li>
+            <li>Managed from a dedicated admin interface.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="badge-row">
+        <span class="badge">Premium UI</span>
+        <span class="badge">Responsive Layout</span>
+        <span class="badge">Mobile Optimized</span>
+        <span class="badge">Arabic + English</span>
+        <span class="badge">Interactive Modals</span>
+        <span class="badge">Dynamic Sections</span>
+      </div>
+
+      <div class="visual-grid">
+        <div class="visual-stack">
+          <figure class="visual-card">
+            <img src="assets/images/amjaad.avif" alt="AMG group company visual" />
+            <figcaption>
+              <strong>Group Company Showcase</strong>
+              Representative visual used in the website’s group-company presentation modules.
+            </figcaption>
+          </figure>
+          <figure class="visual-card">
+            <img src="assets/images/projects/new giza/Picture56.jpg" alt="AMG project showcase visual" />
+            <figcaption>
+              <strong>Project Portfolio Visual</strong>
+              Real project media used in the featured-projects and project-detail sections.
+            </figcaption>
+          </figure>
+        </div>
+        <figure class="visual-card">
+          <img src="assets/images/projects/sipra/Picture66.jpg" alt="Construction project visual" />
+          <figcaption>
+            <strong>Project Portfolio Visual</strong>
+            Real project media used in the featured-projects and project-detail sections.
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="footer-strip">
+        <div>Document Scope: Public site feature summary</div>
+        <div>Prepared for sales presentation / client handover</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="page-inner">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Conversion Features</div>
+          <h2>Lead Generation, Careers & Engagement</h2>
+        </div>
+        <div class="section-note">Built to capture business inquiries, HR leads, and trust signals through structured contact and recruitment flows.</div>
+      </div>
+
+      <div class="cards-2">
+        <div class="content-card">
+          <h3>Contact System</h3>
+          <ul>
+            <li>Bilingual contact form with name, email, phone, subject, message, and attachment.</li>
+            <li>Country-code selector with flags and mobile-friendly phone input behavior.</li>
+            <li>Server-side email delivery plus dashboard inbox storage for submissions.</li>
+            <li>Contact details, social links, and address managed centrally.</li>
+          </ul>
+        </div>
+        <div class="content-card">
+          <h3>Careers & Recruitment</h3>
+          <ul>
+            <li>Dedicated careers section on homepage and standalone full careers page.</li>
+            <li>Job listing cards, “apply” modal, and separate general CV submission flow.</li>
+            <li>HR email delivery with CV attachment handling and dashboard applications log.</li>
+            <li>Supports future recruitment scaling without redesign.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cards-3" style="margin-top:14px">
+        <div class="content-card">
+          <h3>Partners</h3>
+          <p>Brand-trust section for displaying partner logos and strengthening corporate positioning.</p>
+        </div>
+        <div class="content-card">
+          <h3>Testimonials</h3>
+          <p>Client and partner feedback blocks to support credibility and social proof.</p>
+        </div>
+        <div class="content-card">
+          <h3>WhatsApp & Direct Contact</h3>
+          <p>Immediate-action communication channel for faster customer engagement and sales follow-up.</p>
+        </div>
+      </div>
+
+      <div class="visual-grid" style="grid-template-columns: 1fr 1fr; margin-top:20px">
+        <figure class="visual-card">
+          <img src="assets/images/electrocivic.avif" alt="Electrocivic visual used in website assets" />
+          <figcaption>
+            <strong>Brand Asset Quality</strong>
+            Dedicated media assets prepared for corporate group entities and public-facing company storytelling.
+          </figcaption>
+        </figure>
+        <figure class="visual-card">
+          <img src="assets/images/projects/new giza/Picture55.jpg" alt="Construction project visual" />
+          <figcaption>
+            <strong>Construction Content Support</strong>
+            High-value media suitable for project sliders, case studies, and client-facing portfolio material.
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="section-head" style="margin-top:26px">
+        <div>
+          <div class="eyebrow">Admin CMS</div>
+          <h2>Dashboard & Content Management Scope</h2>
+        </div>
+        <div class="section-note">The website is not dependent on developers for every small update. A custom admin dashboard is included.</div>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-box">
+          <h3>Site Settings Control</h3>
+          <ul>
+            <li>Logo, favicon, colors, fonts, contact details, HR email, and brand settings.</li>
+            <li>Hero content and primary website presentation variables.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>SEO Dashboard</h3>
+          <ul>
+            <li>Meta title, description, keywords, canonical base, verification codes.</li>
+            <li>Google Analytics, Google Tag Manager, schema data, and robots controls.</li>
+            <li>Auto-updating sitemap and robots generation linked to SEO saves.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Sections Management</h3>
+          <ul>
+            <li>Show/hide sections and control navigation visibility.</li>
+            <li>Section ordering and built-in section title customization.</li>
+            <li>Support for custom sections in addition to standard modules.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Full CRUD Modules</h3>
+          <ul>
+            <li>Services, projects, project companies, careers, partners, testimonials, group companies.</li>
+            <li>Organizational chart and mission/vision management.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Inbox Management</h3>
+          <ul>
+            <li>Messages and job applications stored server-side and shown in dashboard.</li>
+            <li>Unread badge, read-state sync, export CSV, and delete actions.</li>
+          </ul>
+        </div>
+        <div class="feature-box">
+          <h3>Operational Independence</h3>
+          <ul>
+            <li>Designed so non-technical users can maintain core content after handover.</li>
+            <li>Reduces post-sale maintenance dependency.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-strip">
+        <div>Document Scope: Conversion systems + admin CMS scope</div>
+        <div>Operational value: reduces future maintenance cost</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="page-inner">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Technical Value</div>
+          <h2>Implementation Effort & Deliverables</h2>
+        </div>
+        <div class="section-note">This section summarizes the real work invested beyond visible design: structure, logic, backend handling, localization, and maintainability.</div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-label">Architecture</div>
+          <div class="timeline-body">
+            <h3>Structured Multi-File Frontend</h3>
+            <p>Separated CSS and JavaScript modules for hero, sections, projects, careers, contact, animations, and reusable base styles.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">Localization</div>
+          <div class="timeline-body">
+            <h3>Bilingual Content Engine</h3>
+            <p>English and Arabic content handling, RTL/LTR switching, dynamic labels, translated placeholders, and multilingual admin-editable fields.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">Dynamic Data</div>
+          <div class="timeline-body">
+            <h3>Settings + Data Layer</h3>
+            <p>Default data model, local storage data layer, server persistence, dynamic settings application, and feature toggles across public pages.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">Backend</div>
+          <div class="timeline-body">
+            <h3>PHP Integration</h3>
+            <p>Contact mailer, application mailer, dashboard save endpoint, server inbox storage, SEO synchronization, sitemap generation, and message-state APIs.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">SEO</div>
+          <div class="timeline-body">
+            <h3>Search Readiness</h3>
+            <p>Metadata controls, verification support, analytics tags, sitemap/robots generation, canonical controls, and heading structure optimization.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-label">Refinement</div>
+          <div class="timeline-body">
+            <h3>Responsive QA & Iteration</h3>
+            <p>Mobile-specific fixes for cards, project details, phone field behavior, dashboard inbox visibility, and other UX adjustments during delivery.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cards-2" style="margin-top:22px">
+        <div class="content-card">
+          <h3>Included Deliverables</h3>
+          <ul>
+            <li>Main bilingual corporate landing page</li>
+            <li>Standalone careers page</li>
+            <li>Custom admin dashboard</li>
+            <li>Contact and careers email flows</li>
+            <li>Server-side message/application storage</li>
+            <li>SEO management and sitemap automation</li>
+          </ul>
+        </div>
+        <div class="content-card">
+          <h3>Commercial Value to Buyer</h3>
+          <ul>
+            <li>Ready for company presentation and lead generation</li>
+            <li>Supports internal updates without constant developer dependency</li>
+            <li>Combines marketing site, recruitment portal, and operational CMS</li>
+            <li>More valuable than a static brochure site due to management tools and backend workflows</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="designer-credit">
+        <h3>Designer & Developer</h3>
+        <p><strong>Hossam Emam</strong></p>
+        <p>Email: <a href="mailto:hossamemamdev@gmail.com">hossamemamdev@gmail.com</a></p>
+        <p>Phone: 01124711154</p>
+        <p>LinkedIn: <a href="https://www.linkedin.com/in/hossamemamdev/" target="_blank" rel="noopener noreferrer">https://www.linkedin.com/in/hossamemamdev/</a></p>
+      </div>
+
+      <div class="footer-strip">
+        <div>Prepared for: Website sale / delivery presentation</div>
+        <div>Suggested export: Browser Print → Save as PDF</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

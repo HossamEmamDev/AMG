@@ -9,9 +9,34 @@ const CONTACT_COUNTRIES = [
   { flag: '🇶🇦', code: '+974', label_en: 'Qatar', label_ar: 'قطر' },
   { flag: '🇧🇭', code: '+973', label_en: 'Bahrain', label_ar: 'البحرين' },
   { flag: '🇴🇲', code: '+968', label_en: 'Oman', label_ar: 'عُمان' },
+  { flag: '🇯🇴', code: '+962', label_en: 'Jordan', label_ar: 'الأردن' },
+  { flag: '🇱🇧', code: '+961', label_en: 'Lebanon', label_ar: 'لبنان' },
+  { flag: '🇮🇶', code: '+964', label_en: 'Iraq', label_ar: 'العراق' },
+  { flag: '🇵🇸', code: '+970', label_en: 'Palestine', label_ar: 'فلسطين' },
+  { flag: '🇹🇷', code: '+90', label_en: 'Turkey', label_ar: 'تركيا' },
   { flag: '🇬🇧', code: '+44', label_en: 'United Kingdom', label_ar: 'المملكة المتحدة' },
   { flag: '🇺🇸', code: '+1', label_en: 'United States', label_ar: 'الولايات المتحدة' },
+  { flag: '🇨🇦', code: '+1', label_en: 'Canada', label_ar: 'كندا' },
+  { flag: '🇩🇪', code: '+49', label_en: 'Germany', label_ar: 'ألمانيا' },
+  { flag: '🇫🇷', code: '+33', label_en: 'France', label_ar: 'فرنسا' },
+  { flag: '🇮🇹', code: '+39', label_en: 'Italy', label_ar: 'إيطاليا' },
+  { flag: '🇪🇸', code: '+34', label_en: 'Spain', label_ar: 'إسبانيا' },
+  { flag: '🇳🇱', code: '+31', label_en: 'Netherlands', label_ar: 'هولندا' },
+  { flag: '🇨🇭', code: '+41', label_en: 'Switzerland', label_ar: 'سويسرا' },
+  { flag: '🇮🇳', code: '+91', label_en: 'India', label_ar: 'الهند' },
+  { flag: '🇵🇰', code: '+92', label_en: 'Pakistan', label_ar: 'باكستان' },
+  { flag: '🇧🇩', code: '+880', label_en: 'Bangladesh', label_ar: 'بنغلاديش' },
+  { flag: '🇨🇳', code: '+86', label_en: 'China', label_ar: 'الصين' },
+  { flag: '🇯🇵', code: '+81', label_en: 'Japan', label_ar: 'اليابان' },
+  { flag: '🇦🇺', code: '+61', label_en: 'Australia', label_ar: 'أستراليا' },
 ];
+
+function formatContactCountryOption(item, lang) {
+  const label = lang === 'ar' ? item.label_ar || item.label_en : item.label_en || item.label_ar;
+  return lang === 'ar'
+    ? `${item.flag} ${label} (${item.code})`
+    : `${item.flag} ${label} (${item.code})`;
+}
 
 function syncContactPhoneValue(form) {
   const country = form.querySelector('#contact-country-code');
@@ -26,10 +51,11 @@ function updateContactPhoneUi() {
   const select = document.getElementById('contact-country-code');
   if (!select) return;
   const lang = document.documentElement.getAttribute('data-lang') || 'en';
+  select.setAttribute('aria-label', lang === 'ar' ? 'كود الدولة' : 'Country code');
   Array.from(select.options).forEach((option) => {
-    const match = CONTACT_COUNTRIES.find((item) => item.code === option.value);
+    const match = CONTACT_COUNTRIES.find((item) => item.code === option.value && item.label_en === option.dataset.labelEn);
     if (!match) return;
-    option.textContent = `${match.flag} ${match.code} ${match['label_' + lang]}`;
+    option.textContent = formatContactCountryOption(match, lang);
   });
 }
 
@@ -40,7 +66,7 @@ function initContactPhoneField() {
   if (!select || !local || !form || select.options.length) return;
 
   select.innerHTML = CONTACT_COUNTRIES.map((item) =>
-    `<option value="${item.code}" ${item.code === '+20' ? 'selected' : ''}>${item.flag} ${item.code} ${item.label_en}</option>`
+    `<option value="${item.code}" data-label-en="${item.label_en}" ${item.code === '+20' ? 'selected' : ''}>${formatContactCountryOption(item, 'en')}</option>`
   ).join('');
 
   updateContactPhoneUi();

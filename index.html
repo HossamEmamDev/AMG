@@ -11,13 +11,13 @@
   <!-- Open Graph -->
   <meta property="og:title" content="AMG Main Contracting" />
   <meta property="og:description" content="Building the Future Across Egypt & Saudi Arabia" />
-  <meta property="og:image" content="assets/images/amg-logo.jpeg" />
+  <meta property="og:image" content="https://amg-main.com/assets/images/og/amg-og-cover.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="" />
+  <meta property="og:url" content="https://amg-main.com/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="AMG Main Contracting" />
   <meta name="twitter:description" content="Building the Future Across Egypt & Saudi Arabia" />
-  <meta name="twitter:image" content="assets/images/amg-logo.jpeg" />
+  <meta name="twitter:image" content="https://amg-main.com/assets/images/og/amg-og-cover.png" />
   <meta name="author" content="AMG Main Contracting Group" />
   <meta name="application-name" content="AMG Main Contracting" />
   <meta name="theme-color" content="#C99664" />
@@ -25,8 +25,8 @@
   <meta property="og:locale" content="en_US" />
   <meta name="google-site-verification" content="" />
   <meta name="msvalidate.01" content="" />
-  <link rel="canonical" href="" />
-  <link rel="icon" id="favicon-link" href="assets/images/amg-logo.jpeg" type="image/jpeg" />
+  <link rel="canonical" href="https://amg-main.com/" />
+  <link rel="icon" id="favicon-link" href="assets/images/logo/amg-logo.jpeg" type="image/jpeg" />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -134,11 +134,11 @@
             data-ar="مجموعة AMG للمقاولات الرئيسية">AMG Main Contracting Group</span>
         </div>
 
-        <h1 class="hero-title" id="hero-title">
+        <h2 class="hero-title" id="hero-title">
           <span data-en="We Build" data-ar="نحن نبني">We Build</span>
           <span class="accent" data-en="Iconic Landmarks" data-ar="معالم أيقونية">Iconic Landmarks</span>
           <span data-en="With Precision & Integrity" data-ar="بدقة ومصداقية">With Precision & Integrity</span>
-        </h1>
+        </h2>
 
         <p class="hero-subtitle" id="hero-subtitle">Premium construction, civil &amp; electromechanical solutions across Egypt and Saudi Arabia — on time, built to last.</p>
 
@@ -174,7 +174,7 @@
       <div class="who-we-are-shell">
         <div class="who-we-are-copy">
           <span class="section-tag" id="who-we-are-tag" data-en="Who We Are" data-ar="من نحن">Who We Are</span>
-          <h2 id="who-we-are-title" data-en="AMG Main Contracting Group" data-ar="مجموعة AMG للمقاولات الرئيسية">AMG Main Contracting Group</h2>
+          <h1 id="who-we-are-title" data-en="AMG Main Contracting Group" data-ar="مجموعة AMG للمقاولات الرئيسية">AMG Main Contracting Group</h1>
           <p id="who-we-are-subtitle" data-en="A concise introduction to the group, its positioning, and a premium company profile entry point."
             data-ar="نبذة مختصرة عن المجموعة ومكانتها ونقطة دخول احترافية إلى بروفايل الشركة.">
             A concise introduction to the group, its positioning, and a premium company profile entry point.
@@ -183,7 +183,7 @@
             AMG Main Contracting Group delivers integrated construction, civil, MEP, and fit-out capabilities through a multi-company structure built for dependable execution and premium project delivery.
           </p>
           <div class="who-we-are-actions">
-            <a class="btn btn-outline" id="who-we-are-profile-cta" href="javascript:void(0)" data-en="Download Company Profile" data-ar="تحميل بروفايل الشركة">Download Company Profile</a>
+            <a class="btn btn-primary" id="who-we-are-profile-cta" href="javascript:void(0)" data-en="Download Company Profile" data-ar="تحميل بروفايل الشركة">Download Company Profile</a>
           </div>
         </div>
         <div class="who-we-are-visual">
@@ -477,11 +477,13 @@
           <div class="form-row">
             <div class="form-group">
               <label data-en="Your Name" data-ar="اسمك">Your Name</label>
-              <input type="text" name="name" placeholder="John Doe" />
+              <input type="text" name="name" placeholder="John Doe" data-placeholder-en="John Doe"
+                data-placeholder-ar="الاسم الكامل" />
             </div>
             <div class="form-group">
               <label data-en="Email Address" data-ar="البريد الإلكتروني">Email Address</label>
-              <input type="email" name="email" placeholder="you@example.com" />
+              <input type="email" name="email" placeholder="you@example.com" data-placeholder-en="you@example.com"
+                data-placeholder-ar="البريد@الإلكتروني.com" />
             </div>
           </div>
           <div class="form-row">
@@ -494,22 +496,24 @@
                 <input type="hidden" id="contact-phone-full" name="phone" />
               </div>
             </div>
-            <div class="form-group">
-              <label data-en="Attachment" data-ar="مرفق">Attachment</label>
-              <label class="file-input-label contact-file-label" for="contact-attachment">
-                <i class="fas fa-paperclip"></i>
-                <span id="contact-file-label" data-en="Attach file (optional)" data-ar="أرفق ملفًا اختياريًا">Attach file (optional)</span>
-              </label>
-              <input type="file" id="contact-attachment" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="updateContactFileLabel(this)" />
-            </div>
+          </div>
+          <div class="form-group contact-attachment-group">
+            <label data-en="Attachment" data-ar="مرفق">Attachment</label>
+            <label class="file-input-label contact-file-label" for="contact-attachment">
+              <i class="fas fa-paperclip"></i>
+              <span id="contact-file-label" data-en="Attach file (optional)" data-ar="أرفق ملفًا اختياريًا">Attach file (optional)</span>
+            </label>
+            <input type="file" id="contact-attachment" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="updateContactFileLabel(this)" />
           </div>
           <div class="form-group">
             <label data-en="Subject" data-ar="الموضوع">Subject</label>
-            <input type="text" name="subject" />
+            <input type="text" name="subject" data-placeholder-en="How can we help?"
+              data-placeholder-ar="كيف يمكننا مساعدتك؟" placeholder="How can we help?" />
           </div>
           <div class="form-group">
             <label data-en="Message" data-ar="رسالتك">Message</label>
-            <textarea name="message" rows="5"></textarea>
+            <textarea name="message" rows="5" data-placeholder-en="Tell us about your inquiry..."
+              data-placeholder-ar="اكتب تفاصيل رسالتك هنا..." placeholder="Tell us about your inquiry..."></textarea>
           </div>
           <button type="submit" class="btn btn-primary" data-en="Send Message" data-ar="إرسال الرسالة">Send
             Message</button>

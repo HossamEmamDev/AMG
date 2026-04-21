@@ -9,13 +9,13 @@
   <meta name="robots" content="index, follow" />
   <meta property="og:title" content="Careers — AMG Main Contracting" />
   <meta property="og:description" content="Discover career opportunities at AMG Main Contracting Group." />
-  <meta property="og:image" content="assets/images/amg-logo.jpeg" />
+  <meta property="og:image" content="https://amg-main.com/assets/images/og/amg-og-cover.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="" />
+  <meta property="og:url" content="https://amg-main.com/careers.html" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Careers — AMG Main Contracting" />
   <meta name="twitter:description" content="Discover career opportunities at AMG Main Contracting Group." />
-  <meta name="twitter:image" content="assets/images/amg-logo.jpeg" />
+  <meta name="twitter:image" content="https://amg-main.com/assets/images/og/amg-og-cover.png" />
   <meta name="author" content="AMG Main Contracting Group" />
   <meta name="application-name" content="AMG Careers" />
   <meta name="theme-color" content="#C99664" />
@@ -23,8 +23,13 @@
   <meta property="og:locale" content="en_US" />
   <meta name="google-site-verification" content="" />
   <meta name="msvalidate.01" content="" />
-  <link rel="canonical" href="" />
-  <link rel="icon" id="favicon-link" href="assets/images/amg-logo.jpeg" />
+  <link rel="canonical" href="https://amg-main.com/careers.html" />
+  <link rel="icon" id="favicon-link" href="assets/images/logo/amg-logo.jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Barlow:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
@@ -68,7 +73,6 @@
         <a href="#careers-grid-full" data-en="Careers" data-ar="الوظائف">Careers <i class="fa fa-chevron-down"></i></a>
         <ul class="dropdown">
           <li><a href="#careers-grid-full" data-en="All Careers" data-ar="كل الوظائف">All Careers</a></li>
-          <li><a href="javascript:void(0)" onclick="openGeneralCvModal()" data-en="Submit Your CV" data-ar="أرسل سيرتك الذاتية">Submit Your CV</a></li>
           <li><a href="index.html#contact" data-en="Contact" data-ar="اتصل بنا">Contact</a></li>
         </ul>
       </li>
@@ -82,53 +86,82 @@
   </div>
 </nav>
 
-<div class="careers-page-hero">
-  <div class="container" style="position:relative;z-index:1">
-    <span class="section-tag" data-en="Join Our Team" data-ar="انضم لفريقنا">Join Our Team</span>
-    <h1 data-en="Career Opportunities" data-ar="الفرص الوظيفية">Career Opportunities</h1>
-    <p data-en="Build your career with AMG Main Contracting Group — where excellence meets opportunity." data-ar="ابنِ مسيرتك المهنية مع مجموعة AMG للمقاولات الرئيسية — حيث يلتقي التميز بالفرصة.">
-      Build your career with AMG Main Contracting Group — where excellence meets opportunity.
-    </p>
-    <div style="margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-primary" type="button" onclick="openGeneralCvModal()" data-en="Submit Your CV" data-ar="أرسل سيرتك الذاتية">Submit Your CV</button>
-      <a href="index.html#contact" class="btn btn-outline-white" data-en="Talk To HR" data-ar="تواصل مع الموارد البشرية">Talk To HR</a>
+<section class="careers-page-hero">
+  <div class="container careers-hero-shell">
+    <div class="careers-hero-copy">
+      <span class="section-tag" data-en="Join Our Team" data-ar="انضم لفريقنا">Join Our Team</span>
+      <span class="careers-hero-kicker" id="cp-hero-kicker">Built For People Who Deliver At Scale</span>
+      <h1 id="cp-hero-title">Careers Crafted For Builders, Leaders, And High-Performance Teams</h1>
+      <p id="cp-hero-text">
+        Join AMG Main Contracting Group and work across landmark construction, MEP, infrastructure, and delivery operations in Egypt and Saudi Arabia. Explore live openings or send your CV directly to our HR team.
+      </p>
+      <div class="careers-hero-actions">
+        <a href="#career-openings" id="career-explore-btn" class="btn btn-primary" data-en="Explore Openings" data-ar="استعرض الوظائف">Explore Openings</a>
+        <button id="career-share-cv-btn" class="btn btn-outline-white careers-hero-secondary" type="button" data-en="Share Your CV" data-ar="أرسل سيرتك الذاتية">Share Your CV</button>
+      </div>
     </div>
-    <div class="careers-hero-stats">
-      <div class="careers-hero-stat">
-        <strong id="career-open-count">0</strong>
-        <span data-en="Open Roles" data-ar="وظائف متاحة">Open Roles</span>
+
+    <div class="careers-hero-panel">
+      <div class="careers-summary-card careers-summary-card-hero">
+        <span class="careers-summary-label" id="cp-summary-label">Live Listing Status</span>
+        <strong id="career-listing-summary" data-en="0 active roles" data-ar="0 وظائف نشطة">0 active roles</strong>
+        <p id="cp-summary-text">Use the filters below or send your CV directly to HR.</p>
+        <div class="careers-hero-stats">
+          <div class="careers-hero-stat">
+            <strong id="career-open-count">0</strong>
+            <span data-en="Open Roles" data-ar="وظائف متاحة">Open Roles</span>
+          </div>
+          <div class="careers-hero-stat">
+            <strong id="career-fulltime-count">0</strong>
+            <span data-en="Full-Time Tracks" data-ar="وظائف دوام كامل">Full-Time Tracks</span>
+          </div>
+          <div class="careers-hero-stat">
+            <strong data-en="2" data-ar="2">2</strong>
+            <span data-en="Core Markets" data-ar="أسواق رئيسية">Core Markets</span>
+          </div>
+        </div>
       </div>
-      <div class="careers-hero-stat">
-        <strong data-en="2" data-ar="2">2</strong>
-        <span data-en="Core Markets" data-ar="أسواق رئيسية">Core Markets</span>
-      </div>
-      <div class="careers-hero-stat">
-        <strong data-en="HR" data-ar="HR">HR</strong>
-        <span data-en="Direct CV Review" data-ar="مراجعة مباشرة للسيرة">Direct CV Review</span>
+      <div class="careers-panel-card careers-panel-card-simple">
+        <span class="careers-panel-label" id="cp-panel-label">Talent Standards</span>
+        <h2 id="cp-panel-title">We hire for ownership, site readiness, precision, and calm execution under pressure.</h2>
+        <ul class="careers-panel-points">
+          <li id="cp-panel-point1">Engineering, site, commercial, and support functions</li>
+          <li id="cp-panel-point2">Structured review with direct HR visibility</li>
+          <li id="cp-panel-point3">Open applications accepted for future opportunities</li>
+        </ul>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<section class="careers-section">
+<section class="careers-section" id="career-openings">
   <div class="container">
-    <div class="careers-intro-shell" style="margin-bottom:32px">
+    <div class="careers-intro-shell">
       <div class="careers-intro-copy">
-        <span class="careers-kicker" data-en="Luxury In Delivery, Luxury In Talent" data-ar="فخامة في التنفيذ وفخامة في استقطاب الكفاءات">Luxury In Delivery, Luxury In Talent</span>
-        <p data-en="Apply to an open role or share your CV with our HR team for future leadership, engineering, and site opportunities." data-ar="قدّم على وظيفة متاحة أو شارك سيرتك الذاتية مع فريق الموارد البشرية للفرص القيادية والهندسية والميدانية القادمة.">
-          Apply to an open role or share your CV with our HR team for future leadership, engineering, and site opportunities.
+        <span class="careers-kicker" id="cp-openings-kicker">Open Opportunities</span>
+        <h2 class="careers-section-title" id="cp-openings-title">Find The Right Role Or Submit A General Application</h2>
+        <p id="cp-openings-text">
+          Every role below is managed from the dashboard. New jobs added by your team now refresh correctly on both the homepage and this page after the site loads server data.
         </p>
       </div>
       <div class="careers-intro-cta">
-        <button class="btn btn-primary" type="button" onclick="openGeneralCvModal()" data-en="Send General Application" data-ar="إرسال طلب عام">Send General Application</button>
+        <span class="careers-intro-note" data-en="Choose a role below and submit one direct application." data-ar="اختر وظيفة من القائمة أدناه وقدّم طلباً مباشراً واحداً.">Choose a role below and submit one direct application.</span>
       </div>
     </div>
-    <div class="careers-filter" id="careers-filter">
-      <button class="filter-btn active" data-filter="all" data-en="All Positions" data-ar="جميع الوظائف" onclick="filterCareers('all', this)">All Positions</button>
-      <button class="filter-btn" data-filter="full-time" data-en="Full-Time" data-ar="دوام كامل" onclick="filterCareers('full-time', this)">Full-Time</button>
-      <button class="filter-btn" data-filter="part-time" data-en="Part-Time" data-ar="دوام جزئي" onclick="filterCareers('part-time', this)">Part-Time</button>
-      <button class="filter-btn" data-filter="contract" data-en="Contract" data-ar="عقد" onclick="filterCareers('contract', this)">Contract</button>
+
+    <div class="careers-filter-shell">
+      <div class="careers-filter-head">
+        <span class="careers-filter-label" id="cp-filters-label">Role Filters</span>
+        <p id="cp-filters-text">Switch between all positions and contract types.</p>
+      </div>
+      <div class="careers-filter" id="careers-filter">
+        <button class="filter-btn active" data-filter="all" data-en="All Positions" data-ar="جميع الوظائف" onclick="filterCareers('all', this)">All Positions</button>
+        <button class="filter-btn" data-filter="full-time" data-en="Full-Time" data-ar="دوام كامل" onclick="filterCareers('full-time', this)">Full-Time</button>
+        <button class="filter-btn" data-filter="part-time" data-en="Part-Time" data-ar="دوام جزئي" onclick="filterCareers('part-time', this)">Part-Time</button>
+        <button class="filter-btn" data-filter="contract" data-en="Contract" data-ar="عقد" onclick="filterCareers('contract', this)">Contract</button>
+      </div>
     </div>
+
     <div class="careers-grid" id="careers-grid-full"></div>
   </div>
 </section>
@@ -144,10 +177,54 @@
   document.write(`
     <script src="${window.appendVersion("js/data.js")}"><\/script>
     <script src="${window.appendVersion("js/lang.js")}"><\/script>
+    <script src="${window.appendVersion("js/main.js")}"><\/script>
     <script src="${window.appendVersion("js/careers.js")}"><\/script>
   `);
 
   function bootCareersPage() {
+    if (typeof getData !== 'function' || typeof getCareerUiStrings !== 'function') {
+      window.setTimeout(bootCareersPage, 60);
+      return;
+    }
+
+    function applyCareersPageContent() {
+      const content = {
+        ...(DEFAULT_DATA.careersPageContent || {}),
+        ...(getData('careersPageContent') || {}),
+      };
+      const lang = document.documentElement.getAttribute('data-lang') || 'en';
+      const localized = (key) => content[`${key}_${lang}`] || content[`${key}_en`] || '';
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+
+      setText('cp-hero-kicker', localized('heroKicker'));
+      setText('cp-hero-title', localized('heroTitle'));
+      setText('cp-hero-text', localized('heroText'));
+      setText('cp-panel-label', localized('panelLabel'));
+      setText('cp-panel-title', localized('panelTitle'));
+      setText('cp-panel-point1', localized('panelPoint1'));
+      setText('cp-panel-point2', localized('panelPoint2'));
+      setText('cp-panel-point3', localized('panelPoint3'));
+      setText('cp-panel-mini1', localized('panelMini1'));
+      setText('cp-panel-mini2', localized('panelMini2'));
+      setText('cp-highlight1-title', localized('highlight1Title'));
+      setText('cp-highlight1-text', localized('highlight1Text'));
+      setText('cp-highlight2-title', localized('highlight2Title'));
+      setText('cp-highlight2-text', localized('highlight2Text'));
+      setText('cp-highlight3-title', localized('highlight3Title'));
+      setText('cp-highlight3-text', localized('highlight3Text'));
+      setText('cp-openings-kicker', localized('openingsKicker'));
+      setText('cp-openings-title', localized('openingsTitle'));
+      setText('cp-openings-text', localized('openingsText'));
+      setText('cp-summary-label', localized('summaryLabel'));
+      setText('cp-summary-text', localized('summaryText'));
+      setText('cp-filters-label', localized('filtersLabel'));
+      setText('cp-filters-text', localized('filtersText'));
+    }
+
+    window.applyCareersPageContent = applyCareersPageContent;
     window.addEventListener('scroll', () => {
       document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
     });
@@ -156,63 +233,78 @@
       document.getElementById('nav-links').classList.toggle('open');
     });
 
+    const exploreBtn = document.getElementById('career-explore-btn');
+    if (exploreBtn) {
+      exploreBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        const target = document.getElementById('career-openings');
+        if (target) {
+          window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+        }
+      });
+    }
+
+    const shareCvBtn = document.getElementById('career-share-cv-btn');
+    if (shareCvBtn) {
+      shareCvBtn.addEventListener('click', () => {
+        if (typeof window.openGeneralCvModal === 'function') {
+          window.openGeneralCvModal();
+        }
+      });
+    }
+
     let currentFilter = 'all';
     window.filterCareers = function (type, btn) {
       currentFilter = type;
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderAllCareers();
+      window.renderAllCareers();
     };
 
-    function renderAllCareers() {
+    window.renderAllCareers = function renderAllCareers() {
       const lang = document.documentElement.getAttribute('data-lang') || 'en';
-      const careers = getData('careers') || [];
-      const filtered = currentFilter === 'all' ? careers.filter(c => c.active !== false) : careers.filter(c => c.type === currentFilter && c.active !== false);
+      const careers = typeof getActiveCareers === 'function'
+        ? getActiveCareers()
+        : (getData('careers') || []);
+      const filtered = currentFilter === 'all'
+        ? careers
+        : careers.filter(c => (c.type || 'full-time') === currentFilter);
       const grid = document.getElementById('careers-grid-full');
       const count = document.getElementById('career-open-count');
-      if (count) count.textContent = String(careers.filter(c => c.active !== false).length);
+      const summary = document.getElementById('career-listing-summary');
+      const fullTimeCount = document.getElementById('career-fulltime-count');
+      const activeCareers = careers;
+      if (count) count.textContent = String(activeCareers.length);
+      if (fullTimeCount) fullTimeCount.textContent = String(activeCareers.filter(c => (c.type || 'full-time') === 'full-time').length);
+      if (summary) {
+        summary.textContent = lang === 'ar'
+          ? `${activeCareers.length} وظائف نشطة`
+          : `${activeCareers.length} active role${activeCareers.length === 1 ? '' : 's'}`;
+      }
       if (!grid) return;
 
-      const labels = getCareerUiStrings(lang).labels;
-      const generalCard = `
-        <div class="career-card career-card-featured">
-          <div class="career-card-glow"></div>
-          <div class="career-header">
-            <div class="career-head-copy">
-              <span class="career-index">${lang === 'ar' ? 'طلب عام' : 'General Application'}</span>
-              <h3 class="career-title">${labels.generalTitle}</h3>
-            </div>
-          </div>
-          <p class="career-desc expanded">${labels.generalSubtitle}</p>
-          <div class="career-feature-points">
-            <span>${lang === 'ar' ? 'إرسال مباشر لفريق الموارد البشرية' : 'Direct to the HR team'}</span>
-            <span>${lang === 'ar' ? 'فرص حالية ومستقبلية' : 'Current and future opportunities'}</span>
-          </div>
-          <div class="career-footer">
-            <span class="career-location"><i class="fa fa-star"></i>${lang === 'ar' ? 'مسار مهني مفتوح' : 'Open talent track'}</span>
-            <div class="career-actions">
-              <button class="btn btn-primary" style="padding:7px 16px;font-size:0.78rem" onclick="openGeneralCvModal()">${labels.submitGeneral}</button>
-            </div>
-          </div>
-        </div>`;
       if (!filtered.length) {
-        grid.innerHTML = [
-          generalCard,
-          `<p style="text-align:center;color:var(--color-text-muted);grid-column:1/-1;padding:40px">${lang==='ar'?'لا توجد وظائف متاحة حالياً':'No positions available currently'}</p>`
-        ].join('');
+        grid.innerHTML = `<div class="career-empty-state">
+          <span class="career-empty-kicker">${lang === 'ar' ? 'لا توجد نتائج حالياً' : 'No matching roles right now'}</span>
+          <h3>${lang === 'ar' ? 'لا توجد وظائف متاحة ضمن هذا التصنيف حالياً.' : 'There are no openings under this filter right now.'}</h3>
+          <p>${lang === 'ar' ? 'جرّب تصنيفاً آخر أو انتظر حتى يتم نشر وظيفة جديدة من لوحة التحكم.' : 'Try another filter or wait until a new role is published from the dashboard.'}</p>
+        </div>`;
         return;
       }
-      grid.innerHTML = [generalCard, ...filtered.map(c => buildCareerCard(c, lang, true))].join('');
+      grid.innerHTML = filtered.map(c => buildCareerCard(c, lang, true)).join('');
       wireShareBtns();
-    }
+    };
 
-    renderAllCareers();
-    window.closeModal = function (id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; };
-    window.openModal = function (id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; };
+    applyCareersPageContent();
+    window.renderAllCareers();
     document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o){o.classList.remove('open');document.body.style.overflow='';} }));
   }
 
-  bootCareersPage();
+  if (document.readyState === 'complete') {
+    bootCareersPage();
+  } else {
+    window.addEventListener('load', bootCareersPage, { once: true });
+  }
 </script>
 </body>
 </html>

@@ -593,23 +593,6 @@
               </div>
             </div>
 
-            <div class="card">
-              <div class="card-header">
-                <h3><i class="fas fa-file-lines"></i> Company Profile</h3>
-              </div>
-              <div class="form-grid-2">
-                <div class="form-field">
-                  <label>Company Profile PDF</label>
-                  <input type="text" id="s-manual-company-profile" placeholder="PDF URL or uploaded PDF data" />
-                  <small>This uploaded file will be used everywhere on the website for company profile downloads.</small>
-                </div>
-                <div class="form-field">
-                  <label>Upload Company Profile PDF</label>
-                  <input type="file" accept="application/pdf,.pdf" onchange="previewUpload(this,'s-manual-company-profile')" style="color:var(--dash-muted)" />
-                </div>
-              </div>
-            </div>
-
             <!-- Social Media -->
             <div class="card">
               <div class="card-header">
@@ -801,6 +784,64 @@
         <!-- ── CAREERS ── -->
         <div class="tab-panel" id="tab-careers">
           <h2 class="page-title">Job Postings</h2>
+          <div class="card" style="margin-bottom:20px">
+            <div class="toolbar" style="margin-bottom:14px">
+              <h3 style="margin:0">Careers Page Content</h3>
+            </div>
+            <p style="color:var(--db-muted);margin-bottom:18px">Edit the premium careers page copy that appears above the job listings.</p>
+            <div class="form-grid-2">
+              <div class="form-field"><label>Hero Kicker (EN)</label><input type="text" id="cp-hero-kicker-en" /></div>
+              <div class="form-field"><label>Hero Kicker (AR)</label><input type="text" id="cp-hero-kicker-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Hero Title (EN)</label><textarea id="cp-hero-title-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Hero Title (AR)</label><textarea id="cp-hero-title-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Hero Text (EN)</label><textarea id="cp-hero-text-en" rows="4"></textarea></div>
+              <div class="form-field"><label>Hero Text (AR)</label><textarea id="cp-hero-text-ar" rows="4" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Panel Label (EN)</label><input type="text" id="cp-panel-label-en" /></div>
+              <div class="form-field"><label>Panel Label (AR)</label><input type="text" id="cp-panel-label-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Panel Title (EN)</label><textarea id="cp-panel-title-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Panel Title (AR)</label><textarea id="cp-panel-title-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Panel Point 1 (EN)</label><input type="text" id="cp-panel-point1-en" /></div>
+              <div class="form-field"><label>Panel Point 1 (AR)</label><input type="text" id="cp-panel-point1-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Panel Point 2 (EN)</label><input type="text" id="cp-panel-point2-en" /></div>
+              <div class="form-field"><label>Panel Point 2 (AR)</label><input type="text" id="cp-panel-point2-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Panel Point 3 (EN)</label><input type="text" id="cp-panel-point3-en" /></div>
+              <div class="form-field"><label>Panel Point 3 (AR)</label><input type="text" id="cp-panel-point3-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Mini Card 1 Text (EN)</label><textarea id="cp-panel-mini1-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Mini Card 1 Text (AR)</label><textarea id="cp-panel-mini1-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Mini Card 2 Text (EN)</label><textarea id="cp-panel-mini2-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Mini Card 2 Text (AR)</label><textarea id="cp-panel-mini2-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Highlight 1 Title (EN)</label><input type="text" id="cp-highlight1-title-en" /></div>
+              <div class="form-field"><label>Highlight 1 Title (AR)</label><input type="text" id="cp-highlight1-title-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Highlight 1 Text (EN)</label><textarea id="cp-highlight1-text-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Highlight 1 Text (AR)</label><textarea id="cp-highlight1-text-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Highlight 2 Title (EN)</label><input type="text" id="cp-highlight2-title-en" /></div>
+              <div class="form-field"><label>Highlight 2 Title (AR)</label><input type="text" id="cp-highlight2-title-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Highlight 2 Text (EN)</label><textarea id="cp-highlight2-text-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Highlight 2 Text (AR)</label><textarea id="cp-highlight2-text-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Highlight 3 Title (EN)</label><input type="text" id="cp-highlight3-title-en" /></div>
+              <div class="form-field"><label>Highlight 3 Title (AR)</label><input type="text" id="cp-highlight3-title-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Highlight 3 Text (EN)</label><textarea id="cp-highlight3-text-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Highlight 3 Text (AR)</label><textarea id="cp-highlight3-text-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Openings Kicker (EN)</label><input type="text" id="cp-openings-kicker-en" /></div>
+              <div class="form-field"><label>Openings Kicker (AR)</label><input type="text" id="cp-openings-kicker-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Openings Title (EN)</label><textarea id="cp-openings-title-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Openings Title (AR)</label><textarea id="cp-openings-title-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Openings Text (EN)</label><textarea id="cp-openings-text-en" rows="4"></textarea></div>
+              <div class="form-field"><label>Openings Text (AR)</label><textarea id="cp-openings-text-ar" rows="4" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Summary Label (EN)</label><input type="text" id="cp-summary-label-en" /></div>
+              <div class="form-field"><label>Summary Label (AR)</label><input type="text" id="cp-summary-label-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Summary Text (EN)</label><textarea id="cp-summary-text-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Summary Text (AR)</label><textarea id="cp-summary-text-ar" rows="3" dir="rtl"></textarea></div>
+              <div class="form-field"><label>Filters Label (EN)</label><input type="text" id="cp-filters-label-en" /></div>
+              <div class="form-field"><label>Filters Label (AR)</label><input type="text" id="cp-filters-label-ar" dir="rtl" /></div>
+              <div class="form-field"><label>Filters Text (EN)</label><textarea id="cp-filters-text-en" rows="3"></textarea></div>
+              <div class="form-field"><label>Filters Text (AR)</label><textarea id="cp-filters-text-ar" rows="3" dir="rtl"></textarea></div>
+            </div>
+            <div class="toolbar" style="margin-top:18px">
+              <button class="btn-add" onclick="saveCareersPageContent()"><i class="fas fa-save"></i> Save Careers Page Content</button>
+            </div>
+            <div class="save-msg" id="careers-page-msg"></div>
+          </div>
           <div class="toolbar">
             <button class="btn-add" onclick="openCareerModal()"><i class="fas fa-plus"></i> Add Job Posting</button>
           </div>
@@ -831,12 +872,18 @@
         <!-- ── MESSAGES ── -->
         <div class="tab-panel" id="tab-messages">
           <h2 class="page-title">Contact Messages</h2>
+          <div class="toolbar">
+            <button class="btn-add" onclick="exportInboxItems('messages')"><i class="fas fa-file-export"></i> Export</button>
+          </div>
           <div id="messages-list"></div>
         </div>
 
         <!-- ── APPLICATIONS ── -->
         <div class="tab-panel" id="tab-applications">
           <h2 class="page-title">Job Applications</h2>
+          <div class="toolbar">
+            <button class="btn-add" onclick="exportInboxItems('applications')"><i class="fas fa-file-export"></i> Export</button>
+          </div>
           <div id="applications-list"></div>
         </div>
 

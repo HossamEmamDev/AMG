@@ -7,6 +7,8 @@
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
+require_once __DIR__ . '/inbox_store.php';
+
 // ── Helpers ──
 function sanitize($val) {
     return htmlspecialchars(strip_tags(trim($val)), ENT_QUOTES, 'UTF-8');
@@ -153,6 +155,16 @@ if ($attachmentData) {
 $sent = mail($toEmail, $emailSubject, $body, $headers);
 
 if ($sent) {
+    inbox_append_item('messages', [
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'subject' => $subject ?: 'General Inquiry',
+        'message' => $message,
+        'attachmentName' => $attachmentData['name'] ?? '',
+        'date' => gmdate('c'),
+        'read' => false,
+    ]);
     jsonResponse(true, 'Message sent successfully');
 } else {
     jsonResponse(false, 'Mail delivery failed');

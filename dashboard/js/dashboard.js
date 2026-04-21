@@ -139,6 +139,20 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+function syncInboxDataFromServer() {
+  return fetch("../php/load_inbox.php", { cache: "no-store" })
+    .then((r) => r.json())
+    .then((res) => {
+      if (!res || !res.success) return;
+      localStorage.setItem("amg_messages", JSON.stringify(res.messages || []));
+      localStorage.setItem("amg_applications", JSON.stringify(res.applications || []));
+      renderOverview();
+      renderMessagesList();
+      renderApplicationsList();
+    })
+    .catch(() => {});
+}
+
 // ── Init ──
 function initDashboard() {
   safeDashboardRun("renderOurGroupList", () => renderOurGroupList());
@@ -152,6 +166,7 @@ function initDashboard() {
   safeDashboardRun("renderServicesList", () => renderServicesList());
   safeDashboardRun("renderProjectCompaniesList", () => renderProjectCompaniesList());
   safeDashboardRun("renderProjectsList", () => renderProjectsList());
+  safeDashboardRun("loadCareersPageContent", () => loadCareersPageContent());
   safeDashboardRun("renderCareersList", () => renderCareersList());
   safeDashboardRun("renderPartnersList", () => renderPartnersList());
   safeDashboardRun("renderTestimonialsList", () => renderTestimonialsList());
@@ -159,6 +174,7 @@ function initDashboard() {
   safeDashboardRun("renderApplicationsList", () => renderApplicationsList());
   safeDashboardRun("renderTeamList", () => renderTeamList());
   safeDashboardRun("syncSectionRegistry", () => syncSectionRegistry());
+  safeDashboardRun("syncInboxDataFromServer", () => syncInboxDataFromServer());
 
   // Sidebar toggle
   document.getElementById("menu-toggle").addEventListener("click", () => {
@@ -198,6 +214,7 @@ function switchTab(tab) {
   if (tab === "who-we-are") loadOurGroupSettings();
   if (tab === "org-chart") loadOrgChart();
   if (tab === "mission-vision") loadMissionVision();
+  if (tab === "careers") loadCareersPageContent();
 }
 
 // ── Settings ──
@@ -241,8 +258,6 @@ function loadSettings() {
   document.getElementById("s-hr-email").value = s.hrEmail || "";
   document.getElementById("s-phone").value = s.phone || "";
   document.getElementById("s-whatsapp-number").value = s.whatsappNumber || "+201124711154";
-  document.getElementById("s-manual-company-profile").value =
-    s.manualCompanyProfile || "";
   document.getElementById("s-address-en").value = s.address_en || "";
   document.getElementById("s-address-ar").value = s.address_ar || "";
   document.getElementById("s-footer-desc-en").value = s.footerDesc_en || "";
@@ -322,7 +337,6 @@ function saveSettings() {
   s.hrEmail = document.getElementById("s-hr-email").value;
   s.phone = document.getElementById("s-phone").value;
   s.whatsappNumber = document.getElementById("s-whatsapp-number").value;
-  s.manualCompanyProfile = document.getElementById("s-manual-company-profile").value;
   s.address_en = document.getElementById("s-address-en").value;
   s.address_ar = document.getElementById("s-address-ar").value;
   s.footerDesc_en = document.getElementById("s-footer-desc-en").value;
@@ -518,8 +532,6 @@ function buildUploadConfig(targetId) {
       return { folder: "images/logo", filename: "who-we-are-logo" };
     case "wg-profile-url":
       return { folder: "files/profiles", filename: "who-we-are-profile" };
-    case "s-manual-company-profile":
-      return { folder: "files/profiles", filename: "company-profile" };
     case "custom-block-image":
       return {
         folder: "images/custom-sections",
@@ -2139,6 +2151,117 @@ async function saveProject(id) {
 
 // ── Careers ──
 let reqTags = [];
+function loadCareersPageContent() {
+  const content = {
+    ...(DEFAULT_DATA.careersPageContent || {}),
+    ...(getData("careersPageContent") || {}),
+  };
+  const setVal = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.value = value || "";
+  };
+  setVal("cp-hero-kicker-en", content.heroKicker_en);
+  setVal("cp-hero-kicker-ar", content.heroKicker_ar);
+  setVal("cp-hero-title-en", content.heroTitle_en);
+  setVal("cp-hero-title-ar", content.heroTitle_ar);
+  setVal("cp-hero-text-en", content.heroText_en);
+  setVal("cp-hero-text-ar", content.heroText_ar);
+  setVal("cp-panel-label-en", content.panelLabel_en);
+  setVal("cp-panel-label-ar", content.panelLabel_ar);
+  setVal("cp-panel-title-en", content.panelTitle_en);
+  setVal("cp-panel-title-ar", content.panelTitle_ar);
+  setVal("cp-panel-point1-en", content.panelPoint1_en);
+  setVal("cp-panel-point1-ar", content.panelPoint1_ar);
+  setVal("cp-panel-point2-en", content.panelPoint2_en);
+  setVal("cp-panel-point2-ar", content.panelPoint2_ar);
+  setVal("cp-panel-point3-en", content.panelPoint3_en);
+  setVal("cp-panel-point3-ar", content.panelPoint3_ar);
+  setVal("cp-panel-mini1-en", content.panelMini1_en);
+  setVal("cp-panel-mini1-ar", content.panelMini1_ar);
+  setVal("cp-panel-mini2-en", content.panelMini2_en);
+  setVal("cp-panel-mini2-ar", content.panelMini2_ar);
+  setVal("cp-highlight1-title-en", content.highlight1Title_en);
+  setVal("cp-highlight1-title-ar", content.highlight1Title_ar);
+  setVal("cp-highlight1-text-en", content.highlight1Text_en);
+  setVal("cp-highlight1-text-ar", content.highlight1Text_ar);
+  setVal("cp-highlight2-title-en", content.highlight2Title_en);
+  setVal("cp-highlight2-title-ar", content.highlight2Title_ar);
+  setVal("cp-highlight2-text-en", content.highlight2Text_en);
+  setVal("cp-highlight2-text-ar", content.highlight2Text_ar);
+  setVal("cp-highlight3-title-en", content.highlight3Title_en);
+  setVal("cp-highlight3-title-ar", content.highlight3Title_ar);
+  setVal("cp-highlight3-text-en", content.highlight3Text_en);
+  setVal("cp-highlight3-text-ar", content.highlight3Text_ar);
+  setVal("cp-openings-kicker-en", content.openingsKicker_en);
+  setVal("cp-openings-kicker-ar", content.openingsKicker_ar);
+  setVal("cp-openings-title-en", content.openingsTitle_en);
+  setVal("cp-openings-title-ar", content.openingsTitle_ar);
+  setVal("cp-openings-text-en", content.openingsText_en);
+  setVal("cp-openings-text-ar", content.openingsText_ar);
+  setVal("cp-summary-label-en", content.summaryLabel_en);
+  setVal("cp-summary-label-ar", content.summaryLabel_ar);
+  setVal("cp-summary-text-en", content.summaryText_en);
+  setVal("cp-summary-text-ar", content.summaryText_ar);
+  setVal("cp-filters-label-en", content.filtersLabel_en);
+  setVal("cp-filters-label-ar", content.filtersLabel_ar);
+  setVal("cp-filters-text-en", content.filtersText_en);
+  setVal("cp-filters-text-ar", content.filtersText_ar);
+}
+
+function saveCareersPageContent() {
+  const getVal = (id) => document.getElementById(id)?.value || "";
+  setData("careersPageContent", {
+    heroKicker_en: getVal("cp-hero-kicker-en"),
+    heroKicker_ar: getVal("cp-hero-kicker-ar"),
+    heroTitle_en: getVal("cp-hero-title-en"),
+    heroTitle_ar: getVal("cp-hero-title-ar"),
+    heroText_en: getVal("cp-hero-text-en"),
+    heroText_ar: getVal("cp-hero-text-ar"),
+    panelLabel_en: getVal("cp-panel-label-en"),
+    panelLabel_ar: getVal("cp-panel-label-ar"),
+    panelTitle_en: getVal("cp-panel-title-en"),
+    panelTitle_ar: getVal("cp-panel-title-ar"),
+    panelPoint1_en: getVal("cp-panel-point1-en"),
+    panelPoint1_ar: getVal("cp-panel-point1-ar"),
+    panelPoint2_en: getVal("cp-panel-point2-en"),
+    panelPoint2_ar: getVal("cp-panel-point2-ar"),
+    panelPoint3_en: getVal("cp-panel-point3-en"),
+    panelPoint3_ar: getVal("cp-panel-point3-ar"),
+    panelMini1_en: getVal("cp-panel-mini1-en"),
+    panelMini1_ar: getVal("cp-panel-mini1-ar"),
+    panelMini2_en: getVal("cp-panel-mini2-en"),
+    panelMini2_ar: getVal("cp-panel-mini2-ar"),
+    highlight1Title_en: getVal("cp-highlight1-title-en"),
+    highlight1Title_ar: getVal("cp-highlight1-title-ar"),
+    highlight1Text_en: getVal("cp-highlight1-text-en"),
+    highlight1Text_ar: getVal("cp-highlight1-text-ar"),
+    highlight2Title_en: getVal("cp-highlight2-title-en"),
+    highlight2Title_ar: getVal("cp-highlight2-title-ar"),
+    highlight2Text_en: getVal("cp-highlight2-text-en"),
+    highlight2Text_ar: getVal("cp-highlight2-text-ar"),
+    highlight3Title_en: getVal("cp-highlight3-title-en"),
+    highlight3Title_ar: getVal("cp-highlight3-title-ar"),
+    highlight3Text_en: getVal("cp-highlight3-text-en"),
+    highlight3Text_ar: getVal("cp-highlight3-text-ar"),
+    openingsKicker_en: getVal("cp-openings-kicker-en"),
+    openingsKicker_ar: getVal("cp-openings-kicker-ar"),
+    openingsTitle_en: getVal("cp-openings-title-en"),
+    openingsTitle_ar: getVal("cp-openings-title-ar"),
+    openingsText_en: getVal("cp-openings-text-en"),
+    openingsText_ar: getVal("cp-openings-text-ar"),
+    summaryLabel_en: getVal("cp-summary-label-en"),
+    summaryLabel_ar: getVal("cp-summary-label-ar"),
+    summaryText_en: getVal("cp-summary-text-en"),
+    summaryText_ar: getVal("cp-summary-text-ar"),
+    filtersLabel_en: getVal("cp-filters-label-en"),
+    filtersLabel_ar: getVal("cp-filters-label-ar"),
+    filtersText_en: getVal("cp-filters-text-en"),
+    filtersText_ar: getVal("cp-filters-text-ar"),
+  });
+  showMsg("careers-page-msg", "Careers page content saved.", true);
+  pushToServer();
+}
+
 function renderCareersList() {
   const careers = getData("careers") || [];
   const list = document.getElementById("careers-list");
@@ -2176,6 +2299,8 @@ function toggleCareer(id) {
     c.active = !c.active;
     setData("careers", careers);
     renderCareersList();
+    renderOverview();
+    pushToServer();
   }
 }
 
@@ -2420,6 +2545,9 @@ function renderMessagesList() {
       <div class="msg-row-subject">${m.subject || "—"}</div>
       <div class="msg-row-body">${m.message || ""}</div>
       ${m.attachmentName ? `<div class="msg-row-subject">Attachment: <strong>${m.attachmentName}</strong></div>` : ""}
+      <div class="msg-row-actions">
+        <button class="btn-del" type="button" onclick="event.stopPropagation(); deleteInboxItem('messages', ${messages.length - 1 - i})"><i class="fas fa-trash"></i> Delete</button>
+      </div>
     </div>`,
     )
     .join("");
@@ -2429,6 +2557,9 @@ function markMsgRead(i) {
   const msgs = JSON.parse(localStorage.getItem("amg_messages") || "[]");
   if (msgs[i]) msgs[i].read = true;
   localStorage.setItem("amg_messages", JSON.stringify(msgs));
+  const formData = new FormData();
+  formData.append("index", i);
+  fetch("../php/mark_message_read.php", { method: "POST", body: formData }).catch(() => {});
   renderMessagesList();
   renderOverview();
 }
@@ -2446,14 +2577,84 @@ function renderApplicationsList() {
   list.innerHTML = apps
     .reverse()
     .map(
-      (a) => `
+      (a, i) => `
     <div class="msg-row">
       <div class="msg-row-header"><span class="msg-row-name">${a.name}</span><span class="msg-row-date">${new Date(a.date).toLocaleString()}</span></div>
       <div class="msg-row-email">${a.email} &nbsp;|&nbsp; 📞 ${a.phone || ""}</div>
       <div class="msg-row-subject">${a.type === "general" ? "General CV:" : "Applied for:"} <strong>${a.jobTitle || "Open Application"}</strong></div>
+      <div class="msg-row-actions">
+        <button class="btn-del" type="button" onclick="deleteInboxItem('applications', ${apps.length - 1 - i})"><i class="fas fa-trash"></i> Delete</button>
+      </div>
     </div>`,
     )
     .join("");
+}
+
+function deleteInboxItem(type, index) {
+  const key = type === "messages" ? "amg_messages" : "amg_applications";
+  const items = JSON.parse(localStorage.getItem(key) || "[]");
+  if (!items[index]) return;
+  items.splice(index, 1);
+  localStorage.setItem(key, JSON.stringify(items));
+
+  const formData = new FormData();
+  formData.append("type", type);
+  formData.append("index", index);
+  fetch("../php/delete_inbox_item.php", { method: "POST", body: formData }).catch(() => {});
+
+  if (type === "messages") renderMessagesList();
+  if (type === "applications") renderApplicationsList();
+  renderOverview();
+}
+
+function exportInboxItems(type) {
+  const key = type === "messages" ? "amg_messages" : "amg_applications";
+  const items = JSON.parse(localStorage.getItem(key) || "[]");
+  if (!items.length) return;
+
+  const rows = type === "messages"
+    ? items.map((item) => ({
+        date: item.date || "",
+        name: item.name || "",
+        email: item.email || "",
+        phone: item.phone || "",
+        subject: item.subject || "",
+        message: item.message || "",
+        attachment: item.attachmentName || "",
+        read: item.read ? "yes" : "no",
+      }))
+    : items.map((item) => ({
+        date: item.date || "",
+        type: item.type || "",
+        job_title: item.jobTitle || "",
+        name: item.name || "",
+        email: item.email || "",
+        phone: item.phone || "",
+        linkedin: item.linkedin || "",
+        education: item.education || "",
+        experience: item.experience || "",
+        cv_name: item.cvName || "",
+      }));
+
+  const headers = Object.keys(rows[0]);
+  const csv = [
+    headers.join(","),
+    ...rows.map((row) =>
+      headers
+        .map((header) => `"${String(row[header] ?? "").replace(/"/g, '""')}"`)
+        .join(","),
+    ),
+  ].join("\n");
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${type}-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // ── Team ──
@@ -2723,6 +2924,8 @@ function deleteItem(key, id) {
     loadOrgChart();
     renderOrgChartList();
   }
+  renderOverview();
+  pushToServer();
 }
 
 // ── Helpers ──
@@ -2760,6 +2963,7 @@ function pushToServer() {
     "projectCompanies",
     "projects",
     "careers",
+    "careersPageContent",
     "partners",
     "testimonials",
     "groupCompanies",
@@ -2894,6 +3098,7 @@ pushToServer = function pushToServerWithMissionVision() {
     "projectCompanies",
     "projects",
     "careers",
+    "careersPageContent",
     "partners",
     "testimonials",
     "groupCompanies",

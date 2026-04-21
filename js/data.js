@@ -102,7 +102,7 @@ const DEFAULT_DATA = {
       "AMG Main Contracting, construction company Egypt, construction company Saudi Arabia, MEP contractor, infrastructure contractor, premium contracting",
     defaultKeywords_ar:
       "AMG للمقاولات الرئيسية، شركة مقاولات مصر، شركة مقاولات السعودية، مقاول كهروميكانيكا، مقاول بنية تحتية، مقاولات متميزة",
-    ogImage: "assets/images/amg-logo.jpeg",
+    ogImage: "https://amg-main.com/assets/images/og/amg-og-cover.png",
     robots: "index, follow",
     canonicalBase: "",
     googleSiteVerification: "",
@@ -958,6 +958,67 @@ const DEFAULT_DATA = {
       stars: 5,
     },
   ],
+
+  careersPageContent: {
+    heroKicker_en: "Built For People Who Deliver At Scale",
+    heroKicker_ar: "مبني للمحترفين القادرين على التنفيذ على نطاق واسع",
+    heroTitle_en: "Careers Crafted For Builders, Leaders, And High-Performance Teams",
+    heroTitle_ar: "فرص مهنية مصممة للبنّائين والقادة وفرق الأداء العالي",
+    heroText_en:
+      "Join AMG Main Contracting Group and work across landmark construction, MEP, infrastructure, and delivery operations in Egypt and Saudi Arabia. Explore live openings or send your CV directly to our HR team.",
+    heroText_ar:
+      "انضم إلى مجموعة AMG للمقاولات الرئيسية واعمل عبر مشاريع الإنشاءات وMEP والبنية التحتية وعمليات التنفيذ في مصر والسعودية. استعرض الوظائف المتاحة الآن أو أرسل سيرتك الذاتية مباشرة إلى فريق الموارد البشرية.",
+    panelLabel_en: "Talent Standards",
+    panelLabel_ar: "معايير الكفاءات",
+    panelTitle_en:
+      "We hire for ownership, site readiness, precision, and calm execution under pressure.",
+    panelTitle_ar:
+      "نحن نوظف على أساس المسؤولية والجاهزية الميدانية والدقة والقدرة على التنفيذ الهادئ تحت الضغط.",
+    panelPoint1_en: "Engineering, site, commercial, and support functions",
+    panelPoint1_ar: "وظائف هندسية وميدانية وتجارية وداعمة",
+    panelPoint2_en: "Structured review with direct HR visibility",
+    panelPoint2_ar: "مراجعة منظمة مع وصول مباشر من الموارد البشرية",
+    panelPoint3_en: "Open applications accepted for future opportunities",
+    panelPoint3_ar: "قبول الطلبات العامة للفرص الحالية والمستقبلية",
+    panelMini1_en: "Share your CV for current openings or future talent pools.",
+    panelMini1_ar: "أرسل سيرتك الذاتية للوظائف الحالية أو لمجموعة المواهب المستقبلية.",
+    panelMini2_en: "Expect a premium, direct, and professional review experience.",
+    panelMini2_ar: "توقع تجربة مراجعة احترافية ومباشرة وعالية الجودة.",
+    highlight1Title_en: "Projects With Real Scale",
+    highlight1Title_ar: "مشاريع ذات نطاق حقيقي",
+    highlight1Text_en:
+      "Work on landmark delivery environments where timelines, quality, and accountability matter every day.",
+    highlight1Text_ar:
+      "اعمل ضمن بيئات تنفيذ بارزة حيث يهم الالتزام بالجدول والجودة والمسؤولية يومياً.",
+    highlight2Title_en: "A Clear Delivery Culture",
+    highlight2Title_ar: "ثقافة تنفيذ واضحة",
+    highlight2Text_en:
+      "Our teams operate with structured ownership, disciplined communication, and premium client-facing standards.",
+    highlight2Text_ar:
+      "تعمل فرقنا بمسؤوليات واضحة وتواصل منضبط ومعايير احترافية عالية في التعامل مع العملاء.",
+    highlight3Title_en: "Regional Exposure",
+    highlight3Title_ar: "تعرض إقليمي",
+    highlight3Text_en:
+      "Build your career across Egypt and Saudi Arabia with opportunities tied to real business growth.",
+    highlight3Text_ar:
+      "طوّر مسارك المهني عبر مصر والسعودية من خلال فرص مرتبطة بنمو الأعمال الفعلي.",
+    openingsKicker_en: "Open Opportunities",
+    openingsKicker_ar: "الفرص المتاحة",
+    openingsTitle_en: "Find The Right Role Or Submit A General Application",
+    openingsTitle_ar: "اعثر على الوظيفة المناسبة أو أرسل طلباً عاماً",
+    openingsText_en:
+      "Every role below is managed from the dashboard. New jobs added by your team now refresh correctly on both the homepage and this page after the site loads server data.",
+    openingsText_ar:
+      "جميع الوظائف أدناه تتم إدارتها من لوحة التحكم. والآن يتم تحديث الوظائف الجديدة بشكل صحيح على الصفحة الرئيسية وهذه الصفحة بعد تحميل بيانات الخادم.",
+    summaryLabel_en: "Live Listing Status",
+    summaryLabel_ar: "حالة الوظائف الحالية",
+    summaryText_en: "Use the filters below or send your CV directly to HR.",
+    summaryText_ar: "استخدم الفلاتر أدناه أو أرسل سيرتك الذاتية مباشرة إلى الموارد البشرية.",
+    filtersLabel_en: "Role Filters",
+    filtersLabel_ar: "فلاتر الوظائف",
+    filtersText_en: "Switch between all positions and contract types.",
+    filtersText_ar: "بدّل بين جميع الوظائف وأنواع التعاقد المختلفة.",
+  },
 };
 
 // ── Initialize Storage ──
@@ -999,6 +1060,12 @@ function migrateLegacyBranding() {
   }
   if (typeof settings.manualCompanyProfile !== "string") {
     settings.manualCompanyProfile = "";
+  }
+  if (typeof settings.whoWeAreProfile === "string" && settings.whoWeAreProfile.trim() && !settings.manualCompanyProfile) {
+    settings.manualCompanyProfile = settings.whoWeAreProfile;
+  }
+  if (Object.prototype.hasOwnProperty.call(settings, "whoWeAreProfile")) {
+    delete settings.whoWeAreProfile;
   }
   if (typeof settings.showWhoWeAreProfileCta !== "boolean") {
     settings.showWhoWeAreProfileCta = DEFAULT_DATA.siteSettings.showWhoWeAreProfileCta;
@@ -1064,6 +1131,12 @@ function migrateLegacyBranding() {
   if (!Array.isArray(sectionOrder) || !sectionOrder.length) {
     setData("sectionOrder", DEFAULT_DATA.sectionOrder);
   }
+
+  const careersPageContent = getData("careersPageContent") || {};
+  setData("careersPageContent", {
+    ...DEFAULT_DATA.careersPageContent,
+    ...careersPageContent,
+  });
 }
 
 function migrateProjectCompanyAssignments() {
@@ -1265,8 +1338,9 @@ function applySettings() {
   const fav = document.getElementById("favicon-link");
   if (fav && s.favicon) fav.href = s.favicon;
 
-  // Social links in footer
+  // Social links
   renderFooterSocial();
+  renderContactSocial();
 
   // Contact info
   const lang = root.getAttribute("data-lang") || "en";
@@ -1607,7 +1681,7 @@ function applySeoSettings() {
   const title = page === "careers" ? localized("careersTitle") || localized("defaultTitle") : localized("homeTitle") || localized("defaultTitle");
   const description = page === "careers" ? localized("careersDescription") || localized("defaultDescription") : localized("homeDescription") || localized("defaultDescription");
   const keywords = page === "careers" ? localized("careersKeywords") || localized("defaultKeywords") : localized("homeKeywords") || localized("defaultKeywords");
-  const ogImage = seo.ogImage || "assets/images/amg-logo.jpeg";
+  const ogImage = seo.ogImage || "https://amg-main.com/assets/images/og/amg-og-cover.png";
   const robots = seo.robots || "index, follow";
   const canonicalBase = seo.canonicalBase || "";
   const canonicalHref = canonicalBase
@@ -1701,6 +1775,18 @@ function renderFooterSocial() {
     .join("");
 }
 
+function renderContactSocial() {
+  const s = getData("siteSettings");
+  const el = document.getElementById("contact-social");
+  if (!el) return;
+  el.innerHTML = (s.socialLinks || [])
+    .map(
+      (sl) =>
+        `<a href="${sl.url}" class="soc-link" target="_blank" rel="noopener noreferrer" title="${sl.label}" aria-label="${sl.label}"><i class="${sl.icon}"></i></a>`,
+    )
+    .join("");
+}
+
 // Apply section visibility
 function applySectionVisibility() {
   syncSectionRegistry();
@@ -1752,8 +1838,7 @@ function renderGroup() {
   const profileLabel =
     lang === "ar" ? "تحميل بروفايل الشركة" : "Download Company Profile";
   const websiteLabel = lang === "ar" ? "زيارة الموقع" : "Visit Website";
-  const manualUrl = settings.manualCompanyProfile || "";
-  const profileHref = manualUrl;
+  const profileHref = settings.manualCompanyProfile || "";
   const profileName = getDownloadName(profileHref, "amg-company-profile.pdf");
   const whoWeAreBrief = settings[`whoWeAreBrief_${lang}`] || settings.whoWeAreBrief_en || "";
   const whoWeAreBriefEl = document.getElementById("who-we-are-brief");
@@ -1765,12 +1850,19 @@ function renderGroup() {
   const whoWeAreCta = document.getElementById("who-we-are-profile-cta");
   if (whoWeAreCta) {
     whoWeAreCta.textContent = profileLabel;
-    if (settings.showWhoWeAreProfileCta !== false && profileHref) {
+    if (settings.showWhoWeAreProfileCta !== false) {
       whoWeAreCta.style.display = "";
-      whoWeAreCta.setAttribute("href", profileHref);
-      whoWeAreCta.setAttribute("target", "_blank");
-      whoWeAreCta.setAttribute("download", profileName);
-      whoWeAreCta.removeAttribute("aria-disabled");
+      if (profileHref) {
+        whoWeAreCta.setAttribute("href", profileHref);
+        whoWeAreCta.setAttribute("target", "_blank");
+        whoWeAreCta.setAttribute("download", profileName);
+        whoWeAreCta.removeAttribute("aria-disabled");
+      } else {
+        whoWeAreCta.setAttribute("href", "javascript:void(0)");
+        whoWeAreCta.removeAttribute("target");
+        whoWeAreCta.removeAttribute("download");
+        whoWeAreCta.setAttribute("aria-disabled", "true");
+      }
     } else {
       whoWeAreCta.style.display = "none";
       whoWeAreCta.setAttribute("href", "javascript:void(0)");
@@ -1844,26 +1936,42 @@ function renderGroup() {
     setTimeout(setupScrollReveal, 50);
 }
 
+function loadServerSiteData() {
+  const version = encodeURIComponent(window.__assetVersion || Date.now());
+  const tryLoad = (url) =>
+    fetch(`${url}?v=${version}`, { cache: "no-store" }).then((response) => {
+      if (!response.ok) throw new Error(`Failed to load ${url}`);
+      return response.json();
+    });
+
+  return tryLoad("php/load_settings.php").catch(() => tryLoad("data/settings.json"));
+}
+
 function initSiteData() {
-  // Try to load settings from server first
-  fetch("php/load_settings.php")
-    .then((r) => r.json())
+  // Try to load settings from server first, then fall back to the saved JSON file.
+  loadServerSiteData()
     .then((serverData) => {
       if (serverData) {
-        // Server has data — save it to localStorage then apply
         Object.keys(serverData).forEach((key) => {
           localStorage.setItem("amg_" + key, JSON.stringify(serverData[key]));
         });
         cleanupLegacyGroupCompanies();
       }
     })
-    .catch(() => {}) // if fetch fails, fall back to localStorage silently
+    .catch(() => {})
     .finally(() => {
       syncSectionRegistry();
       applySettings();
       applySeoSettings();
       applySectionVisibility();
       renderGroup();
+      if (typeof renderServices === "function") renderServices();
+      if (typeof renderProjects === "function") renderProjects();
+      if (typeof renderCareers === "function") renderCareers();
+      if (typeof applyCareersPageContent === "function") applyCareersPageContent();
+      if (typeof renderAllCareers === "function") renderAllCareers();
+      if (typeof renderPartners === "function") renderPartners();
+      if (typeof renderCustomSections === "function") renderCustomSections();
       if (typeof renderOrgChart === "function") renderOrgChart();
     });
 }
